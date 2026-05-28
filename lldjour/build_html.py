@@ -1,40 +1,43 @@
 """
 build_html.py — Génère un index.html autonome pour Netlify Drop
-Lit data/latest.json et produit un site HTML complet tout-en-un.
+Lit data/latest.json + data/competitors.json et produit un site HTML deux onglets.
 
 Usage :
-  python build_html.py              # génère dist/index.html
+  python build_html.py              # génère index.html à la racine
   python build_html.py --open       # génère + ouvre dans le navigateur
 """
 
 import json
 import argparse
-import subprocess
 import sys
 from pathlib import Path
 from datetime import datetime
 
-SRC  = Path(__file__).parent / "data" / "latest.json"
-DIST = Path(__file__).parent / "dist"
+ROOT     = Path(__file__).parent
+SRC      = ROOT / "data" / "latest.json"
+COMP_SRC = ROOT / "data" / "competitors.json"
+OUT      = ROOT / "index.html"
 
-def load_data() -> dict:
-    if not SRC.exists():
-        print(f"ERREUR : {SRC} introuvable. Lance d'abord : python scraper.py")
-        sys.exit(1)
-    return json.loads(SRC.read_text(encoding="utf-8"))
+def load_json(path, fallback=None):
+    if not path.exists():
+        return fallback or []
+    return json.loads(path.read_text(encoding="utf-8"))
 
-def format_date(iso: str) -> str:
+def format_date(iso):
     try:
         d = datetime.fromisoformat(iso)
         mois = ["jan","fév","mar","avr","mai","juin","juil","août","sep","oct","nov","déc"]
         return f"{d.day} {mois[d.month-1]} {d.year}"
-    except Exception:
+    except:
         return iso
 
-def build(data: dict) -> str:
-    offers_json = json.dumps(data["offers"], ensure_ascii=False)
+def build():
+    data     = load_json(SRC, {"offers": [], "date": ""})
+    comp_raw = load_json(COMP_SRC, [])
+
+    offers_json = json.dumps(data.get("offers", []), ensure_ascii=False)
+    comp_json   = json.dumps(comp_raw, ensure_ascii=False)
     date_label  = format_date(data.get("date", data.get("generated_at", "")))
-    count       = data.get("count", len(data["offers"]))
 
     return f"""<!DOCTYPE html>
 <html lang="fr">
@@ -42,7 +45,7 @@ def build(data: dict) -> str:
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#ffffff">
-<title>Veille LLD — XPENG · Zeekr</title>
+<title>Veille LLD — XPENG · Zeekr · Concurrents</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -54,6 +57,9 @@ def build(data: dict) -> str:
   --blue-bg:#e6f1fb;--blue-txt:#0c447c;
   --green-bg:#eaf3de;--green-txt:#27500a;
   --purple-bg:#eeedfe;--purple-txt:#3c3489;
+  --teal-bg:#e1f5ee;--teal-txt:#085041;
+  --amber-bg:#faeeda;--amber-txt:#633806;
+  --coral-bg:#faece7;--coral-txt:#712b13;
   --teal:#1d9e75;
   --radius:8px;--radius-lg:12px;
 }}
@@ -65,29 +71,24 @@ def build(data: dict) -> str:
     --blue-bg:#0c447c;--blue-txt:#b5d4f4;
     --green-bg:#27500a;--green-txt:#c0dd97;
     --purple-bg:#3c3489;--purple-txt:#cecbf6;
+    --teal-bg:#085041;--teal-txt:#9fe1cb;
+    --amber-bg:#633806;--amber-txt:#fac775;
+    --coral-bg:#712b13;--coral-txt:#f5c4b3;
   }}
 }}
-body{{
-  font-family:'Inter',system-ui,sans-serif;
-  background:var(--bg3);
-  color:var(--txt);
-  min-height:100vh;
-  font-size:15px;
-  line-height:1.5;
-}}
+body{{font-family:'Inter',system-ui,sans-serif;background:var(--bg3);color:var(--txt);min-height:100vh;font-size:15px;line-height:1.5}}
 .page{{max-width:520px;margin:0 auto;padding:0 1rem 3rem}}
 
 /* Header */
-.header{{
-  padding:1.25rem 0 1rem;
-  border-bottom:0.5px solid var(--border);
-  margin-bottom:1.25rem;
-  display:flex;align-items:center;justify-content:space-between;
-}}
-.header-left h1{{font-size:16px;font-weight:500;color:var(--txt)}}
-.header-left .sub{{font-size:12px;color:var(--txt3);margin-top:2px;display:flex;align-items:center;gap:5px}}
+.header{{padding:1.25rem 0 0;}}
+.header h1{{font-size:16px;font-weight:500;color:var(--txt)}}
+.header .sub{{font-size:12px;color:var(--txt3);margin-top:2px;display:flex;align-items:center;gap:5px}}
 .dot{{width:6px;height:6px;border-radius:50%;background:var(--teal);display:inline-block;flex-shrink:0}}
-.badge-count{{font-size:12px;background:var(--bg2);border:0.5px solid var(--border);border-radius:99px;padding:3px 10px;color:var(--txt2)}}
+
+/* Onglets */
+.tabs{{display:flex;gap:0;margin:1rem 0;border-bottom:0.5px solid var(--border)}}
+.tab{{font-size:13px;padding:8px 16px;cursor:pointer;color:var(--txt2);border-bottom:2px solid transparent;margin-bottom:-0.5px;background:none;border-left:none;border-right:none;border-top:none;transition:all .15s}}
+.tab.active{{color:var(--txt);border-bottom-color:var(--txt);font-weight:500}}
 
 /* Stats */
 .stats{{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:1.25rem}}
@@ -97,30 +98,21 @@ body{{
 
 /* Filtres */
 .filters{{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem}}
-.pill{{
-  font-size:12px;padding:5px 12px;border-radius:99px;
-  border:0.5px solid var(--border2);background:var(--bg);
-  color:var(--txt2);cursor:pointer;transition:all .15s;
-  -webkit-tap-highlight-color:transparent;
-}}
+.pill{{font-size:12px;padding:5px 12px;border-radius:99px;border:0.5px solid var(--border2);background:var(--bg);color:var(--txt2);cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}}
 .pill:hover{{background:var(--bg2)}}
 .pill.active{{background:var(--txt);color:var(--bg);border-color:transparent}}
 
 /* Cartes */
 .cards{{display:flex;flex-direction:column;gap:10px}}
-.card{{
-  background:var(--bg);border:0.5px solid var(--border);
-  border-radius:var(--radius-lg);padding:1rem;
-}}
+.card{{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1rem}}
 .card-top{{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}}
 .model-tag{{font-size:11px;font-weight:500;padding:2px 9px;border-radius:99px}}
 .tag-g9{{background:var(--blue-bg);color:var(--blue-txt)}}
 .tag-g6{{background:var(--green-bg);color:var(--green-txt)}}
 .tag-7x{{background:var(--purple-bg);color:var(--purple-txt)}}
-.type-badge{{
-  font-size:10px;padding:2px 7px;border-radius:99px;
-  background:var(--bg2);color:var(--txt2);border:0.5px solid var(--border);
-}}
+.tag-ev{{background:var(--teal-bg);color:var(--teal-txt)}}
+.tag-phev{{background:var(--amber-bg);color:var(--amber-txt)}}
+.type-badge{{font-size:10px;padding:2px 7px;border-radius:99px;background:var(--bg2);color:var(--txt2);border:0.5px solid var(--border)}}
 .card-version{{font-size:13px;font-weight:500;color:var(--txt);margin-bottom:4px}}
 .card-price{{font-size:28px;font-weight:500;color:var(--txt);line-height:1;margin-bottom:10px}}
 .card-price span{{font-size:13px;font-weight:400;color:var(--txt2)}}
@@ -129,51 +121,58 @@ body{{
 .card-row{{display:flex;justify-content:space-between;font-size:12px}}
 .card-row-label{{color:var(--txt2)}}
 .card-row-val{{color:var(--txt);font-weight:500}}
-.card-link{{color:#185fa5;text-decoration:none;font-weight:400}}
+.card-link{{color:#185fa5;text-decoration:none}}
 .card-link:hover{{text-decoration:underline}}
 .card-note{{font-size:11px;color:var(--txt3);font-style:italic;margin-top:7px;line-height:1.4}}
-
-/* Vide */
 .empty{{text-align:center;padding:2.5rem 1rem;color:var(--txt3);font-size:14px}}
-
-/* Footer */
 .footer{{margin-top:1.5rem;padding-top:1rem;border-top:0.5px solid var(--border);font-size:11px;color:var(--txt3);line-height:1.6}}
+.section-sep{{font-size:11px;font-weight:500;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;margin:1.5rem 0 .75rem;padding-bottom:6px;border-bottom:0.5px solid var(--border)}}
 </style>
 </head>
 <body>
 <div class="page">
 
   <div class="header">
-    <div class="header-left">
-      <h1>Veille LLD</h1>
-      <div class="sub">
-        <span class="dot"></span>
-        Mise à jour le {date_label}
-      </div>
+    <h1>Veille LLD</h1>
+    <div class="sub"><span class="dot"></span> Mise à jour le {date_label}</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('main',this)">XPENG · Zeekr</button>
+    <button class="tab" onclick="switchTab('comp',this)">Concurrents</button>
+  </div>
+
+  <!-- ONGLET PRINCIPAL -->
+  <div id="tab-main">
+    <div class="stats">
+      <div class="stat"><div class="stat-label">Offres</div><div class="stat-val" id="s-count">—</div></div>
+      <div class="stat"><div class="stat-label">Mensualité min.</div><div class="stat-val" id="s-min">—</div></div>
+      <div class="stat"><div class="stat-label">Mensualité max.</div><div class="stat-val" id="s-max">—</div></div>
+      <div class="stat"><div class="stat-label">Modèles suivis</div><div class="stat-val">3</div></div>
     </div>
-    <span class="badge-count" id="badge">{count} offres</span>
+    <div class="filters" id="main-filters">
+      <button class="pill active" data-f="all">Tous</button>
+      <button class="pill" data-f="G9">G9</button>
+      <button class="pill" data-f="G6">G6</button>
+      <button class="pill" data-f="7X">7X</button>
+      <button class="pill" data-f="neuf">Neuf</button>
+      <button class="pill" data-f="occasion">Occasion</button>
+    </div>
+    <div class="cards" id="main-cards"></div>
   </div>
 
-  <div class="stats">
-    <div class="stat"><div class="stat-label">Offres</div><div class="stat-val" id="s-count">{count}</div></div>
-    <div class="stat"><div class="stat-label">Mensualité min.</div><div class="stat-val" id="s-min">—</div></div>
-    <div class="stat"><div class="stat-label">Mensualité max.</div><div class="stat-val" id="s-max">—</div></div>
-    <div class="stat"><div class="stat-label">Modèles suivis</div><div class="stat-val">3</div></div>
+  <!-- ONGLET CONCURRENTS -->
+  <div id="tab-comp" style="display:none">
+    <div class="filters" id="comp-filters">
+      <button class="pill active" data-f="all">Tous</button>
+      <button class="pill" data-f="EV">Électrique</button>
+      <button class="pill" data-f="PHEV">PHEV</button>
+    </div>
+    <div id="comp-cards"></div>
   </div>
-
-  <div class="filters" id="filters">
-    <button class="pill active" data-f="all">Tous</button>
-    <button class="pill" data-f="G9">G9</button>
-    <button class="pill" data-f="G6">G6</button>
-    <button class="pill" data-f="7X">7X</button>
-    <button class="pill" data-f="neuf">Neuf</button>
-    <button class="pill" data-f="occasion">Occasion</button>
-  </div>
-
-  <div class="cards" id="cards"></div>
 
   <div class="footer">
-    Sources : xpeng.com &middot; even-motors.com &middot; vivacar.fr &middot; zeekr.eu<br>
+    Sources : xpeng.com · even-motors.com · vivacar.fr · zeekr.eu · polestar.com · byd.com · kia.com · toyota.fr · volvocars.com · omoda-jaecoo.fr · automobilepropre.com<br>
     Données collectées automatiquement chaque matin à 07h00.
   </div>
 
@@ -181,99 +180,149 @@ body{{
 
 <script>
 const OFFERS = {offers_json};
-let active = 'all';
+const COMPETITORS = {comp_json};
+let mainFilter = 'all';
+let compFilter = 'all';
+let currentTab = 'main';
 
-function tagClass(m){{
-  return m==='G9'?'tag-g9':m==='G6'?'tag-g6':'tag-7x';
+function tagClass(model, brand){{
+  if(brand==='ZEEKR') return 'tag-7x';
+  if(model==='G9') return 'tag-g9';
+  if(model==='G6') return 'tag-g6';
+  return 'tag-7x';
 }}
 
-function fmt(n){{
-  return n != null ? n.toLocaleString('fr-FR') : '—';
+function compTag(type){{
+  return type==='PHEV' ? 'tag-phev' : 'tag-ev';
 }}
 
-function render(){{
+function fmt(n){{ return n!=null ? n.toLocaleString('fr-FR') : '—'; }}
+
+function renderMain(){{
   const filtered = OFFERS.filter(o => {{
-    if(active==='all') return true;
-    if(active==='neuf'||active==='occasion') return o.type===active;
-    return o.model===active;
+    if(mainFilter==='all') return true;
+    if(mainFilter==='neuf'||mainFilter==='occasion') return o.type===mainFilter;
+    return o.model===mainFilter;
   }});
-
   const prices = filtered.filter(o=>o.price_monthly).map(o=>o.price_monthly);
-  const minP = prices.length ? Math.min(...prices) : null;
-  const maxP = prices.length ? Math.max(...prices) : null;
-
   document.getElementById('s-count').textContent = filtered.length;
-  document.getElementById('s-min').textContent = minP ? minP+'€' : '—';
-  document.getElementById('s-max').textContent = maxP ? maxP+'€' : '—';
-  document.getElementById('badge').textContent = filtered.length+' offre'+(filtered.length>1?'s':'');
+  document.getElementById('s-min').textContent = prices.length ? Math.min(...prices)+'€' : '—';
+  document.getElementById('s-max').textContent = prices.length ? Math.max(...prices)+'€' : '—';
 
-  document.querySelectorAll('.pill').forEach(p => {{
-    const map = {{'all':'Tous','neuf':'Neuf','occasion':'Occasion'}};
-    const label = map[active] || active;
-    p.classList.toggle('active', p.dataset.f === active);
-  }});
+  document.querySelectorAll('#main-filters .pill').forEach(p=>p.classList.toggle('active',p.dataset.f===mainFilter));
 
-  if(!filtered.length){{
-    document.getElementById('cards').innerHTML = '<div class="empty">Aucune offre pour ce filtre.</div>';
-    return;
-  }}
-
-  document.getElementById('cards').innerHTML = filtered.map(o => `
+  document.getElementById('main-cards').innerHTML = filtered.length ? filtered.map(o=>`
     <div class="card">
       <div class="card-top">
-        <span class="model-tag ${{tagClass(o.model)}}">${{o.brand}} ${{o.model}}</span>
+        <span class="model-tag ${{tagClass(o.model,o.brand)}}">${{o.brand}} ${{o.model}}</span>
         <span class="type-badge">${{o.type}}</span>
       </div>
       <div class="card-version">${{o.version}}</div>
       ${{o.price_monthly
         ? `<div class="card-price">${{o.price_monthly}} €<span>/mois</span></div>`
-        : `<div class="no-price">Offre LLD non publiée</div>`
-      }}
+        : `<div class="no-price">Offre LLD non publiée</div>`}}
       <div class="card-rows">
-        ${{o.duration_months ? `<div class="card-row"><span class="card-row-label">Durée</span><span class="card-row-val">${{o.duration_months}} mois · ${{fmt(o.km_per_year)}} km/an</span></div>` : ''}}
-        ${{o.first_payment ? `<div class="card-row"><span class="card-row-label">1er loyer</span><span class="card-row-val">${{fmt(o.first_payment)}} €</span></div>` : ''}}
-        <div class="card-row">
-          <span class="card-row-label">Source</span>
-          <span class="card-row-val"><a class="card-link" href="${{o.source_url}}" target="_blank" rel="noopener">${{o.source_name}} ↗</a></span>
-        </div>
+        ${{o.duration_months?`<div class="card-row"><span class="card-row-label">Durée</span><span class="card-row-val">${{o.duration_months}} mois · ${{fmt(o.km_per_year)}} km/an</span></div>`:''}}
+        ${{o.first_payment?`<div class="card-row"><span class="card-row-label">1er loyer</span><span class="card-row-val">${{fmt(o.first_payment)}} €</span></div>`:''}}
+        <div class="card-row"><span class="card-row-label">Source</span><span class="card-row-val"><a class="card-link" href="${{o.source_url}}" target="_blank">${{o.source_name}} ↗</a></span></div>
       </div>
-      ${{o.note ? `<div class="card-note">${{o.note}}</div>` : ''}}
+      ${{o.note?`<div class="card-note">${{o.note}}</div>`:''}}
     </div>
-  `).join('');
+  `).join('') : '<div class="empty">Aucune offre pour ce filtre.</div>';
 }}
 
-document.getElementById('filters').addEventListener('click', e => {{
-  const btn = e.target.closest('.pill');
-  if(!btn) return;
-  active = btn.dataset.f;
-  render();
+function renderComp(){{
+  const evs   = COMPETITORS.filter(c=>c.type==='EV'   && (compFilter==='all'||compFilter==='EV'));
+  const phevs = COMPETITORS.filter(c=>c.type==='PHEV' && (compFilter==='all'||compFilter==='PHEV'));
+
+  document.querySelectorAll('#comp-filters .pill').forEach(p=>p.classList.toggle('active',p.dataset.f===compFilter));
+
+  let html = '';
+
+  if(evs.length){{
+    html += `<div class="section-sep">Électriques</div><div class="cards">`;
+    html += evs.map(c=>`
+      <div class="card">
+        <div class="card-top">
+          <span class="model-tag ${{compTag(c.type)}}">${{c.brand}} ${{c.model}}</span>
+          <span class="type-badge">100% élec.</span>
+        </div>
+        ${{c.price_monthly
+          ? `<div class="card-price">${{c.price_monthly}} €<span>/mois</span></div>`
+          : `<div class="no-price">Prix indicatif</div>`}}
+        <div class="card-rows">
+          ${{c.duration_months?`<div class="card-row"><span class="card-row-label">Durée</span><span class="card-row-val">${{c.duration_months}} mois · ${{fmt(c.km_per_year)}} km/an</span></div>`:''}}
+          ${{c.first_payment?`<div class="card-row"><span class="card-row-label">1er loyer</span><span class="card-row-val">${{fmt(c.first_payment)}} €</span></div>`:''}}
+          <div class="card-row"><span class="card-row-label">Source</span><span class="card-row-val"><a class="card-link" href="${{c.source_url}}" target="_blank">${{c.source_name}} ↗</a></span></div>
+        </div>
+        ${{c.note?`<div class="card-note">${{c.note}}</div>`:''}}
+      </div>
+    `).join('');
+    html += `</div>`;
+  }}
+
+  if(phevs.length){{
+    html += `<div class="section-sep">PHEV</div><div class="cards">`;
+    html += phevs.map(c=>`
+      <div class="card">
+        <div class="card-top">
+          <span class="model-tag ${{compTag(c.type)}}">${{c.brand}} ${{c.model}}</span>
+          <span class="type-badge">PHEV</span>
+        </div>
+        ${{c.price_monthly
+          ? `<div class="card-price">${{c.price_monthly}} €<span>/mois</span></div>`
+          : `<div class="no-price">Prix indicatif</div>`}}
+        <div class="card-rows">
+          ${{c.duration_months?`<div class="card-row"><span class="card-row-label">Durée</span><span class="card-row-val">${{c.duration_months}} mois · ${{fmt(c.km_per_year)}} km/an</span></div>`:''}}
+          ${{c.first_payment?`<div class="card-row"><span class="card-row-label">1er loyer</span><span class="card-row-val">${{fmt(c.first_payment)}} €</span></div>`:''}}
+          <div class="card-row"><span class="card-row-label">Source</span><span class="card-row-val"><a class="card-link" href="${{c.source_url}}" target="_blank">${{c.source_name}} ↗</a></span></div>
+        </div>
+        ${{c.note?`<div class="card-note">${{c.note}}</div>`:''}}
+      </div>
+    `).join('');
+    html += `</div>`;
+  }}
+
+  if(!html) html = '<div class="empty">Aucune donnée concurrente.</div>';
+  document.getElementById('comp-cards').innerHTML = html;
+}}
+
+function switchTab(tab, btn){{
+  currentTab = tab;
+  document.getElementById('tab-main').style.display = tab==='main' ? '' : 'none';
+  document.getElementById('tab-comp').style.display = tab==='comp' ? '' : 'none';
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  if(tab==='comp') renderComp();
+}}
+
+document.getElementById('main-filters').addEventListener('click', e=>{{
+  const btn=e.target.closest('.pill'); if(!btn) return;
+  mainFilter=btn.dataset.f; renderMain();
+}});
+document.getElementById('comp-filters').addEventListener('click', e=>{{
+  const btn=e.target.closest('.pill'); if(!btn) return;
+  compFilter=btn.dataset.f; renderComp();
 }});
 
-render();
+renderMain();
 </script>
 </body>
 </html>"""
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--open", action="store_true", help="Ouvre dans le navigateur après génération")
+    parser.add_argument("--open", action="store_true")
     args = parser.parse_args()
 
-    data = load_data()
-    html = build(data)
-
-    DIST.mkdir(exist_ok=True)
-    out = DIST / "index.html"
-    out.write_text(html, encoding="utf-8")
-
-    size_kb = round(out.stat().st_size / 1024, 1)
-    print(f"✓ Généré : {out}  ({size_kb} Ko)")
-    print(f"  {data['count']} offres · mise à jour du {data.get('date', '—')}")
-    print(f"\n  → Glisse le dossier dist/ sur https://app.netlify.com/drop")
+    html = build()
+    OUT.write_text(html, encoding="utf-8")
+    size_kb = round(OUT.stat().st_size / 1024, 1)
+    print(f"✓ Généré : {OUT}  ({size_kb} Ko)")
 
     if args.open:
         import webbrowser
-        webbrowser.open(out.as_uri())
+        webbrowser.open(OUT.as_uri())
 
 if __name__ == "__main__":
     main()

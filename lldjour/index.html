@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#ffffff">
-<title>Veille LLD — XPENG · Zeekr</title>
+<title>Veille LLD — XPENG · Zeekr · Concurrents</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -16,6 +16,9 @@
   --blue-bg:#e6f1fb;--blue-txt:#0c447c;
   --green-bg:#eaf3de;--green-txt:#27500a;
   --purple-bg:#eeedfe;--purple-txt:#3c3489;
+  --teal-bg:#e1f5ee;--teal-txt:#085041;
+  --amber-bg:#faeeda;--amber-txt:#633806;
+  --coral-bg:#faece7;--coral-txt:#712b13;
   --teal:#1d9e75;
   --radius:8px;--radius-lg:12px;
 }
@@ -27,29 +30,24 @@
     --blue-bg:#0c447c;--blue-txt:#b5d4f4;
     --green-bg:#27500a;--green-txt:#c0dd97;
     --purple-bg:#3c3489;--purple-txt:#cecbf6;
+    --teal-bg:#085041;--teal-txt:#9fe1cb;
+    --amber-bg:#633806;--amber-txt:#fac775;
+    --coral-bg:#712b13;--coral-txt:#f5c4b3;
   }
 }
-body{
-  font-family:'Inter',system-ui,sans-serif;
-  background:var(--bg3);
-  color:var(--txt);
-  min-height:100vh;
-  font-size:15px;
-  line-height:1.5;
-}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg3);color:var(--txt);min-height:100vh;font-size:15px;line-height:1.5}
 .page{max-width:520px;margin:0 auto;padding:0 1rem 3rem}
 
 /* Header */
-.header{
-  padding:1.25rem 0 1rem;
-  border-bottom:0.5px solid var(--border);
-  margin-bottom:1.25rem;
-  display:flex;align-items:center;justify-content:space-between;
-}
-.header-left h1{font-size:16px;font-weight:500;color:var(--txt)}
-.header-left .sub{font-size:12px;color:var(--txt3);margin-top:2px;display:flex;align-items:center;gap:5px}
+.header{padding:1.25rem 0 0;}
+.header h1{font-size:16px;font-weight:500;color:var(--txt)}
+.header .sub{font-size:12px;color:var(--txt3);margin-top:2px;display:flex;align-items:center;gap:5px}
 .dot{width:6px;height:6px;border-radius:50%;background:var(--teal);display:inline-block;flex-shrink:0}
-.badge-count{font-size:12px;background:var(--bg2);border:0.5px solid var(--border);border-radius:99px;padding:3px 10px;color:var(--txt2)}
+
+/* Onglets */
+.tabs{display:flex;gap:0;margin:1rem 0;border-bottom:0.5px solid var(--border)}
+.tab{font-size:13px;padding:8px 16px;cursor:pointer;color:var(--txt2);border-bottom:2px solid transparent;margin-bottom:-0.5px;background:none;border-left:none;border-right:none;border-top:none;transition:all .15s}
+.tab.active{color:var(--txt);border-bottom-color:var(--txt);font-weight:500}
 
 /* Stats */
 .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:1.25rem}
@@ -59,30 +57,21 @@ body{
 
 /* Filtres */
 .filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem}
-.pill{
-  font-size:12px;padding:5px 12px;border-radius:99px;
-  border:0.5px solid var(--border2);background:var(--bg);
-  color:var(--txt2);cursor:pointer;transition:all .15s;
-  -webkit-tap-highlight-color:transparent;
-}
+.pill{font-size:12px;padding:5px 12px;border-radius:99px;border:0.5px solid var(--border2);background:var(--bg);color:var(--txt2);cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
 .pill:hover{background:var(--bg2)}
 .pill.active{background:var(--txt);color:var(--bg);border-color:transparent}
 
 /* Cartes */
 .cards{display:flex;flex-direction:column;gap:10px}
-.card{
-  background:var(--bg);border:0.5px solid var(--border);
-  border-radius:var(--radius-lg);padding:1rem;
-}
+.card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1rem}
 .card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .model-tag{font-size:11px;font-weight:500;padding:2px 9px;border-radius:99px}
 .tag-g9{background:var(--blue-bg);color:var(--blue-txt)}
 .tag-g6{background:var(--green-bg);color:var(--green-txt)}
 .tag-7x{background:var(--purple-bg);color:var(--purple-txt)}
-.type-badge{
-  font-size:10px;padding:2px 7px;border-radius:99px;
-  background:var(--bg2);color:var(--txt2);border:0.5px solid var(--border);
-}
+.tag-ev{background:var(--teal-bg);color:var(--teal-txt)}
+.tag-phev{background:var(--amber-bg);color:var(--amber-txt)}
+.type-badge{font-size:10px;padding:2px 7px;border-radius:99px;background:var(--bg2);color:var(--txt2);border:0.5px solid var(--border)}
 .card-version{font-size:13px;font-weight:500;color:var(--txt);margin-bottom:4px}
 .card-price{font-size:28px;font-weight:500;color:var(--txt);line-height:1;margin-bottom:10px}
 .card-price span{font-size:13px;font-weight:400;color:var(--txt2)}
@@ -91,51 +80,58 @@ body{
 .card-row{display:flex;justify-content:space-between;font-size:12px}
 .card-row-label{color:var(--txt2)}
 .card-row-val{color:var(--txt);font-weight:500}
-.card-link{color:#185fa5;text-decoration:none;font-weight:400}
+.card-link{color:#185fa5;text-decoration:none}
 .card-link:hover{text-decoration:underline}
 .card-note{font-size:11px;color:var(--txt3);font-style:italic;margin-top:7px;line-height:1.4}
-
-/* Vide */
 .empty{text-align:center;padding:2.5rem 1rem;color:var(--txt3);font-size:14px}
-
-/* Footer */
 .footer{margin-top:1.5rem;padding-top:1rem;border-top:0.5px solid var(--border);font-size:11px;color:var(--txt3);line-height:1.6}
+.section-sep{font-size:11px;font-weight:500;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;margin:1.5rem 0 .75rem;padding-bottom:6px;border-bottom:0.5px solid var(--border)}
 </style>
 </head>
 <body>
 <div class="page">
 
   <div class="header">
-    <div class="header-left">
-      <h1>Veille LLD</h1>
-      <div class="sub">
-        <span class="dot"></span>
-        Mise à jour le 28 mai 2026
-      </div>
+    <h1>Veille LLD</h1>
+    <div class="sub"><span class="dot"></span> Mise à jour le 28 mai 2026</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('main',this)">XPENG · Zeekr</button>
+    <button class="tab" onclick="switchTab('comp',this)">Concurrents</button>
+  </div>
+
+  <!-- ONGLET PRINCIPAL -->
+  <div id="tab-main">
+    <div class="stats">
+      <div class="stat"><div class="stat-label">Offres</div><div class="stat-val" id="s-count">—</div></div>
+      <div class="stat"><div class="stat-label">Mensualité min.</div><div class="stat-val" id="s-min">—</div></div>
+      <div class="stat"><div class="stat-label">Mensualité max.</div><div class="stat-val" id="s-max">—</div></div>
+      <div class="stat"><div class="stat-label">Modèles suivis</div><div class="stat-val">3</div></div>
     </div>
-    <span class="badge-count" id="badge">5 offres</span>
+    <div class="filters" id="main-filters">
+      <button class="pill active" data-f="all">Tous</button>
+      <button class="pill" data-f="G9">G9</button>
+      <button class="pill" data-f="G6">G6</button>
+      <button class="pill" data-f="7X">7X</button>
+      <button class="pill" data-f="neuf">Neuf</button>
+      <button class="pill" data-f="occasion">Occasion</button>
+    </div>
+    <div class="cards" id="main-cards"></div>
   </div>
 
-  <div class="stats">
-    <div class="stat"><div class="stat-label">Offres</div><div class="stat-val" id="s-count">5</div></div>
-    <div class="stat"><div class="stat-label">Mensualité min.</div><div class="stat-val" id="s-min">—</div></div>
-    <div class="stat"><div class="stat-label">Mensualité max.</div><div class="stat-val" id="s-max">—</div></div>
-    <div class="stat"><div class="stat-label">Modèles suivis</div><div class="stat-val">3</div></div>
+  <!-- ONGLET CONCURRENTS -->
+  <div id="tab-comp" style="display:none">
+    <div class="filters" id="comp-filters">
+      <button class="pill active" data-f="all">Tous</button>
+      <button class="pill" data-f="EV">Électrique</button>
+      <button class="pill" data-f="PHEV">PHEV</button>
+    </div>
+    <div id="comp-cards"></div>
   </div>
-
-  <div class="filters" id="filters">
-    <button class="pill active" data-f="all">Tous</button>
-    <button class="pill" data-f="G9">G9</button>
-    <button class="pill" data-f="G6">G6</button>
-    <button class="pill" data-f="7X">7X</button>
-    <button class="pill" data-f="neuf">Neuf</button>
-    <button class="pill" data-f="occasion">Occasion</button>
-  </div>
-
-  <div class="cards" id="cards"></div>
 
   <div class="footer">
-    Sources : xpeng.com &middot; even-motors.com &middot; vivacar.fr &middot; zeekr.eu<br>
+    Sources : xpeng.com · even-motors.com · vivacar.fr · zeekr.eu · polestar.com · byd.com · kia.com · toyota.fr · volvocars.com · omoda-jaecoo.fr · automobilepropre.com<br>
     Données collectées automatiquement chaque matin à 07h00.
   </div>
 
@@ -143,75 +139,132 @@ body{
 
 <script>
 const OFFERS = [{"model": "G6", "brand": "XPENG", "version": "Autonomie Standard", "type": "neuf", "price_monthly": 359.0, "first_payment": 3550.0, "duration_months": 48, "km_per_year": 10000, "source_name": "even-motors.com", "source_url": "https://even-motors.com/nouveau-xpeng-g6-une-offre-en-lld-des-359e-mois/", "note": "Sous conditions de reprise de 1 800 €. Valable avant le 31/05/2026.", "scraped_at": "2026-05-28T07:00:12", "scraped_date": "2026-05-28"}, {"model": "G6", "brand": "XPENG", "version": "Autonomie Standard (sans reprise)", "type": "neuf", "price_monthly": 425.0, "first_payment": 3000.0, "duration_months": 48, "km_per_year": 10000, "source_name": "even-motors.com", "source_url": "https://even-motors.com/nouveau-xpeng-g6-en-lld-a-partir-de-425e-mois/", "note": "Sans condition de reprise.", "scraped_at": "2026-05-28T07:00:15", "scraped_date": "2026-05-28"}, {"model": "G6", "brand": "XPENG", "version": "Autonomie Standard 2025", "type": "occasion", "price_monthly": 308.0, "first_payment": 11200.0, "duration_months": 60, "km_per_year": 10000, "source_name": "vivacar.fr", "source_url": "https://www.vivacar.fr/voiture-occasion/xpeng/g6", "note": "Offre occasion LOA/LLD via Vivacar.", "scraped_at": "2026-05-28T07:00:22", "scraped_date": "2026-05-28"}, {"model": "G9", "brand": "XPENG", "version": "Autonomie Étendue", "type": "neuf", "price_monthly": 565.0, "first_payment": 5500.0, "duration_months": 48, "km_per_year": 10000, "source_name": "even-motors.com", "source_url": "https://even-motors.com/nouveau-xpeng-g9-profitez-dune-offre-en-lld-des-565e-mois/", "note": "Pack premium inclus (valeur 2 640 €). Valable avant le 31/05/2026.", "scraped_at": "2026-05-28T07:00:18", "scraped_date": "2026-05-28"}, {"model": "7X", "brand": "ZEEKR", "version": "Standard", "type": "neuf", "price_monthly": null, "first_payment": null, "duration_months": null, "km_per_year": null, "source_name": "zeekr.eu", "source_url": "https://www.zeekr.eu/fr-fr/offers", "note": "Zeekr lancé en France le 2 avril 2026. Prix catalogue 52 990 €. Offre LLD FR non encore publiée.", "scraped_at": "2026-05-28T07:00:28", "scraped_date": "2026-05-28"}];
-let active = 'all';
+const COMPETITORS = [{"brand": "Tesla", "model": "Model Y", "type": "EV", "price_monthly": 499, "first_payment": null, "duration_months": 36, "km_per_year": 10000, "source_name": "tesla.com", "source_url": "https://www.tesla.com/fr_fr/modely", "note": "Prix catalogue 40 990 €. LOA 36 mois / 10 000 km. Éligible bonus CEE."}, {"brand": "Hyundai", "model": "Ioniq 5", "type": "EV", "price_monthly": 445, "first_payment": null, "duration_months": 48, "km_per_year": 10000, "source_name": "caroom.fr", "source_url": "https://www.caroom.fr/leasing/hyundai/ioniq-5", "note": "LLD dès 445 €/mois. Prix catalogue à partir de 45 450 €."}, {"brand": "Polestar", "model": "3", "type": "EV", "price_monthly": 890, "first_payment": null, "duration_months": 48, "km_per_year": 10000, "source_name": "polestar.com", "source_url": "https://www.polestar.com/fr/polestar-3/", "note": "LLD officielle 48 mois / 40 000 km sans apport. Valable avant 30/06/2026."}, {"brand": "BYD", "model": "Sealion 7", "type": "EV", "price_monthly": 459, "first_payment": 3500, "duration_months": 49, "km_per_year": 10000, "source_name": "byd.com / groupechopard.com", "source_url": "https://www.groupechopard.com/offres/leasing-byd", "note": "LLD officielle 49 mois / 40 000 km. 1er loyer 3 500 €. Valable avant 31/05/2026."}, {"brand": "OMODA", "model": "9", "type": "EV", "price_monthly": 606, "first_payment": null, "duration_months": 48, "km_per_year": 10000, "source_name": "omoda-jaecoo.fr", "source_url": "https://omoda-jaecoo.fr/", "note": "LLD officielle 48 mois / 40 000 km. Version SHS-P Premium. Valable avant 31/05/2026."}, {"brand": "JAECOO", "model": "7", "type": "PHEV", "price_monthly": 390, "first_payment": null, "duration_months": 48, "km_per_year": 10000, "source_name": "omoda-jaecoo.fr", "source_url": "https://omoda-jaecoo.fr/", "note": "LLD officielle 48 mois / 40 000 km. Version SHS-H Select. Valable avant 31/05/2026."}, {"brand": "Kia", "model": "Sportage PHEV", "type": "PHEV", "price_monthly": 347, "first_payment": null, "duration_months": 49, "km_per_year": 10000, "source_name": "kia.com", "source_url": "https://www.groupechopard.com/offres/leasing-kia", "note": "LLD 49 mois / 40 000 km sans apport. Sous condition de reprise. Valable 01-31/05/2026."}, {"brand": "Toyota", "model": "RAV4 PHEV", "type": "PHEV", "price_monthly": 569, "first_payment": 3000, "duration_months": 36, "km_per_year": 10000, "source_name": "kinto-mobility.eu", "source_url": "https://www.kinto-mobility.eu/fr/fr/kinto-one/offres/offre-toyota-rav4-hybride-rechargeable-business", "note": "LLD KINTO 36 mois / 30 000 km. 1er loyer 3 000 €. Valable avant 31/05/2026. Réservé professionnels."}, {"brand": "Volvo", "model": "XC60 Recharge", "type": "PHEV", "price_monthly": 725, "first_payment": null, "duration_months": 48, "km_per_year": 15000, "source_name": "volvocars.com", "source_url": "https://www.volvocars.com/fr/l/offres-professionnels/volvo-xc60/", "note": "LLD 48 mois / 60 000 km sans apport. Maintenance & assistance incluses. Valable avant 30/04/2026. Réservé professionnels."}, {"brand": "Hyundai", "model": "Tucson PHEV", "type": "PHEV", "price_monthly": null, "first_payment": null, "duration_months": null, "km_per_year": null, "source_name": "hyundai.com", "source_url": "https://www.hyundai.com/fr/fr/modeles/tucson-phev.html", "note": "Prix catalogue à partir de ~42 000 €. Offre LLD en concession — consulter directement."}, {"brand": "Mitsubishi", "model": "Outlander PHEV", "type": "PHEV", "price_monthly": null, "first_payment": null, "duration_months": null, "km_per_year": null, "source_name": "mitsubishi-motors.fr", "source_url": "https://www.mitsubishi-motors.fr/outlander-phev", "note": "Prix catalogue à partir de ~49 000 €. Offre LLD en concession — consulter directement."}];
+let mainFilter = 'all';
+let compFilter = 'all';
+let currentTab = 'main';
 
-function tagClass(m){
-  return m==='G9'?'tag-g9':m==='G6'?'tag-g6':'tag-7x';
+function tagClass(model, brand){
+  if(brand==='ZEEKR') return 'tag-7x';
+  if(model==='G9') return 'tag-g9';
+  if(model==='G6') return 'tag-g6';
+  return 'tag-7x';
 }
 
-function fmt(n){
-  return n != null ? n.toLocaleString('fr-FR') : '—';
+function compTag(type){
+  return type==='PHEV' ? 'tag-phev' : 'tag-ev';
 }
 
-function render(){
+function fmt(n){ return n!=null ? n.toLocaleString('fr-FR') : '—'; }
+
+function renderMain(){
   const filtered = OFFERS.filter(o => {
-    if(active==='all') return true;
-    if(active==='neuf'||active==='occasion') return o.type===active;
-    return o.model===active;
+    if(mainFilter==='all') return true;
+    if(mainFilter==='neuf'||mainFilter==='occasion') return o.type===mainFilter;
+    return o.model===mainFilter;
   });
-
   const prices = filtered.filter(o=>o.price_monthly).map(o=>o.price_monthly);
-  const minP = prices.length ? Math.min(...prices) : null;
-  const maxP = prices.length ? Math.max(...prices) : null;
-
   document.getElementById('s-count').textContent = filtered.length;
-  document.getElementById('s-min').textContent = minP ? minP+'€' : '—';
-  document.getElementById('s-max').textContent = maxP ? maxP+'€' : '—';
-  document.getElementById('badge').textContent = filtered.length+' offre'+(filtered.length>1?'s':'');
+  document.getElementById('s-min').textContent = prices.length ? Math.min(...prices)+'€' : '—';
+  document.getElementById('s-max').textContent = prices.length ? Math.max(...prices)+'€' : '—';
 
-  document.querySelectorAll('.pill').forEach(p => {
-    const map = {'all':'Tous','neuf':'Neuf','occasion':'Occasion'};
-    const label = map[active] || active;
-    p.classList.toggle('active', p.dataset.f === active);
-  });
+  document.querySelectorAll('#main-filters .pill').forEach(p=>p.classList.toggle('active',p.dataset.f===mainFilter));
 
-  if(!filtered.length){
-    document.getElementById('cards').innerHTML = '<div class="empty">Aucune offre pour ce filtre.</div>';
-    return;
-  }
-
-  document.getElementById('cards').innerHTML = filtered.map(o => `
+  document.getElementById('main-cards').innerHTML = filtered.length ? filtered.map(o=>`
     <div class="card">
       <div class="card-top">
-        <span class="model-tag ${tagClass(o.model)}">${o.brand} ${o.model}</span>
+        <span class="model-tag ${tagClass(o.model,o.brand)}">${o.brand} ${o.model}</span>
         <span class="type-badge">${o.type}</span>
       </div>
       <div class="card-version">${o.version}</div>
       ${o.price_monthly
         ? `<div class="card-price">${o.price_monthly} €<span>/mois</span></div>`
-        : `<div class="no-price">Offre LLD non publiée</div>`
-      }
+        : `<div class="no-price">Offre LLD non publiée</div>`}
       <div class="card-rows">
-        ${o.duration_months ? `<div class="card-row"><span class="card-row-label">Durée</span><span class="card-row-val">${o.duration_months} mois · ${fmt(o.km_per_year)} km/an</span></div>` : ''}
-        ${o.first_payment ? `<div class="card-row"><span class="card-row-label">1er loyer</span><span class="card-row-val">${fmt(o.first_payment)} €</span></div>` : ''}
-        <div class="card-row">
-          <span class="card-row-label">Source</span>
-          <span class="card-row-val"><a class="card-link" href="${o.source_url}" target="_blank" rel="noopener">${o.source_name} ↗</a></span>
-        </div>
+        ${o.duration_months?`<div class="card-row"><span class="card-row-label">Durée</span><span class="card-row-val">${o.duration_months} mois · ${fmt(o.km_per_year)} km/an</span></div>`:''}
+        ${o.first_payment?`<div class="card-row"><span class="card-row-label">1er loyer</span><span class="card-row-val">${fmt(o.first_payment)} €</span></div>`:''}
+        <div class="card-row"><span class="card-row-label">Source</span><span class="card-row-val"><a class="card-link" href="${o.source_url}" target="_blank">${o.source_name} ↗</a></span></div>
       </div>
-      ${o.note ? `<div class="card-note">${o.note}</div>` : ''}
+      ${o.note?`<div class="card-note">${o.note}</div>`:''}
     </div>
-  `).join('');
+  `).join('') : '<div class="empty">Aucune offre pour ce filtre.</div>';
 }
 
-document.getElementById('filters').addEventListener('click', e => {
-  const btn = e.target.closest('.pill');
-  if(!btn) return;
-  active = btn.dataset.f;
-  render();
+function renderComp(){
+  const evs   = COMPETITORS.filter(c=>c.type==='EV'   && (compFilter==='all'||compFilter==='EV'));
+  const phevs = COMPETITORS.filter(c=>c.type==='PHEV' && (compFilter==='all'||compFilter==='PHEV'));
+
+  document.querySelectorAll('#comp-filters .pill').forEach(p=>p.classList.toggle('active',p.dataset.f===compFilter));
+
+  let html = '';
+
+  if(evs.length){
+    html += `<div class="section-sep">Électriques</div><div class="cards">`;
+    html += evs.map(c=>`
+      <div class="card">
+        <div class="card-top">
+          <span class="model-tag ${compTag(c.type)}">${c.brand} ${c.model}</span>
+          <span class="type-badge">100% élec.</span>
+        </div>
+        ${c.price_monthly
+          ? `<div class="card-price">${c.price_monthly} €<span>/mois</span></div>`
+          : `<div class="no-price">Prix indicatif</div>`}
+        <div class="card-rows">
+          ${c.duration_months?`<div class="card-row"><span class="card-row-label">Durée</span><span class="card-row-val">${c.duration_months} mois · ${fmt(c.km_per_year)} km/an</span></div>`:''}
+          ${c.first_payment?`<div class="card-row"><span class="card-row-label">1er loyer</span><span class="card-row-val">${fmt(c.first_payment)} €</span></div>`:''}
+          <div class="card-row"><span class="card-row-label">Source</span><span class="card-row-val"><a class="card-link" href="${c.source_url}" target="_blank">${c.source_name} ↗</a></span></div>
+        </div>
+        ${c.note?`<div class="card-note">${c.note}</div>`:''}
+      </div>
+    `).join('');
+    html += `</div>`;
+  }
+
+  if(phevs.length){
+    html += `<div class="section-sep">PHEV</div><div class="cards">`;
+    html += phevs.map(c=>`
+      <div class="card">
+        <div class="card-top">
+          <span class="model-tag ${compTag(c.type)}">${c.brand} ${c.model}</span>
+          <span class="type-badge">PHEV</span>
+        </div>
+        ${c.price_monthly
+          ? `<div class="card-price">${c.price_monthly} €<span>/mois</span></div>`
+          : `<div class="no-price">Prix indicatif</div>`}
+        <div class="card-rows">
+          ${c.duration_months?`<div class="card-row"><span class="card-row-label">Durée</span><span class="card-row-val">${c.duration_months} mois · ${fmt(c.km_per_year)} km/an</span></div>`:''}
+          ${c.first_payment?`<div class="card-row"><span class="card-row-label">1er loyer</span><span class="card-row-val">${fmt(c.first_payment)} €</span></div>`:''}
+          <div class="card-row"><span class="card-row-label">Source</span><span class="card-row-val"><a class="card-link" href="${c.source_url}" target="_blank">${c.source_name} ↗</a></span></div>
+        </div>
+        ${c.note?`<div class="card-note">${c.note}</div>`:''}
+      </div>
+    `).join('');
+    html += `</div>`;
+  }
+
+  if(!html) html = '<div class="empty">Aucune donnée concurrente.</div>';
+  document.getElementById('comp-cards').innerHTML = html;
+}
+
+function switchTab(tab, btn){
+  currentTab = tab;
+  document.getElementById('tab-main').style.display = tab==='main' ? '' : 'none';
+  document.getElementById('tab-comp').style.display = tab==='comp' ? '' : 'none';
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  if(tab==='comp') renderComp();
+}
+
+document.getElementById('main-filters').addEventListener('click', e=>{
+  const btn=e.target.closest('.pill'); if(!btn) return;
+  mainFilter=btn.dataset.f; renderMain();
+});
+document.getElementById('comp-filters').addEventListener('click', e=>{
+  const btn=e.target.closest('.pill'); if(!btn) return;
+  compFilter=btn.dataset.f; renderComp();
 });
 
-render();
+renderMain();
 </script>
 </body>
 </html>
