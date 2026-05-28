@@ -1,0 +1,41 @@
+name: Veille LLD quotidienne
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # 07h00 heure française (UTC+1)
+  workflow_dispatch:       # permet de lancer manuellement depuis GitHub
+
+jobs:
+  scrape-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupère le repo
+        uses: actions/checkout@v4
+
+      - name: Installe Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Installe les dépendances
+        run: |
+          pip install requests beautifulsoup4 playwright
+          playwright install chromium --with-deps
+
+      - name: Lance le scraper
+        run: python lldjour/scraper.py --mode pw
+
+      - name: Génère le HTML
+        run: python lldjour/build_html.py
+
+      - name: Copie index.html au bon endroit
+        run: cp lldjour/dist/index.html lldjour/index.html
+
+      - name: Commit et push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add lldjour/data/latest.json lldjour/index.html
+          git diff --staged --quiet || git commit -m "mise à jour LLD $(date +'%Y-%m-%d')"
+          git push
