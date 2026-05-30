@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-05-28T07:00:00",
-  "date": "2026-05-28",
-  "count": 5,
+  "generated_at": "2026-05-30T10:49:04",
+  "date": "2026-05-30",
+  "count": 8,
   "offers": [
     {
       "model": "G6",
@@ -12,41 +12,71 @@
       "first_payment": 3550.0,
       "duration_months": 48,
       "km_per_year": 10000,
-      "source_name": "even-motors.com",
+      "source_name": "even-motors.com (PW)",
       "source_url": "https://even-motors.com/nouveau-xpeng-g6-une-offre-en-lld-des-359e-mois/",
-      "note": "Sous conditions de reprise de 1 800 €. Valable avant le 31/05/2026.",
-      "scraped_at": "2026-05-28T07:00:12",
-      "scraped_date": "2026-05-28"
+      "note": "",
+      "scraped_at": "2026-05-30T10:48:17",
+      "scraped_date": "2026-05-30"
+    },
+    {
+      "model": "G6",
+      "brand": "XPENG",
+      "version": "Autonomie Etendue, Standard, Étendue",
+      "type": "neuf",
+      "price_monthly": 359.0,
+      "first_payment": 3550.0,
+      "duration_months": 48,
+      "km_per_year": 10000,
+      "source_name": "even-motors.com (PW)",
+      "source_url": "https://event.xpeng.com/fr/3y01dt.html",
+      "note": "",
+      "scraped_at": "2026-05-30T10:48:42",
+      "scraped_date": "2026-05-30"
+    },
+    {
+      "model": "G6",
+      "brand": "XPENG",
+      "version": "—",
+      "type": "occasion",
+      "price_monthly": 388.0,
+      "first_payment": null,
+      "duration_months": null,
+      "km_per_year": null,
+      "source_name": "www.vivacar.fr (PW)",
+      "source_url": "https://www.vivacar.fr/voiture-occasion/xpeng/g6",
+      "note": "",
+      "scraped_at": "2026-05-30T10:48:49",
+      "scraped_date": "2026-05-30"
     },
     {
       "model": "G6",
       "brand": "XPENG",
       "version": "Autonomie Standard (sans reprise)",
       "type": "neuf",
-      "price_monthly": 425.0,
-      "first_payment": 3000.0,
-      "duration_months": 48,
-      "km_per_year": 10000,
-      "source_name": "even-motors.com",
+      "price_monthly": null,
+      "first_payment": null,
+      "duration_months": null,
+      "km_per_year": null,
+      "source_name": "even-motors.com (PW)",
       "source_url": "https://even-motors.com/nouveau-xpeng-g6-en-lld-a-partir-de-425e-mois/",
-      "note": "Sans condition de reprise.",
-      "scraped_at": "2026-05-28T07:00:15",
-      "scraped_date": "2026-05-28"
+      "note": "",
+      "scraped_at": "2026-05-30T10:48:23",
+      "scraped_date": "2026-05-30"
     },
     {
-      "model": "G6",
+      "model": "G9",
       "brand": "XPENG",
-      "version": "Autonomie Standard 2025",
-      "type": "occasion",
-      "price_monthly": 308.0,
-      "first_payment": 11200.0,
-      "duration_months": 60,
+      "version": "Autonomie Etendue, Standard",
+      "type": "neuf",
+      "price_monthly": 520.0,
+      "first_payment": 5500.0,
+      "duration_months": 48,
       "km_per_year": 10000,
-      "source_name": "vivacar.fr",
-      "source_url": "https://www.vivacar.fr/voiture-occasion/xpeng/g6",
-      "note": "Offre occasion LOA/LLD via Vivacar.",
-      "scraped_at": "2026-05-28T07:00:22",
-      "scraped_date": "2026-05-28"
+      "source_name": "even-motors.com (PW)",
+      "source_url": "https://event.xpeng.com/fr/t79710.html",
+      "note": "",
+      "scraped_at": "2026-05-30T10:48:37",
+      "scraped_date": "2026-05-30"
     },
     {
       "model": "G9",
@@ -57,11 +87,26 @@
       "first_payment": 5500.0,
       "duration_months": 48,
       "km_per_year": 10000,
-      "source_name": "even-motors.com",
+      "source_name": "even-motors.com (PW)",
       "source_url": "https://even-motors.com/nouveau-xpeng-g9-profitez-dune-offre-en-lld-des-565e-mois/",
-      "note": "Pack premium inclus (valeur 2 640 €). Valable avant le 31/05/2026.",
-      "scraped_at": "2026-05-28T07:00:18",
-      "scraped_date": "2026-05-28"
+      "note": "",
+      "scraped_at": "2026-05-30T10:48:30",
+      "scraped_date": "2026-05-30"
+    },
+    {
+      "model": "G9",
+      "brand": "XPENG",
+      "version": "—",
+      "type": "occasion",
+      "price_monthly": 583.0,
+      "first_payment": null,
+      "duration_months": null,
+      "km_per_year": null,
+      "source_name": "www.vivacar.fr (PW)",
+      "source_url": "https://www.vivacar.fr/voiture-occasion/xpeng/g9",
+      "note": "",
+      "scraped_at": "2026-05-30T10:48:55",
+      "scraped_date": "2026-05-30"
     },
     {
       "model": "7X",
@@ -72,11 +117,11 @@
       "first_payment": null,
       "duration_months": null,
       "km_per_year": null,
-      "source_name": "zeekr.eu",
+      "source_name": "www.zeekr.eu (PW)",
       "source_url": "https://www.zeekr.eu/fr-fr/offers",
       "note": "Zeekr lancé en France le 2 avril 2026. Prix catalogue 52 990 €. Offre LLD FR non encore publiée.",
-      "scraped_at": "2026-05-28T07:00:28",
-      "scraped_date": "2026-05-28"
+      "scraped_at": "2026-05-30T10:49:04",
+      "scraped_date": "2026-05-30"
     }
   ]
 }
