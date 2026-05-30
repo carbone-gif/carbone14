@@ -29,9 +29,6 @@ jobs:
       - name: Génère le HTML
         run: python lldjour/build_html.py
 
-      - name: Copie index.html au bon endroit
-        run: cp lldjour/dist/index.html lldjour/index.html
-
       - name: Commit et push
         run: |
           git config user.name "github-actions[bot]"
