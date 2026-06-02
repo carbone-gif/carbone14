@@ -574,6 +574,41 @@ body{
 .loading-msg{text-align:center;padding:32px;color:var(--label2);font-size:14px;}
 
 /* ─── NOTE IN DAY CARD ─── */
+/* ── COMPTEUR J- ── */
+.jminus-badge{background:linear-gradient(135deg,#1C1C2E,#16213E);color:#fff;border-radius:10px;padding:6px 12px;text-align:center;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.jminus-num{font-size:28px;font-weight:200;letter-spacing:-1px;line-height:1;color:#fff}
+.jminus-label{font-size:11px;opacity:.6;margin-top:2px}
+.jminus-right{text-align:right}
+.jminus-countdown{font-size:13px;font-weight:600;color:var(--teal);font-variant-numeric:tabular-nums}
+/* ── RAPPELS URGENTS ── */
+.urgents-banner{background:rgba(255,59,48,.07);border:1px solid rgba(255,59,48,.2);border-radius:var(--rad-lg);padding:12px 14px;margin-bottom:12px;}
+.urgents-title{font-size:12px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.urgent-item{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:0.5px solid rgba(255,59,48,.1);font-size:13px;}
+.urgent-item:last-child{border:none}
+.urgent-check{width:18px;height:18px;border-radius:4px;border:2px solid var(--red);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;}
+.urgent-check.done{background:var(--green);border-color:var(--green);color:#fff;font-size:11px;}
+.urgent-text{flex:1;color:var(--label2);line-height:1.3}
+.urgent-text.done{text-decoration:line-through;color:var(--label4)}
+/* ── DÉPENSES ── */
+.depense-row{display:flex;align-items:center;gap:8px;margin-top:8px;padding-top:8px;border-top:0.5px solid var(--sep-color);}
+.depense-label{font-size:11px;font-weight:600;color:var(--label3);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;}
+.depense-input{flex:1;font-size:14px;font-family:'Inter',sans-serif;padding:5px 10px;border:1.5px solid var(--bg4);border-radius:8px;background:var(--bg2);color:var(--label);outline:none;width:80px;}
+.depense-input:focus{border-color:var(--blue)}
+.depense-unit{font-size:13px;color:var(--label2)}
+.depense-total-row{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--bg3);border-radius:10px;margin-top:6px;font-size:13px;}
+.depense-total-label{color:var(--label2)}
+.depense-total-val{font-weight:700;color:var(--label)}
+/* ── PHOTO ── */
+.photo-row{display:flex;align-items:center;gap:8px;margin-top:8px;}
+.photo-input{flex:1;font-size:12px;font-family:'Inter',sans-serif;padding:5px 10px;border:1.5px solid var(--bg4);border-radius:8px;background:var(--bg2);color:var(--label);outline:none;}
+.photo-input:focus{border-color:var(--blue)}
+.photo-preview{width:100%;border-radius:10px;margin-top:6px;max-height:180px;object-fit:cover;display:none;}
+/* ── AUJOURD'HUI ── */
+.today-hero{background:linear-gradient(135deg,#0F766E,#0E7490);color:#fff;border-radius:var(--rad-lg);padding:16px;margin-bottom:12px;}
+.today-hero-day{font-size:13px;font-weight:600;opacity:.7;margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em}
+.today-hero-title{font-size:20px;font-weight:700;line-height:1.2;margin-bottom:2px}
+.today-hero-date{font-size:12px;opacity:.65}
+.today-offtrip{text-align:center;padding:40px 20px;color:var(--label2);font-size:15px;line-height:1.8;}
 .day-note-area{margin-top:10px;border-top:0.5px solid var(--sep-color);padding-top:10px;}
 .day-note-label{font-size:11px;font-weight:600;color:var(--label3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;}
 .day-note-input{width:100%;min-height:56px;font-size:13px;font-family:'Inter',system-ui,sans-serif;padding:8px 10px;border:1.5px solid var(--bg4);border-radius:8px;background:var(--bg2);color:var(--label);outline:none;resize:none;line-height:1.5;transition:border-color .15s;}
@@ -697,6 +732,7 @@ body{
     </div>
   </div>
   <nav class="top-nav" id="top-nav">
+    <button onclick="switchTab('aujourdhui',this)">📅 Aujourd'hui</button>
     <button class="active" onclick="switchTab('itinerary',this)">🗓 Itinéraire</button>
     <button onclick="switchTab('carte',this)">🗺 Carte</button>
     <button onclick="switchTab('meteo',this)">🌦 Météo</button>
@@ -713,8 +749,17 @@ body{
 
 <div class="page">
 
+<!-- AUJOURD'HUI -->
+<div id="tab-aujourdhui" class="tab-panel" style="display:none">
+  <div id="today-content"></div>
+</div>
+
 <!-- ─── ITINÉRAIRE ─── -->
 <div id="tab-itinerary" class="tab-panel">
+  <div id="urgents-banner" class="urgents-banner" style="display:none">
+    <div class="urgents-title">🚨 À réserver MAINTENANT</div>
+    <div id="urgents-list"></div>
+  </div>
   <div class="filter-row" id="stage-filter">
     <button class="fpill active" data-f="all">Tout</button>
     <button class="fpill" data-f="bkk1">Bangkok 1</button>
@@ -1136,6 +1181,7 @@ body{
   </button>
 </nav>
 <div class="more-menu" id="more-menu">
+  <button class="more-item" onclick="switchTabFromMore('aujourdhui')"><span class="more-icon">📅</span> Aujourd'hui</button>
   <button class="more-item" onclick="switchTabFromMore('transport')"><span class="more-icon">🚆</span> Transport</button>
   <button class="more-item" onclick="switchTabFromMore('rappels')"><span class="more-icon">⏰</span> Rappels</button>
   <button class="more-item" onclick="switchTabFromMore('thai')"><span class="more-icon">🗣</span> Thaï</button>
@@ -1418,6 +1464,8 @@ function switchTab(name, btnEl) {
   currentTab = name;
   closeMore();
 
+  if (name === 'aujourdhui') { renderToday(); setInterval(updateJminus, 1000); }
+  if (name === 'itinerary') { renderUrgents(); }
   if (name === 'carte') {
     if (!mapInited) { mapInited = true; setTimeout(initMap, 80); }
     else if (map) { setTimeout(function() { map.invalidateSize(); }, 80); }
@@ -1639,7 +1687,17 @@ function renderItinerary(f) {
       '<div class="day-body">' +
         '<ul class="act-list">' + d.acts.map(function(a) { return '<li>' + a + '</li>'; }).join('') + '</ul>' +
         '<div class="tip-box">' + d.tip + '</div>' +
-        '<div class="day-note-area">' +
+          '<div class="depense-row">' +
+            '<span class="depense-label">💸 Dépenses</span>' +
+            '<input type="number" class="depense-input" data-day="' + d.day + '" placeholder="0" value="' + (loadDepense(d.day)||'') + '" oninput="saveDepense(' + d.day + ',this.value)" min="0">' +
+            '<span class="depense-unit">฿</span>' +
+          '</div>' +
+          '<div class="photo-row">' +
+            '<span class="depense-label">📸 Photo</span>' +
+            '<input type="url" class="photo-input" data-day="' + d.day + '" placeholder="URL de la photo…" value="' + (loadPhoto(d.day)||'') + '" oninput="savePhoto(' + d.day + ',this.value)">' +
+          '</div>' +
+          (loadPhoto(d.day) ? '<img class="photo-preview" src="' + loadPhoto(d.day) + '" style="display:block" onerror="this.style.display=\'none\'">' : '<img class="photo-preview">') +
+          '<div class="day-note-area">' +
           '<div style="font-size:11px;font-weight:600;color:var(--label3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">📍 Lieu</div>' +
           '<input type="text" class="day-note-lieu" data-day="' + d.day + '" value="' + noteLieu.replace(/"/g,'&quot;') + '" placeholder="Où as-tu fait ça ?" oninput="autosaveLieuItin(this)" style="width:100%;font-size:13px;font-family:\'Inter\',sans-serif;padding:6px 10px;border:1.5px solid var(--bg4);border-radius:8px;background:var(--bg2);color:var(--label);outline:none;margin-bottom:8px;" onfocus="this.style.borderColor=\'var(--blue)\'" onblur="this.style.borderColor=\'var(--bg4)\'">' +
           '<div class="day-note-label">✏️ Mes notes</div>' +
@@ -2347,7 +2405,150 @@ document.getElementById("guide-budget").addEventListener("click", function(e) {
 });
 
 /* ─── INIT ─── */
+/* ─── COMPTEUR J- ─── */
+var DEPART = new Date('2026-07-23T00:00:00');
+var RETOUR = new Date('2026-08-18T23:59:59');
+function updateJminus() {
+  var now = new Date();
+  var diff = DEPART - now;
+  var el = document.getElementById('jminus-num');
+  var cd = document.getElementById('jminus-countdown');
+  if (!el) return;
+  if (diff > 0) {
+    var days = Math.floor(diff / 86400000);
+    var h = Math.floor((diff % 86400000) / 3600000);
+    var m = Math.floor((diff % 3600000) / 60000);
+    var s = Math.floor((diff % 60000) / 1000);
+    el.textContent = 'J-' + days;
+    if (cd) cd.textContent = h + 'h ' + String(m).padStart(2,'0') + 'm ' + String(s).padStart(2,'0') + 's';
+  } else if (now <= RETOUR) {
+    var dayN = Math.floor((now - DEPART) / 86400000) + 1;
+    el.textContent = 'Jour ' + dayN;
+    if (cd) cd.textContent = '✈️ En voyage !';
+  } else {
+    el.textContent = 'Terminé';
+    if (cd) cd.textContent = '🏠 De retour !';
+  }
+}
+
+/* ─── DÉPENSES ─── */
+var DEP_KEY = 'thai2026_dep';
+function loadAllDep() { try { return JSON.parse(localStorage.getItem(DEP_KEY)) || {}; } catch(e) { return {}; } }
+function loadDepense(day) { return loadAllDep()['d'+day] || ''; }
+function saveDepense(day, val) { var d = loadAllDep(); d['d'+day] = val; try { localStorage.setItem(DEP_KEY, JSON.stringify(d)); } catch(e) {} updateDepTotal(); }
+function updateDepTotal() {
+  var d = loadAllDep(); var total = 0;
+  Object.values(d).forEach(function(v) { total += parseFloat(v) || 0; });
+  var el = document.getElementById('dep-total'); if (el) el.textContent = total.toLocaleString('fr-FR') + ' ฿';
+  var rate = currentRate || 38;
+  var el2 = document.getElementById('dep-total-eur'); if (el2) el2.textContent = '≈ ' + (total/rate).toFixed(0) + ' €';
+}
+
+/* ─── PHOTOS ─── */
+var PHOTO_KEY = 'thai2026_photos';
+function loadAllPhotos() { try { return JSON.parse(localStorage.getItem(PHOTO_KEY)) || {}; } catch(e) { return {}; } }
+function loadPhoto(day) { return loadAllPhotos()['p'+day] || ''; }
+function savePhoto(day, url) {
+  var p = loadAllPhotos(); p['p'+day] = url;
+  try { localStorage.setItem(PHOTO_KEY, JSON.stringify(p)); } catch(e) {}
+  var img = document.querySelector('.photo-preview[data-day="'+day+'"]') || document.querySelector('img.photo-preview');
+  var inputs = document.querySelectorAll('.photo-input[data-day="'+day+'"]');
+  inputs.forEach(function(inp) {
+    var preview = inp.closest('.day-body') ? inp.closest('.day-body').querySelector('.photo-preview') : null;
+    if (preview) { preview.src = url; preview.style.display = url ? 'block' : 'none'; }
+  });
+}
+
+/* ─── RAPPELS URGENTS ─── */
+var URGENTS = [
+  { id:'train', label:'Train de nuit n°7 — 27 juil. (12go.asia)', url:'https://12go.asia/fr/travel/bangkok/chiang-mai' },
+  { id:'elephant', label:'Elephant Nature Park — 29 juil. (elephantnaturepark.org)', url:'https://www.elephantnaturepark.org' },
+  { id:'boonsiri', label:'Van Boonsiri aller — 2 août (boonsiriferries.com)', url:'https://www.boonsiriferries.com' },
+  { id:'vol', label:'Vol Chiang Mai → Bangkok — 31 juil.', url:'https://12go.asia/fr/travel/chiang-mai/bangkok' },
+];
+var URG_KEY = 'thai2026_urg';
+function loadUrgDone() { try { return JSON.parse(localStorage.getItem(URG_KEY)) || {}; } catch(e) { return {}; } }
+function saveUrgDone(id, val) { var d = loadUrgDone(); d[id] = val; try { localStorage.setItem(URG_KEY, JSON.stringify(d)); } catch(e) {} renderUrgents(); }
+function renderUrgents() {
+  var done = loadUrgDone();
+  var remaining = URGENTS.filter(function(u) { return !done[u.id]; });
+  var banner = document.getElementById('urgents-banner');
+  var list = document.getElementById('urgents-list');
+  if (!banner || !list) return;
+  if (remaining.length === 0) { banner.style.display = 'none'; return; }
+  banner.style.display = '';
+  list.innerHTML = URGENTS.map(function(u) {
+    var isDone = !!done[u.id];
+    return '<div class="urgent-item">' +
+      '<div class="urgent-check' + (isDone?' done':'') + '" onclick="saveUrgDone(\'' + u.id + '\',' + !isDone + ')">' + (isDone?'✓':'') + '</div>' +
+      '<span class="urgent-text' + (isDone?' done':'') + '"><a href="' + u.url + '" target="_blank" style="color:inherit;text-decoration:none">' + u.label + '</a></span>' +
+    '</div>';
+  }).join('');
+}
+
+/* ─── AUJOURD'HUI ─── */
+function renderToday() {
+  var el = document.getElementById('today-content'); if (!el) return;
+  var now = new Date();
+  var notes = loadNotes(); var dep = loadAllDep(); var photos = loadAllPhotos();
+  /* Compteur J- */
+  var diff = DEPART - now;
+  var jHtml = '';
+  if (diff > 0) {
+    var days = Math.floor(diff / 86400000);
+    jHtml = '<div class="jminus-badge">' +
+      '<div><div class="jminus-num" id="jminus-num">J-' + days + '</div><div class="jminus-label">avant le départ</div></div>' +
+      '<div class="jminus-right"><div class="jminus-countdown" id="jminus-countdown">--h --m --s</div><div style="font-size:10px;opacity:.5;margin-top:2px">23 juillet 2026</div></div>' +
+    '</div>';
+  }
+  if (now < DEPART) {
+    el.innerHTML = jHtml +
+      '<div class="today-offtrip">🗓️ Le voyage commence le <strong>23 juillet 2026</strong>.<br>Cette page affichera le jour en cours une fois le voyage commencé.<br><br>' +
+      '<button onclick="switchTab(\'itinerary\',null)" style="background:var(--blue);color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:600;cursor:pointer;font-family:\'Inter\',sans-serif;">Voir l\'itinéraire →</button></div>';
+    setInterval(updateJminus, 1000); updateJminus();
+    return;
+  }
+  if (now > RETOUR) {
+    el.innerHTML = '<div class="today-offtrip">🏠 Voyage terminé — de retour à Paris !<br>Consulte le carnet pour revivre les souvenirs.</div>';
+    return;
+  }
+  var dayN = Math.floor((now - DEPART) / 86400000) + 1;
+  var d = DAYS.find(function(x) { return x.day === dayN; });
+  if (!d) { el.innerHTML = '<div class="today-offtrip">Jour ' + dayN + ' — Koh Chang 🏝️<br>Profite !</div>'; return; }
+  var raw = notes['day_' + d.day]; var noteText = getNoteText(raw);
+  var depVal = dep['d'+d.day] || '';
+  var photoUrl = photos['p'+d.day] || '';
+  var actsHtml = d.acts.map(function(a) { return '<li style="font-size:13px;color:var(--label2);padding-left:14px;position:relative;line-height:1.5;margin-bottom:4px"><span style="position:absolute;left:2px;top:8px;width:5px;height:5px;border-radius:50%;background:var(--label4);display:block"></span>' + a + '</li>'; }).join('');
+  el.innerHTML =
+    '<div class="today-hero">' +
+      '<div class="today-hero-day">Jour ' + d.day + ' · ' + d.stageLabel + '</div>' +
+      '<div class="today-hero-title">' + d.emoji + ' ' + d.title + '</div>' +
+      '<div class="today-hero-date">' + d.date + '</div>' +
+    '</div>' +
+    '<div class="list-group" style="padding:12px 16px;margin-bottom:10px">' +
+      '<ul style="list-style:none">' + actsHtml + '</ul>' +
+      '<div style="margin-top:10px;padding-top:10px;border-top:0.5px solid var(--sep-color);background:rgba(255,149,0,.08);border-radius:10px;padding:8px 12px;font-size:12.5px;color:var(--label2);line-height:1.5;border-left:3px solid var(--orange)">💡 ' + d.tip + '</div>' +
+    '</div>' +
+    '<div class="list-group" style="padding:14px 16px;margin-bottom:10px">' +
+      '<div style="font-size:12px;font-weight:600;color:var(--label2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">💸 Dépenses du jour</div>' +
+      '<div class="depense-row" style="border:none;margin:0;padding:0">' +
+        '<input type="number" class="depense-input" data-day="' + d.day + '" placeholder="0" value="' + depVal + '" oninput="saveDepense(' + d.day + ',this.value)" min="0" style="width:120px">' +
+        '<span class="depense-unit">฿</span>' +
+      '</div>' +
+    '</div>' +
+    '<div class="list-group" style="padding:14px 16px;margin-bottom:10px">' +
+      '<div style="font-size:12px;font-weight:600;color:var(--label2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">📸 Photo du jour</div>' +
+      '<input type="url" class="photo-input" data-day="' + d.day + '" placeholder="URL de ta photo…" value="' + photoUrl + '" oninput="savePhoto(' + d.day + ',this.value)">' +
+      (photoUrl ? '<img src="' + photoUrl + '" style="width:100%;border-radius:10px;margin-top:8px;max-height:200px;object-fit:cover" onerror="this.style.display=\'none\'">' : '') +
+    '</div>' +
+    '<div class="list-group" style="padding:14px 16px;margin-bottom:10px">' +
+      '<div style="font-size:12px;font-weight:600;color:var(--label2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">✏️ Notes du jour</div>' +
+      '<textarea class="carnet-textarea" style="margin-top:0" data-day="' + d.day + '" oninput="autosaveNote(this)" placeholder="Tes souvenirs, impressions…">' + noteText + '</textarea>' +
+    '</div>';
+}
+
 renderItinerary('all');
+renderUrgents();
 renderPhrases('politesse');
 renderChecklist();
 refreshCarnetCounter();
