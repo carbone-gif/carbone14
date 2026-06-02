@@ -3,268 +3,2359 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#ffffff">
-<title>Veille LLD — XPENG · Zeekr · Concurrents</title>
+<meta name="theme-color" content="#007AFF">
+<title>🇹🇭 Thaïlande 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#ffffff;--bg2:#f5f5f3;--bg3:#ebebea;
-  --txt:#1a1a1a;--txt2:#6b6b69;--txt3:#9b9b99;
-  --border:rgba(0,0,0,0.1);--border2:rgba(0,0,0,0.18);
-  --blue-bg:#e6f1fb;--blue-txt:#0c447c;
-  --green-bg:#eaf3de;--green-txt:#27500a;
-  --purple-bg:#eeedfe;--purple-txt:#3c3489;
-  --teal-bg:#e1f5ee;--teal-txt:#085041;
-  --amber-bg:#faeeda;--amber-txt:#633806;
-  --coral-bg:#faece7;--coral-txt:#712b13;
-  --teal:#1d9e75;
-  --radius:8px;--radius-lg:12px;
+  --blue:#007AFF;--blue-dk:#0062CC;
+  --green:#34C759;--red:#FF3B30;--orange:#FF9500;--purple:#AF52DE;--teal:#5AC8FA;
+  --bg:#F2F2F7;--bg2:#FFFFFF;--bg3:#E5E5EA;--bg4:#D1D1D6;
+  --label:#000000;--label2:rgba(60,60,67,.6);--label3:rgba(60,60,67,.3);--label4:rgba(60,60,67,.18);
+  --card:#FFFFFF;--sep-color:rgba(60,60,67,.12);
+  --rad:10px;--rad-lg:16px;--rad-xl:20px;
+  --sh:0 1px 0 rgba(0,0,0,.04),0 2px 8px rgba(0,0,0,.06);
+  --sh-lg:0 4px 20px rgba(0,0,0,.10);
+  --tab-h:49px;
 }
 @media(prefers-color-scheme:dark){
   :root{
-    --bg:#1c1c1a;--bg2:#252523;--bg3:#2e2e2c;
-    --txt:#f0f0ee;--txt2:#a0a09e;--txt3:#6b6b69;
-    --border:rgba(255,255,255,0.1);--border2:rgba(255,255,255,0.18);
-    --blue-bg:#0c447c;--blue-txt:#b5d4f4;
-    --green-bg:#27500a;--green-txt:#c0dd97;
-    --purple-bg:#3c3489;--purple-txt:#cecbf6;
-    --teal-bg:#085041;--teal-txt:#9fe1cb;
-    --amber-bg:#633806;--amber-txt:#fac775;
-    --coral-bg:#712b13;--coral-txt:#f5c4b3;
+    --bg:#000000;--bg2:#1C1C1E;--bg3:#2C2C2E;--bg4:#3A3A3C;
+    --label:#FFFFFF;--label2:rgba(235,235,245,.6);--label3:rgba(235,235,245,.3);--label4:rgba(235,235,245,.08);
+    --card:#1C1C1E;--sep-color:rgba(84,84,88,.55);
+    --sh:0 1px 0 rgba(255,255,255,.04),0 2px 8px rgba(0,0,0,.4);
+    --sh-lg:0 4px 20px rgba(0,0,0,.5);
   }
 }
-body{font-family:'Inter',system-ui,sans-serif;background:var(--bg3);color:var(--txt);min-height:100vh;font-size:15px;line-height:1.5}
-.page{max-width:520px;margin:0 auto;padding:0 1rem 3rem}
 
-/* Header */
-.header{padding:1.25rem 0 0;}
-.header h1{font-size:16px;font-weight:500;color:var(--txt)}
-.header .sub{font-size:12px;color:var(--txt3);margin-top:2px;display:flex;align-items:center;gap:5px}
-.dot{width:6px;height:6px;border-radius:50%;background:var(--teal);display:inline-block;flex-shrink:0}
+/* ─── BODY ─── */
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:var(--bg);color:var(--label);
+  min-height:100vh;font-size:15px;line-height:1.4;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:calc(var(--tab-h) + env(safe-area-inset-bottom));
+}
+/* ─── OFFLINE BANNER ─── */
+#offline-banner{
+  display:none;background:var(--orange);color:#fff;
+  text-align:center;font-size:12px;font-weight:500;
+  padding:6px 12px;letter-spacing:.01em;
+}
+/* ─── HEADER ─── */
+.app-header{
+  background:var(--bg2);
+  border-bottom:0.5px solid var(--sep-color);
+  padding:12px 16px 10px;
+  padding-top:calc(12px + env(safe-area-inset-top));
+}
+.header-row{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px}
+.header-title{font-size:20px;font-weight:700;letter-spacing:-.3px;color:var(--label);line-height:1.15}
+.header-title .yr{color:var(--blue)}
+.header-sub{font-size:12px;color:var(--label2);margin-top:2px;font-weight:400}
+.clock-block{text-align:right}
+.clock-city{font-size:10px;font-weight:500;color:var(--label3);letter-spacing:.05em;text-transform:uppercase}
+.clock-val{font-size:20px;font-weight:300;color:var(--label);letter-spacing:-.5px;line-height:1.1;font-variant-numeric:tabular-nums}
+.clock-utc{font-size:10px;color:var(--label3);margin-top:1px}
+.header-badges{display:flex;gap:5px;flex-wrap:wrap}
+.hbadge{
+  font-size:11px;font-weight:500;color:var(--blue);
+  background:rgba(0,122,255,.1);border-radius:6px;
+  padding:3px 8px;line-height:1.4;
+}
+/* ─── TOP NAV TABS (horizontal scroll, tablet+) ─── */
+.top-nav{
+  display:none;
+  background:var(--bg2);
+  border-bottom:0.5px solid var(--sep-color);
+  overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;
+}
+.top-nav::-webkit-scrollbar{display:none}
+.top-nav button{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:13px;font-weight:500;color:var(--label2);
+  background:none;border:none;border-bottom:2px solid transparent;
+  padding:10px 14px;cursor:pointer;
+  font-family:'Inter',sans-serif;white-space:nowrap;
+  margin-bottom:-1px;transition:color .15s,border-color .15s;
+}
+.top-nav button.active{color:var(--blue);border-bottom-color:var(--blue)}
+/* ─── STICKY HEADER ─── */
+.sticky-top{position:sticky;top:0;z-index:200}
+/* ─── BOTTOM NAV (mobile) ─── */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:300;
+  background:rgba(248,248,248,.92);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  border-top:0.5px solid var(--sep-color);
+  display:flex;align-items:stretch;
+  padding-bottom:env(safe-area-inset-bottom);
+  height:calc(var(--tab-h) + env(safe-area-inset-bottom));
+}
+@media(prefers-color-scheme:dark){
+  .bottom-nav{background:rgba(28,28,30,.92)}
+}
+.bnav-item{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:2px;
+  font-size:10px;font-weight:500;color:var(--label3);
+  background:none;border:none;cursor:pointer;
+  padding:5px 2px 2px;
+  font-family:'Inter',sans-serif;
+  transition:color .15s;
+  min-width:0;
+}
+.bnav-item.active{color:var(--blue)}
+.bnav-icon{font-size:20px;line-height:1}
+.bnav-more{position:relative}
+/* More menu */
+.more-menu{
+  display:none;position:fixed;bottom:calc(var(--tab-h) + env(safe-area-inset-bottom) + 6px);
+  right:6px;
+  background:var(--card);border-radius:14px;
+  box-shadow:var(--sh-lg),0 0 0 0.5px var(--sep-color);
+  z-index:400;min-width:180px;overflow:hidden;
+}
+.more-menu.open{display:block}
+.more-item{
+  display:flex;align-items:center;gap:12px;
+  width:100%;padding:12px 16px;
+  font-size:15px;font-weight:400;color:var(--label);
+  background:none;border:none;cursor:pointer;
+  font-family:'Inter',sans-serif;
+  border-bottom:0.5px solid var(--sep-color);
+  text-align:left;
+}
+.more-item:last-child{border:none}
+.more-item:active{background:var(--bg3)}
+.more-icon{font-size:18px}
+/* ─── PAGE ─── */
+.page{max-width:700px;margin:0 auto}
+@media(min-width:768px){
+  .page{max-width:1024px}
+  .bottom-nav{display:none}
+  .top-nav{display:block}
+  .tab-panel{padding:16px 20px 0}
+}
+/* ─── PANEL ─── */
+.tab-panel{padding:12px 16px 0}
+/* ─── GROUPED LIST (iOS style) ─── */
+.list-group{
+  background:var(--card);border-radius:var(--rad-lg);
+  overflow:hidden;margin-bottom:12px;
+  box-shadow:var(--sh);
+}
+.list-group-label{
+  font-size:13px;font-weight:400;color:var(--label2);
+  padding:0 16px 4px;margin-top:16px;text-transform:uppercase;
+  letter-spacing:.05em;font-size:12px;
+}
+.list-row{
+  display:flex;align-items:center;gap:12px;
+  padding:11px 16px;border-bottom:0.5px solid var(--sep-color);
+  font-size:15px;
+}
+.list-row:last-child{border:none}
+.list-row-icon{font-size:18px;flex-shrink:0;width:24px;text-align:center}
+.list-row-label{flex:1;color:var(--label);font-weight:400}
+.list-row-val{color:var(--label2);font-size:15px}
+.list-row-val a{color:var(--blue);text-decoration:none;font-weight:500}
+.list-chevron{color:var(--label4);font-size:12px}
+/* ─── SECTION TITLE ─── */
+.section-title{
+  font-size:22px;font-weight:700;letter-spacing:-.3px;
+  color:var(--label);margin:20px 0 10px;
+}
+.inset-title{
+  font-size:13px;font-weight:600;color:var(--label2);
+  text-transform:uppercase;letter-spacing:.05em;
+  padding:0 4px;margin:16px 0 6px;
+}
 
-/* Onglets */
-.tabs{display:flex;gap:0;margin:1rem 0;border-bottom:0.5px solid var(--border)}
-.tab{font-size:13px;padding:8px 16px;cursor:pointer;color:var(--txt2);border-bottom:2px solid transparent;margin-bottom:-0.5px;background:none;border-left:none;border-right:none;border-top:none;transition:all .15s}
-.tab.active{color:var(--txt);border-bottom-color:var(--txt);font-weight:500}
+/* ─── PILLS / FILTERS ─── */
+.filter-row{
+  display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;
+  padding-bottom:2px;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.filter-row::-webkit-scrollbar{display:none}
+.fpill{
+  font-size:13px;font-weight:500;
+  padding:5px 14px;border-radius:99px;
+  border:none;cursor:pointer;white-space:nowrap;
+  background:var(--bg3);color:var(--label2);
+  font-family:'Inter',sans-serif;
+  transition:background .15s,color .15s;
+  flex-shrink:0;
+}
+.fpill.active{background:var(--blue);color:#fff}
 
-/* Stats */
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:1.25rem}
-.stat{background:var(--bg2);border-radius:var(--radius);padding:.75rem 1rem}
-.stat-label{font-size:11px;color:var(--txt2);margin-bottom:3px}
-.stat-val{font-size:20px;font-weight:500;color:var(--txt)}
+/* ─── ITINERARY ─── */
+.day-card{
+  background:var(--card);border-radius:var(--rad-lg);
+  overflow:hidden;margin-bottom:8px;box-shadow:var(--sh);
+}
+.day-header{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 16px;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.day-num{
+  font-size:11px;font-weight:600;color:var(--label3);
+  text-transform:uppercase;letter-spacing:.05em;width:44px;flex-shrink:0;
+}
+.day-emoji{font-size:22px;flex-shrink:0}
+.day-info{flex:1;min-width:0}
+.day-title{font-size:15px;font-weight:600;color:var(--label);line-height:1.25}
+.day-date{font-size:12px;color:var(--label2);margin-top:1px}
+.stage-pill{
+  font-size:10px;font-weight:600;padding:3px 8px;
+  border-radius:99px;flex-shrink:0;
+}
+.sp-bkk{background:rgba(0,122,255,.12);color:var(--blue)}
+.sp-cm{background:rgba(52,199,89,.12);color:#248A3D}
+.sp-kc{background:rgba(90,200,250,.15);color:#0071A4}
+@media(prefers-color-scheme:dark){
+  .sp-cm{color:var(--green)}.sp-kc{color:var(--teal)}
+}
+.day-chevron{
+  font-size:12px;color:var(--label3);
+  transition:transform .2s;flex-shrink:0;
+}
+.day-header.open .day-chevron{transform:rotate(180deg)}
+.day-body{
+  display:none;padding:12px 16px 14px;
+  border-top:0.5px solid var(--sep-color);
+  background:var(--bg);
+}
+.act-list{list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.act-list li{
+  font-size:13px;color:var(--label2);padding-left:14px;
+  position:relative;line-height:1.5;
+}
+.act-list li::before{
+  content:'';position:absolute;left:2px;top:8px;
+  width:5px;height:5px;border-radius:50%;
+  background:var(--label4);
+}
+.tip-box{
+  background:rgba(255,149,0,.08);border-radius:10px;
+  padding:8px 12px;font-size:12.5px;color:var(--label2);
+  line-height:1.5;border-left:3px solid var(--orange);
+}
+.tip-box::before{content:'💡 '}
+/* 2col on desktop */
+@media(min-width:768px){
+  .day-cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+}
 
-/* Filtres */
-.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem}
-.pill{font-size:12px;padding:5px 12px;border-radius:99px;border:0.5px solid var(--border2);background:var(--bg);color:var(--txt2);cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
-.pill:hover{background:var(--bg2)}
-.pill.active{background:var(--txt);color:var(--bg);border-color:transparent}
+/* ─── KOH CHANG ─── */
+.kc-hero{
+  background:linear-gradient(135deg,#0F766E,#0E7490);
+  color:#fff;border-radius:var(--rad-lg);
+  padding:16px;margin-bottom:10px;
+}
+.kc-hero-title{font-size:17px;font-weight:700;margin-bottom:4px}
+.kc-hero-sub{font-size:12px;opacity:.75;line-height:1.5}
+.kc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+@media(min-width:768px){.kc-grid{grid-template-columns:repeat(4,1fr)}}
+.kc-card{
+  background:var(--card);border-radius:var(--rad);
+  padding:10px 12px;cursor:pointer;
+  box-shadow:var(--sh);
+  transition:opacity .15s;
+  display:flex;flex-direction:column;
+}
+.kc-card:active{opacity:.7}
+.kc-badge{
+  display:inline-block;font-size:10px;font-weight:600;
+  padding:2px 7px;border-radius:99px;margin-bottom:6px;
+  width:fit-content;
+}
+.kc-plage{background:rgba(0,122,255,.1);color:var(--blue)}
+.kc-nature{background:rgba(52,199,89,.1);color:#248A3D}
+.kc-mer{background:rgba(90,200,250,.15);color:#0071A4}
+.kc-culture{background:rgba(255,149,0,.1);color:#C25A00}
+.kc-villa{background:rgba(175,82,222,.1);color:var(--purple)}
+.kc-marche{background:rgba(255,59,48,.1);color:var(--red)}
+@media(prefers-color-scheme:dark){
+  .kc-nature{color:var(--green)}.kc-mer{color:var(--teal)}
+  .kc-culture{color:var(--orange)}.kc-marche{color:var(--red)}
+}
+.kc-emoji{font-size:22px;margin-bottom:4px}
+.kc-title{font-size:12.5px;font-weight:600;color:var(--label);line-height:1.3;margin-bottom:3px}
+.kc-desc{font-size:11px;color:var(--label2);line-height:1.4}
+.kc-more{font-size:10px;color:var(--blue);margin-top:5px;font-weight:500}
 
-/* Cartes */
-.cards{display:flex;flex-direction:column;gap:10px}
-.card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1rem}
-.card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.model-tag{font-size:11px;font-weight:500;padding:2px 9px;border-radius:99px}
-.tag-g9{background:var(--blue-bg);color:var(--blue-txt)}
-.tag-g6{background:var(--green-bg);color:var(--green-txt)}
-.tag-7x{background:var(--purple-bg);color:var(--purple-txt)}
-.tag-ev{background:var(--teal-bg);color:var(--teal-txt)}
-.tag-phev{background:var(--amber-bg);color:var(--amber-txt)}
-.type-badge{font-size:10px;padding:2px 7px;border-radius:99px;background:var(--bg2);color:var(--txt2);border:0.5px solid var(--border)}
-.card-version{font-size:13px;font-weight:500;color:var(--txt);margin-bottom:4px}
-.card-price{font-size:28px;font-weight:500;color:var(--txt);line-height:1;margin-bottom:10px}
-.card-price span{font-size:13px;font-weight:400;color:var(--txt2)}
-.no-price{font-size:13px;color:var(--txt3);font-style:italic;margin-bottom:10px}
-.card-rows{border-top:0.5px solid var(--border);padding-top:8px;display:flex;flex-direction:column;gap:5px}
-.card-row{display:flex;justify-content:space-between;font-size:12px}
-.card-row-label{color:var(--txt2)}
-.card-row-val{color:var(--txt);font-weight:500}
-.card-link{color:#185fa5;text-decoration:none}
-.card-link:hover{text-decoration:underline}
-.card-note{font-size:11px;color:var(--txt3);font-style:italic;margin-top:7px;line-height:1.4}
-.empty{text-align:center;padding:2.5rem 1rem;color:var(--txt3);font-size:14px}
-.footer{margin-top:1.5rem;padding-top:1rem;border-top:0.5px solid var(--border);font-size:11px;color:var(--txt3);line-height:1.6}
-.section-sep{font-size:11px;font-weight:500;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;margin:1.5rem 0 .75rem;padding-bottom:6px;border-bottom:0.5px solid var(--border)}
+/* ─── MAP ─── */
+#leaflet-map{
+  width:100%;height:380px;border-radius:var(--rad-lg);
+  overflow:hidden;margin-bottom:10px;box-shadow:var(--sh);
+}
+@media(min-width:768px){#leaflet-map{height:520px}}
+.map-controls{margin-bottom:10px;display:flex;flex-direction:column;gap:8px}
+
+/* ─── WEATHER ─── */
+.weather-grid{display:flex;flex-direction:column;gap:10px}
+@media(min-width:768px){.weather-grid{display:grid;grid-template-columns:repeat(3,1fr)}}
+.weather-card{
+  background:var(--card);border-radius:var(--rad-lg);
+  padding:16px;box-shadow:var(--sh);
+}
+.w-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.w-city{font-size:17px;font-weight:700;color:var(--label)}
+.w-condition{font-size:12px;color:var(--label2);margin-top:2px}
+.w-live{font-size:11px;color:var(--green);font-weight:500}
+.w-main{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.w-emoji{font-size:48px;line-height:1}
+.w-temp-val{font-size:42px;font-weight:200;color:var(--label);line-height:1;letter-spacing:-2px}
+.w-temp-unit{font-size:22px;font-weight:300;color:var(--label2)}
+.w-feels{font-size:12px;color:var(--label2);margin-top:2px}
+.w-details{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.w-detail-pill{
+  font-size:12px;padding:4px 10px;border-radius:99px;
+  background:var(--bg3);color:var(--label2);font-weight:400;
+}
+.forecast{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.forecast::-webkit-scrollbar{display:none}
+.fc-day{
+  flex-shrink:0;text-align:center;
+  background:var(--bg3);border-radius:10px;
+  padding:8px 6px;min-width:52px;
+}
+.fc-label{font-size:10px;color:var(--label3);font-weight:500;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+.fc-icon{font-size:18px;margin-bottom:4px}
+.fc-hi{font-size:13px;font-weight:600;color:var(--label)}
+.fc-lo{font-size:11px;color:var(--label2)}
+.fc-rain{font-size:10px;color:var(--blue);margin-top:2px}
+
+/* ─── ARGENT ─── */
+.rate-hero{
+  background:var(--blue);color:#fff;
+  border-radius:var(--rad-lg);padding:16px;
+  text-align:center;margin-bottom:12px;
+}
+.rate-label-top{font-size:12px;font-weight:500;opacity:.75;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.rate-value{font-size:36px;font-weight:200;letter-spacing:-1px;line-height:1}
+.rate-source{font-size:11px;opacity:.6;margin-top:4px}
+.conv-card{
+  background:var(--card);border-radius:var(--rad-lg);
+  padding:16px;margin-bottom:12px;box-shadow:var(--sh);
+}
+.conv-dir-row{display:flex;gap:6px;margin-bottom:12px}
+.conv-input{
+  width:100%;font-size:20px;font-weight:300;
+  font-family:'Inter',sans-serif;
+  padding:10px 14px;border:1.5px solid var(--bg4);
+  border-radius:10px;background:var(--bg);color:var(--label);
+  outline:none;letter-spacing:-.3px;
+}
+.conv-input:focus{border-color:var(--blue)}
+.conv-result{
+  font-size:28px;font-weight:300;color:var(--blue);
+  letter-spacing:-1px;padding:8px 0;
+}
+.conv-from-label{font-size:12px;color:var(--label2);margin-bottom:6px;font-weight:500}
+.budget-table{background:var(--card);border-radius:var(--rad-lg);overflow:hidden;box-shadow:var(--sh);margin-bottom:12px}
+.budget-thead{
+  padding:10px 16px;font-size:12px;font-weight:600;
+  color:var(--label2);text-transform:uppercase;letter-spacing:.05em;
+  background:var(--bg3);border-bottom:0.5px solid var(--sep-color);
+}
+.budget-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:11px 16px;border-bottom:0.5px solid var(--sep-color);
+  font-size:14px;
+}
+.budget-row:last-child{border:none}
+.b-stage{color:var(--label2)}
+.b-amt{font-weight:600;color:var(--label)}
+
+/* ─── PHRASES THAÏ ─── */
+.phrase-list{display:flex;flex-direction:column;gap:8px}
+@media(min-width:768px){.phrase-list{display:grid;grid-template-columns:1fr 1fr;gap:8px}}
+.phrase-card{
+  background:var(--card);border-radius:var(--rad-lg);
+  padding:12px 14px;display:flex;align-items:flex-start;gap:12px;
+  box-shadow:var(--sh);
+}
+.phrase-main{flex:1}
+.p-thai{font-size:18px;font-weight:500;color:var(--label);line-height:1.3;margin-bottom:2px}
+.p-phon{font-size:12px;color:var(--blue);font-weight:500;margin-bottom:2px}
+.p-fr{font-size:13px;color:var(--label2)}
+.speak-btn{
+  background:var(--bg3);border:none;border-radius:10px;
+  width:36px;height:36px;font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;-webkit-tap-highlight-color:transparent;
+  transition:opacity .15s;
+}
+.speak-btn:active{opacity:.6}
+
+/* ─── SOS ─── */
+.sos-section{margin-bottom:8px}
+.sos-group{background:var(--card);border-radius:var(--rad-lg);overflow:hidden;box-shadow:var(--sh);margin-bottom:8px}
+.sos-header{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 16px;font-size:13px;font-weight:600;
+  border-bottom:0.5px solid var(--sep-color);
+}
+.sos-red .sos-header{color:var(--red)}
+.sos-orange .sos-header{color:var(--orange)}
+.sos-blue .sos-header{color:var(--blue)}
+.sos-green .sos-header{color:var(--green)}
+.sos-line{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:11px 16px;border-bottom:0.5px solid var(--sep-color);
+  font-size:14px;
+}
+.sos-line:last-child{border:none}
+.sos-name{color:var(--label2)}
+.sos-val{font-weight:600;color:var(--label)}
+.sos-val a{color:var(--blue);text-decoration:none}
+.sos-card-display{
+  background:var(--card);border-radius:var(--rad-lg);padding:16px;
+  text-align:center;box-shadow:var(--sh);
+}
+.sos-card-display-title{font-size:12px;font-weight:600;color:var(--red);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em}
+.sos-thai-text{font-size:24px;font-weight:500;color:var(--label);line-height:1.4;margin-bottom:4px}
+.sos-phon{font-size:12px;color:var(--label2);font-style:italic;margin-bottom:12px}
+
+/* ─── CHECKLIST ─── */
+@media(min-width:768px){.cl-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}}
+.cl-section{background:var(--card);border-radius:var(--rad-lg);overflow:hidden;margin-bottom:10px;box-shadow:var(--sh)}
+.cl-section-head{
+  padding:12px 16px 8px;border-bottom:0.5px solid var(--sep-color);
+}
+.cl-section-title-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.cl-section-title{font-size:15px;font-weight:600;color:var(--label)}
+.cl-progress{font-size:12px;color:var(--label2)}
+.cl-bar{height:3px;background:var(--bg3);border-radius:99px;overflow:hidden}
+.cl-bar-fill{height:100%;background:var(--green);border-radius:99px;transition:width .3s}
+.cl-item{
+  display:flex;align-items:center;gap:12px;
+  padding:11px 16px;border-bottom:0.5px solid var(--sep-color);
+  cursor:pointer;-webkit-tap-highlight-color:transparent;
+}
+.cl-item:last-child{border:none}
+.cl-item input[type=checkbox]{
+  width:20px;height:20px;accent-color:var(--blue);
+  flex-shrink:0;cursor:pointer;
+}
+.cl-item label{font-size:14px;color:var(--label2);cursor:pointer;flex:1;line-height:1.4}
+.cl-item.checked label{text-decoration:line-through;color:var(--label4)}
+.cl-reset{
+  display:block;width:100%;padding:12px;
+  background:none;border:none;color:var(--red);
+  font-size:15px;font-weight:500;cursor:pointer;
+  font-family:'Inter',sans-serif;text-align:center;
+  margin-top:4px;
+}
+
+/* ─── GUIDE ─── */
+.guide-grid{display:flex;flex-direction:column;gap:10px}
+@media(min-width:768px){.guide-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}}
+.guide-card{
+  background:var(--card);border-radius:var(--rad-lg);
+  padding:14px 16px;cursor:pointer;
+  box-shadow:var(--sh);transition:opacity .15s;
+}
+.guide-card:active{opacity:.7}
+.guide-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;gap:8px}
+.guide-name{font-size:15px;font-weight:600;color:var(--label);line-height:1.3;flex:1}
+.gbadge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:99px;flex-shrink:0}
+.gb1{background:rgba(52,199,89,.12);color:#248A3D}
+.gb2{background:rgba(255,149,0,.12);color:#C25A00}
+.gb3{background:rgba(255,59,48,.12);color:var(--red)}
+@media(prefers-color-scheme:dark){.gb1{color:var(--green)}.gb2{color:var(--orange)}}
+.guide-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
+.gtag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:99px;border:0.5px solid var(--sep-color)}
+.gtag-local{background:rgba(0,122,255,.08);color:var(--blue)}
+.gtag-insolite{background:rgba(175,82,222,.1);color:var(--purple)}
+.gtag-sf{background:rgba(255,149,0,.1);color:#C25A00}
+.gtag-gastro{background:rgba(255,59,48,.1);color:var(--red)}
+.gtag-famille{background:rgba(52,199,89,.1);color:#248A3D}
+.gtag-resto{background:rgba(90,200,250,.15);color:#0071A4}
+@media(prefers-color-scheme:dark){.gtag-sf{color:var(--orange)}.gtag-famille{color:var(--green)}.gtag-resto{color:var(--teal)}.gtag-insolite{color:var(--purple)}}
+.guide-desc-short{font-size:13px;color:var(--label2);line-height:1.5;margin-bottom:6px}
+.guide-price-tag{font-size:12px;color:var(--label2);margin-bottom:4px}
+.guide-cta{font-size:12px;color:var(--blue);font-weight:500}
+.guide-empty{padding:32px;text-align:center;color:var(--label2);font-size:14px}
+.dormir-note{
+  background:rgba(52,199,89,.08);border-radius:var(--rad);
+  padding:10px 14px;font-size:13px;color:#248A3D;
+  margin-bottom:10px;line-height:1.5;border-left:3px solid var(--green);
+}
+@media(prefers-color-scheme:dark){.dormir-note{color:var(--green)}}
+
+/* Detail view */
+.back-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:15px;color:var(--blue);background:none;border:none;
+  cursor:pointer;font-family:'Inter',sans-serif;
+  padding:4px 0;margin-bottom:12px;font-weight:400;
+}
+.back-btn::before{content:'‹';font-size:20px;line-height:1}
+.detail-section{
+  font-size:12px;font-weight:600;color:var(--label2);
+  text-transform:uppercase;letter-spacing:.06em;
+  padding:14px 0 4px;border-top:0.5px solid var(--sep-color);
+  margin-top:4px;
+}
+.detail-desc{font-size:15px;color:var(--label2);line-height:1.6}
+.detail-meta{font-size:15px;color:var(--label);font-weight:500}
+.detail-tip{
+  background:rgba(255,149,0,.08);border-radius:10px;
+  padding:10px 14px;font-size:14px;color:var(--label2);
+  line-height:1.5;border-left:3px solid var(--orange);
+  font-style:italic;
+}
+.detail-link{
+  display:flex;align-items:center;gap:8px;
+  font-size:15px;color:var(--blue);text-decoration:none;
+  padding:10px 0;border-bottom:0.5px solid var(--sep-color);
+}
+.detail-link:last-child{border:none}
+.nav-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.nav-btn{
+  font-size:13px;padding:8px 14px;border-radius:10px;
+  text-decoration:none;color:#fff;font-weight:600;
+  display:inline-block;border:none;cursor:pointer;
+  font-family:'Inter',sans-serif;line-height:1;
+}
+
+/* ─── IA ─── */
+.ia-hero{
+  background:linear-gradient(135deg,#1C1C2E,#16213E);
+  border-radius:var(--rad-lg);padding:16px;margin-bottom:12px;color:#fff;
+}
+.ia-hero-title{font-size:17px;font-weight:700;margin-bottom:4px}
+.ia-hero-sub{font-size:12.5px;opacity:.6;line-height:1.5}
+.ia-textarea{
+  width:100%;min-height:110px;font-size:14px;
+  font-family:'Inter',sans-serif;padding:10px 14px;
+  border:1.5px solid var(--bg4);border-radius:10px;
+  background:var(--bg);color:var(--label);outline:none;
+  resize:vertical;line-height:1.5;
+}
+.ia-textarea:focus{border-color:var(--blue)}
+.ia-btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px}
+.ia-btn{
+  padding:10px 6px;border:none;border-radius:10px;
+  font-size:13px;font-weight:600;cursor:pointer;
+  font-family:'Inter',sans-serif;color:#fff;line-height:1.3;
+}
+.ia-feedback{
+  display:none;text-align:center;font-size:13px;color:var(--green);
+  padding:8px;background:rgba(52,199,89,.08);border-radius:10px;
+  border:0.5px solid rgba(52,199,89,.25);margin-top:8px;
+}
+.how-row{display:flex;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--sep-color);align-items:flex-start}
+.how-row:last-child{border:none}
+.how-num{
+  font-size:12px;font-weight:700;color:#fff;
+  background:var(--blue);border-radius:50%;
+  width:20px;height:20px;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px;
+}
+.how-text{font-size:14px;color:var(--label2);line-height:1.5}
+/* ─── FOOTER ─── */
+.app-footer{
+  padding:16px;margin-top:8px;
+  font-size:11px;color:var(--label3);text-align:center;
+  line-height:1.8;
+}
+/* ─── LOADING ─── */
+.loading-msg{text-align:center;padding:32px;color:var(--label2);font-size:14px;}
+
+/* ─── NOTE IN DAY CARD ─── */
+.day-note-area{margin-top:10px;border-top:0.5px solid var(--sep-color);padding-top:10px;}
+.day-note-label{font-size:11px;font-weight:600;color:var(--label3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;}
+.day-note-input{width:100%;min-height:56px;font-size:13px;font-family:'Inter',system-ui,sans-serif;padding:8px 10px;border:1.5px solid var(--bg4);border-radius:8px;background:var(--bg2);color:var(--label);outline:none;resize:none;line-height:1.5;transition:border-color .15s;}
+.day-note-input:focus{border-color:var(--blue)}
+.day-note-input::placeholder{color:var(--label3)}
+.day-note-saved{font-size:11px;color:var(--green);margin-top:3px;opacity:0;transition:opacity .3s;height:14px;}
+.day-note-saved.show{opacity:1}
+
+/* ─── CARNET ─── */
+.carnet-counter{font-size:13px;color:var(--label2);background:var(--bg3);border-radius:99px;padding:4px 12px;}
+.carnet-export{display:block;width:100%;padding:12px;background:none;border:1.5px solid var(--sep-color);border-radius:12px;color:var(--blue);font-size:14px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;text-align:center;margin-bottom:12px;}
+.carnet-export:active{background:var(--bg3)}
+.carnet-entry{background:var(--card);border-radius:var(--rad-lg);margin-bottom:8px;box-shadow:var(--sh);overflow:hidden;}
+.carnet-entry-head{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;}
+.carnet-entry-day{font-size:11px;font-weight:600;color:var(--label3);text-transform:uppercase;letter-spacing:.05em;min-width:44px;}
+.carnet-entry-emoji{font-size:20px;flex-shrink:0;}
+.carnet-entry-info{flex:1;min-width:0}
+.carnet-entry-title{font-size:14px;font-weight:600;color:var(--label);line-height:1.2}
+.carnet-entry-preview{font-size:12px;color:var(--label2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.carnet-entry-chevron{color:var(--label4);font-size:12px;flex-shrink:0;transition:transform .2s;}
+.carnet-entry.open .carnet-entry-chevron{transform:rotate(180deg)}
+.carnet-entry-body{display:none;padding:0 16px 14px;border-top:0.5px solid var(--sep-color);}
+.carnet-textarea{width:100%;min-height:100px;font-size:14px;font-family:'Inter',system-ui,sans-serif;padding:10px 12px;border:1.5px solid var(--bg4);border-radius:10px;background:var(--bg);color:var(--label);outline:none;resize:vertical;line-height:1.6;margin-top:12px;}
+.carnet-textarea:focus{border-color:var(--blue)}
+.carnet-lieu-input{width:100%;font-size:13px;font-family:'Inter',system-ui,sans-serif;padding:7px 10px;border:1.5px solid var(--bg4);border-radius:8px;background:var(--bg);color:var(--label);outline:none;transition:border-color .15s;}
+.carnet-lieu-input:focus{border-color:var(--blue)}
+.carnet-empty{text-align:center;padding:40px 20px;color:var(--label2);font-size:14px;line-height:1.7;}
+.carnet-libre-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;margin-bottom:8px;background:rgba(0,122,255,.07);border:1.5px dashed rgba(0,122,255,.3);border-radius:var(--rad-lg);color:var(--blue);font-size:14px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;}
+.carnet-libre-entry{background:var(--card);border-radius:var(--rad-lg);margin-bottom:8px;box-shadow:var(--sh);overflow:hidden;}
+.carnet-libre-head{display:flex;align-items:center;gap:8px;padding:11px 16px;border-bottom:0.5px solid var(--sep-color);}
+.carnet-libre-title-input{flex:1;font-size:14px;font-weight:600;color:var(--label);background:none;border:none;outline:none;font-family:'Inter',sans-serif;}
+.carnet-libre-del{background:none;border:none;font-size:16px;color:var(--red);cursor:pointer;padding:4px;flex-shrink:0;}
+.carnet-libre-body{padding:10px 16px 14px;}
+
+/* ─── TRANSPORT ─── */
+.transport-hero{background:linear-gradient(135deg,#1C3A5E,#0F2442);color:#fff;border-radius:var(--rad-lg);padding:16px;margin-bottom:12px;}
+.transport-hero-title{font-size:17px;font-weight:700;margin-bottom:4px}
+.transport-hero-sub{font-size:12px;opacity:.65;line-height:1.5}
+.ferry-row{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:0.5px solid var(--sep-color);font-size:13px;}
+.ferry-row:last-child{border:none}
+.ferry-time{font-weight:700;color:var(--label);font-size:14px;min-width:48px}
+.ferry-route{flex:1;color:var(--label2)}
+.ferry-duration{font-size:11px;color:var(--label3);flex-shrink:0;}
+.ferry-price{font-size:12px;font-weight:600;color:var(--blue);flex-shrink:0;min-width:38px;text-align:right;}
+.transport-link-row{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:0.5px solid var(--sep-color);text-decoration:none;}
+.transport-link-row:last-child{border:none}
+.transport-link-icon{font-size:22px;flex-shrink:0}
+.transport-link-info{flex:1}
+.transport-link-title{font-size:15px;font-weight:600;color:var(--label);margin-bottom:2px}
+.transport-link-sub{font-size:12px;color:var(--label2)}
+.transport-link-arr{font-size:16px;color:var(--label4)}
+.resa-row{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:0.5px solid var(--sep-color);}
+.resa-row:last-child{border:none}
+.resa-info{flex:1;min-width:0}
+.resa-title{font-size:14px;font-weight:600;color:var(--label);margin-bottom:2px}
+.resa-sub{font-size:12px;color:var(--label2)}
+.resa-tip{font-size:11px;color:var(--orange);margin-top:3px}
+.resa-btn{font-size:12px;font-weight:600;color:#fff;background:var(--blue);padding:7px 13px;border-radius:8px;text-decoration:none;flex-shrink:0;white-space:nowrap;}
+
+/* ─── KC CALENDAR ─── */
+.kc-cal-wrapper{background:var(--card);border-radius:var(--rad-lg);padding:12px;margin-bottom:12px;box-shadow:var(--sh);}
+.kc-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:0}
+.kc-cal-day-head{text-align:center;font-size:9px;font-weight:600;color:var(--label3);padding:3px 0;text-transform:uppercase;}
+.kc-cal-day{background:var(--bg3);border-radius:7px;padding:5px 2px;text-align:center;cursor:pointer;min-height:54px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:1px;transition:all .15s;border:1.5px solid transparent;}
+.kc-cal-day.has-act{border-color:var(--blue);background:rgba(0,122,255,.07)}
+.kc-cal-day-num{font-size:13px;font-weight:600;color:var(--label);line-height:1.2}
+.kc-cal-day-emoji{font-size:13px;line-height:1}
+.kc-cal-day-label{font-size:8px;color:var(--label2);line-height:1.2;text-align:center;padding:0 1px}
+.kc-act-picker{background:var(--card);border-radius:var(--rad-lg);padding:14px 16px;margin-bottom:12px;box-shadow:var(--sh-lg);display:none;border:2px solid var(--blue);}
+.kc-act-picker.open{display:block}
+.kc-act-picker-title{font-size:15px;font-weight:700;color:var(--label);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;}
+.kc-act-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--label3);padding:0;}
+.kc-act-option{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--sep-color);cursor:pointer;}
+.kc-act-option:last-child{border:none}
+.kc-act-option-emoji{font-size:20px;flex-shrink:0}
+.kc-act-option-info{flex:1}
+.kc-act-option-title{font-size:14px;font-weight:500;color:var(--label)}
+.kc-act-option-type{font-size:11px;color:var(--label2)}
+.kc-act-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--bg4);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .15s;}
+.kc-act-check.on{background:var(--blue);border-color:var(--blue);color:#fff}
+
+/* ─── RAPPELS ─── */
+.rappel-card{background:var(--card);border-radius:var(--rad-lg);overflow:hidden;margin-bottom:8px;box-shadow:var(--sh);}
+.rappel-head{display:flex;align-items:center;gap:10px;padding:11px 16px;font-size:13px;font-weight:600;color:var(--label);border-bottom:0.5px solid var(--sep-color);}
+.rappel-icon{font-size:18px}
+.rappel-urgency{font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;margin-left:auto;}
+.urg-high{background:rgba(255,59,48,.12);color:var(--red)}
+.urg-med{background:rgba(255,149,0,.12);color:var(--orange)}
+.rappel-body{padding:10px 16px 13px;font-size:13px;color:var(--label2);line-height:1.7}
+
+/* ─── PHARMACIES ─── */
+.pharma-head{display:flex;align-items:center;gap:8px;padding:10px 16px;font-size:13px;font-weight:600;color:var(--green);border-bottom:0.5px solid var(--sep-color);}
+.pharma-line{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 16px;border-bottom:0.5px solid var(--sep-color);font-size:13px;gap:8px;}
+.pharma-line:last-child{border:none}
+.pharma-name{color:var(--label2);flex:1}
+.pharma-val{font-weight:500;color:var(--label);text-align:right;flex-shrink:0}
+.pharma-val a{color:var(--blue);text-decoration:none}
 </style>
 </head>
 <body>
-<div class="page">
 
-  <div class="header">
-    <h1>Veille LLD</h1>
-    <div class="sub"><span class="dot"></span> Mise à jour le 30 mai 2026</div>
-  </div>
+<div id="offline-banner">✈️ Mode hors ligne — derniers taux conservés</div>
 
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('main',this)">XPENG · Zeekr</button>
-    <button class="tab" onclick="switchTab('comp',this)">Concurrents</button>
-  </div>
-
-  <!-- ONGLET PRINCIPAL -->
-  <div id="tab-main">
-    <div class="stats">
-      <div class="stat"><div class="stat-label">Offres</div><div class="stat-val" id="s-count">—</div></div>
-      <div class="stat"><div class="stat-label">Mensualité min.</div><div class="stat-val" id="s-min">—</div></div>
-      <div class="stat"><div class="stat-label">Mensualité max.</div><div class="stat-val" id="s-max">—</div></div>
-      <div class="stat"><div class="stat-label">Modèles suivis</div><div class="stat-val">3</div></div>
+<div class="sticky-top">
+  <div class="app-header">
+    <div class="header-row">
+      <div>
+        <div class="header-title">🇹🇭 Thaïlande <span class="yr">2026</span></div>
+        <div class="header-sub">23 juil – 18 août · 4 pers · 26 jours</div>
+      </div>
+      <div class="clock-block">
+        <div class="clock-city">Bangkok</div>
+        <div class="clock-val" id="bkk-clock">--:--</div>
+        <div class="clock-utc">UTC+7</div>
+      </div>
     </div>
-    <div class="filters" id="main-filters">
-      <button class="pill active" data-f="all">Tous</button>
-      <button class="pill" data-f="G9">G9</button>
-      <button class="pill" data-f="G6">G6</button>
-      <button class="pill" data-f="7X">7X</button>
-      <button class="pill" data-f="neuf">Neuf</button>
-      <button class="pill" data-f="occasion">Occasion</button>
+    <div class="header-badges">
+      <span class="hbadge">🏙️ Bangkok ×3</span>
+      <span class="hbadge">🌿 Chiang Mai</span>
+      <span class="hbadge">🏝️ Koh Chang 13 nuits</span>
     </div>
-    <div class="cards" id="main-cards"></div>
   </div>
-
-  <!-- ONGLET CONCURRENTS -->
-  <div id="tab-comp" style="display:none">
-    <div class="filters" id="comp-filters">
-      <button class="pill active" data-f="all">Tous</button>
-      <button class="pill" data-f="EV">Électrique</button>
-      <button class="pill" data-f="PHEV">PHEV</button>
-    </div>
-    <div id="comp-cards"></div>
-  </div>
-
-  <div class="footer">
-    Sources : xpeng.com · even-motors.com · vivacar.fr · zeekr.eu · polestar.com · byd.com · kia.com · toyota.fr · volvocars.com · omoda-jaecoo.fr · automobilepropre.com<br>
-    Données collectées automatiquement chaque matin à 07h00.
-  </div>
-
+  <nav class="top-nav" id="top-nav">
+    <button class="active" onclick="switchTab('itinerary',this)">🗓 Itinéraire</button>
+    <button onclick="switchTab('carte',this)">🗺 Carte</button>
+    <button onclick="switchTab('meteo',this)">🌦 Météo</button>
+    <button onclick="switchTab('argent',this)">💱 Argent</button>
+    <button onclick="switchTab('transport',this)">🚆 Transport</button>
+    <button onclick="switchTab('thai',this)">🗣 Thaï</button>
+    <button onclick="switchTab('sos',this)">🚨 SOS</button>
+    <button onclick="switchTab('checklist',this)">✅ Checklist</button>
+    <button onclick="switchTab('guide',this)">📍 Guide</button>
+    <button onclick="switchTab('carnet',this)">📓 Carnet</button>
+    <button onclick="switchTab('claude',this)">🤖 IA</button>
+  </nav>
 </div>
 
-<script>
-const OFFERS = [{"model": "G6", "brand": "XPENG", "version": "Autonomie Standard", "type": "neuf", "price_monthly": 359.0, "first_payment": 3550.0, "duration_months": 48, "km_per_year": 10000, "source_name": "even-motors.com (PW)", "source_url": "https://even-motors.com/nouveau-xpeng-g6-une-offre-en-lld-des-359e-mois/", "note": "", "scraped_at": "2026-05-30T10:48:17", "scraped_date": "2026-05-30"}, {"model": "G6", "brand": "XPENG", "version": "Autonomie Etendue, Standard, Étendue", "type": "neuf", "price_monthly": 359.0, "first_payment": 3550.0, "duration_months": 48, "km_per_year": 10000, "source_name": "even-motors.com (PW)", "source_url": "https://event.xpeng.com/fr/3y01dt.html", "note": "", "scraped_at": "2026-05-30T10:48:42", "scraped_date": "2026-05-30"}, {"model": "G6", "brand": "XPENG", "version": "—", "type": "occasion", "price_monthly": 388.0, "first_payment": null, "duration_months": null, "km_per_year": null, "source_name": "www.vivacar.fr (PW)", "source_url": "https://www.vivacar.fr/voiture-occasion/xpeng/g6", "note": "", "scraped_at": "2026-05-30T10:48:49", "scraped_date": "2026-05-30"}, {"model": "G6", "brand": "XPENG", "version": "Autonomie Standard (sans reprise)", "type": "neuf", "price_monthly": null, "first_payment": null, "duration_months": null, "km_per_year": null, "source_name": "even-motors.com (PW)", "source_url": "https://even-motors.com/nouveau-xpeng-g6-en-lld-a-partir-de-425e-mois/", "note": "", "scraped_at": "2026-05-30T10:48:23", "scraped_date": "2026-05-30"}, {"model": "G9", "brand": "XPENG", "version": "Autonomie Etendue, Standard", "type": "neuf", "price_monthly": 520.0, "first_payment": 5500.0, "duration_months": 48, "km_per_year": 10000, "source_name": "even-motors.com (PW)", "source_url": "https://event.xpeng.com/fr/t79710.html", "note": "", "scraped_at": "2026-05-30T10:48:37", "scraped_date": "2026-05-30"}, {"model": "G9", "brand": "XPENG", "version": "Autonomie Étendue", "type": "neuf", "price_monthly": 565.0, "first_payment": 5500.0, "duration_months": 48, "km_per_year": 10000, "source_name": "even-motors.com (PW)", "source_url": "https://even-motors.com/nouveau-xpeng-g9-profitez-dune-offre-en-lld-des-565e-mois/", "note": "", "scraped_at": "2026-05-30T10:48:30", "scraped_date": "2026-05-30"}, {"model": "G9", "brand": "XPENG", "version": "—", "type": "occasion", "price_monthly": 583.0, "first_payment": null, "duration_months": null, "km_per_year": null, "source_name": "www.vivacar.fr (PW)", "source_url": "https://www.vivacar.fr/voiture-occasion/xpeng/g9", "note": "", "scraped_at": "2026-05-30T10:48:55", "scraped_date": "2026-05-30"}, {"model": "7X", "brand": "ZEEKR", "version": "Standard", "type": "neuf", "price_monthly": null, "first_payment": null, "duration_months": null, "km_per_year": null, "source_name": "www.zeekr.eu (PW)", "source_url": "https://www.zeekr.eu/fr-fr/offers", "note": "Zeekr lancé en France le 2 avril 2026. Prix catalogue 52 990 €. Offre LLD FR non encore publiée.", "scraped_at": "2026-05-30T10:49:04", "scraped_date": "2026-05-30"}];
-const COMPETITORS = [];
-let mainFilter = 'all';
-let compFilter = 'all';
-let currentTab = 'main';
+<div class="page">
 
-function tagClass(model, brand){
-  if(brand==='ZEEKR') return 'tag-7x';
-  if(model==='G9') return 'tag-g9';
-  if(model==='G6') return 'tag-g6';
-  return 'tag-7x';
-}
+<!-- ─── ITINÉRAIRE ─── -->
+<div id="tab-itinerary" class="tab-panel">
+  <div class="filter-row" id="stage-filter">
+    <button class="fpill active" data-f="all">Tout</button>
+    <button class="fpill" data-f="bkk1">Bangkok 1</button>
+    <button class="fpill" data-f="cm">Chiang Mai</button>
+    <button class="fpill" data-f="bkk2">Bangkok 2</button>
+    <button class="fpill" data-f="kc">Koh Chang</button>
+    <button class="fpill" data-f="bkk3">Bangkok fin</button>
+  </div>
+  <div id="itinerary-cards" class="day-cards-grid"></div>
+</div>
 
-function compTag(type){
-  return type==='PHEV' ? 'tag-phev' : 'tag-ev';
-}
-
-function fmt(n){ return n!=null ? n.toLocaleString('fr-FR') : '—'; }
-
-function renderMain(){
-  const filtered = OFFERS.filter(o => {
-    if(mainFilter==='all') return true;
-    if(mainFilter==='neuf'||mainFilter==='occasion') return o.type===mainFilter;
-    return o.model===mainFilter;
-  });
-  const prices = filtered.filter(o=>o.price_monthly).map(o=>o.price_monthly);
-  document.getElementById('s-count').textContent = filtered.length;
-  document.getElementById('s-min').textContent = prices.length ? Math.min(...prices)+'€' : '—';
-  document.getElementById('s-max').textContent = prices.length ? Math.max(...prices)+'€' : '—';
-
-  document.querySelectorAll('#main-filters .pill').forEach(p=>p.classList.toggle('active',p.dataset.f===mainFilter));
-
-  document.getElementById('main-cards').innerHTML = filtered.length ? filtered.map(o=>`
-    <div class="card">
-      <div class="card-top">
-        <span class="model-tag ${tagClass(o.model,o.brand)}">${o.brand} ${o.model}</span>
-        <span class="type-badge">${o.type}</span>
-      </div>
-      <div class="card-version">${o.version}</div>
-      ${o.price_monthly
-        ? `<div class="card-price">${o.price_monthly} €<span>/mois</span></div>`
-        : `<div class="no-price">Offre LLD non publiée</div>`}
-      <div class="card-rows">
-        ${o.duration_months?`<div class="card-row"><span class="card-row-label">Durée</span><span class="card-row-val">${o.duration_months} mois · ${fmt(o.km_per_year)} km/an</span></div>`:''}
-        ${o.first_payment?`<div class="card-row"><span class="card-row-label">1er loyer</span><span class="card-row-val">${fmt(o.first_payment)} €</span></div>`:''}
-        <div class="card-row"><span class="card-row-label">Source</span><span class="card-row-val"><a class="card-link" href="${o.source_url}" target="_blank">${o.source_name} ↗</a></span></div>
-      </div>
-      ${o.note?`<div class="card-note">${o.note}</div>`:''}
+<!-- ─── CARTE ─── -->
+<div id="tab-carte" class="tab-panel" style="display:none">
+  <div class="map-controls">
+    <div class="filter-row" id="city-filter">
+      <button class="fpill active" data-city="bangkok">🏙️ Bangkok</button>
+      <button class="fpill" data-city="chiangmai">🌿 Chiang Mai</button>
+      <button class="fpill" data-city="kohchang">🏝️ Koh Chang</button>
+      <button class="fpill" id="geolocate-btn" onclick="locateMe()">📍 Ma position</button>
     </div>
-  `).join('') : '<div class="empty">Aucune offre pour ce filtre.</div>';
-}
+    <div class="filter-row" id="type-filter">
+      <button class="fpill active" data-type="all">Tous</button>
+      <button class="fpill" data-type="temple">🛕 Temples</button>
+      <button class="fpill" data-type="plage">🏖 Plages</button>
+      <button class="fpill" data-type="food">🍜 Food</button>
+      <button class="fpill" data-type="marche">🛍 Marchés</button>
+      <button class="fpill" data-type="nature">🌿 Nature</button>
+      <button class="fpill" data-type="transport">🚂 Transport</button>
+      <button class="fpill" data-type="hebergement">🏠 Logement</button>
+    </div>
+  </div>
+  <div id="leaflet-map"></div>
+</div>
 
-function renderComp(){
-  const evs   = COMPETITORS.filter(c=>c.type==='EV'   && (compFilter==='all'||compFilter==='EV'));
-  const phevs = COMPETITORS.filter(c=>c.type==='PHEV' && (compFilter==='all'||compFilter==='PHEV'));
+<!-- ─── MÉTÉO ─── -->
+<div id="tab-meteo" class="tab-panel" style="display:none">
+  <div id="weather-content"><div class="loading-msg">🌤️ Chargement météo…</div></div>
+</div>
 
-  document.querySelectorAll('#comp-filters .pill').forEach(p=>p.classList.toggle('active',p.dataset.f===compFilter));
+<!-- ─── ARGENT ─── -->
+<div id="tab-argent" class="tab-panel" style="display:none">
+  <div id="rate-block"><div class="loading-msg">💱 Chargement du taux…</div></div>
+  <div class="inset-title">Convertisseur</div>
+  <div class="conv-card">
+    <div class="conv-dir-row">
+      <button class="fpill active" id="btn-thb-eur" onclick="setDirection('thb')">฿ → €</button>
+      <button class="fpill" id="btn-eur-thb" onclick="setDirection('eur')">€ → ฿</button>
+    </div>
+    <div class="conv-from-label" id="conv-from-label">Montant en bahts (฿)</div>
+    <input class="conv-input" type="number" id="conv-input" placeholder="1000" oninput="convert()">
+    <div class="conv-result" id="conv-output">—&nbsp;<span id="conv-to-unit" style="font-size:18px;font-weight:400">€</span></div>
+    <div id="conv-loading" style="font-size:12px;color:var(--label2);display:none">Chargement du taux…</div>
+  </div>
+  <div class="inset-title">Budget estimé</div>
+  <div class="budget-table">
+    <div class="budget-thead">Hébergement &amp; vie courante</div>
+    <div class="budget-row"><span class="b-stage">Bangkok 1 — 3 nuits</span><span class="b-amt">≈ 250–400 €</span></div>
+    <div class="budget-row"><span class="b-stage">Chiang Mai — 3 nuits</span><span class="b-amt">≈ 200–350 €</span></div>
+    <div class="budget-row"><span class="b-stage">Bangkok 2 — 2 nuits</span><span class="b-amt">≈ 120–200 €</span></div>
+    <div class="budget-row"><span class="b-stage">Koh Chang — 13 nuits</span><span class="b-amt">Réservé ✓</span></div>
+    <div class="budget-row"><span class="b-stage">Bangkok fin — 2 nuits</span><span class="b-amt">≈ 120–200 €</span></div>
+  </div>
+  <div class="inset-title">Conseils pratiques</div>
+  <div class="list-group">
+    <div class="list-row"><span class="list-row-icon">💳</span><span class="list-row-label"><strong>Revolut</strong> — taux interbancaire, 0 frais</span></div>
+    <div class="list-row"><span class="list-row-icon">🏧</span><span class="list-row-label"><strong>DAB Thaïlande</strong> — frais fixes 220฿, retirer en gros</span></div>
+    <div class="list-row"><span class="list-row-icon">📱</span><span class="list-row-label"><strong>Grab</strong> — payer carte dans l'app</span></div>
+    <div class="list-row"><span class="list-row-icon">🛒</span><span class="list-row-label"><strong>Cash obligatoire</strong> — marchés, street food, temples</span></div>
+    <div class="list-row"><span class="list-row-icon">💵</span><span class="list-row-label"><strong>Ne pas changer en France</strong> — taux très mauvais</span></div>
+  </div>
+</div>
 
-  let html = '';
+<!-- ─── THAÏ ─── -->
+<div id="tab-thai" class="tab-panel" style="display:none">
+  <div class="filter-row" id="phrase-filter">
+    <button class="fpill active" data-cat="politesse">🙏 Politesse</button>
+    <button class="fpill" data-cat="restaurant">🍜 Resto</button>
+    <button class="fpill" data-cat="transport">🚕 Transport</button>
+    <button class="fpill" data-cat="shopping">🛍 Shopping</button>
+    <button class="fpill" data-cat="urgences">🚨 Urgences</button>
+    <button class="fpill" data-cat="sante">🏥 Santé</button>
+  </div>
+  <div id="phrases-list" class="phrase-list"></div>
+</div>
 
-  if(evs.length){
-    html += `<div class="section-sep">Électriques</div><div class="cards">`;
-    html += evs.map(c=>`
-      <div class="card">
-        <div class="card-top">
-          <span class="model-tag ${compTag(c.type)}">${c.brand} ${c.model}</span>
-          <span class="type-badge">100% élec.</span>
-        </div>
-        ${c.price_monthly
-          ? `<div class="card-price">${c.price_monthly} €<span>/mois</span></div>`
-          : `<div class="no-price">Prix indicatif</div>`}
-        <div class="card-rows">
-          ${c.duration_months?`<div class="card-row"><span class="card-row-label">Durée</span><span class="card-row-val">${c.duration_months} mois · ${fmt(c.km_per_year)} km/an</span></div>`:''}
-          ${c.first_payment?`<div class="card-row"><span class="card-row-label">1er loyer</span><span class="card-row-val">${fmt(c.first_payment)} €</span></div>`:''}
-          <div class="card-row"><span class="card-row-label">Source</span><span class="card-row-val"><a class="card-link" href="${c.source_url}" target="_blank">${c.source_name} ↗</a></span></div>
-        </div>
-        ${c.note?`<div class="card-note">${c.note}</div>`:''}
+<!-- ─── SOS ─── -->
+<div id="tab-sos" class="tab-panel" style="display:none">
+  <div class="inset-title">Numéros d'urgence</div>
+  <div class="list-group sos-group sos-red">
+    <div class="sos-header">🚨 Urgences absolues</div>
+    <div class="sos-line"><span class="sos-name">Police nationale</span><span class="sos-val"><a href="tel:191">191</a></span></div>
+    <div class="sos-line"><span class="sos-name">Ambulance / SAMU</span><span class="sos-val"><a href="tel:1669">1669</a></span></div>
+    <div class="sos-line"><span class="sos-name">Pompiers</span><span class="sos-val"><a href="tel:199">199</a></span></div>
+    <div class="sos-line"><span class="sos-name">Police touristique (EN/FR)</span><span class="sos-val"><a href="tel:1155">1155</a></span></div>
+  </div>
+  <div class="inset-title">Hôpitaux — Bangkok</div>
+  <div class="list-group sos-group sos-blue">
+    <div class="sos-header">🏥 Bangkok Hospital</div>
+    <div class="sos-line"><span class="sos-name">Standard 24h</span><span class="sos-val"><a href="tel:+6623100066">+66 2 310-0066</a></span></div>
+    <div class="sos-line"><span class="sos-name">Urgences directes</span><span class="sos-val"><a href="tel:1719">1719</a></span></div>
+    <div class="sos-line"><span class="sos-name">Adresse</span><span class="sos-val" style="font-size:12px">2 Soi Soonvijai 7, New Petchburi</span></div>
+  </div>
+  <div class="list-group sos-group sos-blue">
+    <div class="sos-header">🏥 Bumrungrad International</div>
+    <div class="sos-line"><span class="sos-name">Standard 24h</span><span class="sos-val"><a href="tel:+6626671000">+66 2 667-1000</a></span></div>
+    <div class="sos-line"><span class="sos-name">Adresse</span><span class="sos-val" style="font-size:12px">33 Sukhumvit Soi 3 (Nana)</span></div>
+  </div>
+  <div class="inset-title">Hôpital — Koh Chang</div>
+  <div class="list-group sos-group sos-orange">
+    <div class="sos-header">🏥 Koh Chang Hospital</div>
+    <div class="sos-line"><span class="sos-name">Standard</span><span class="sos-val"><a href="tel:+6639586131">+66 39 586-131</a></span></div>
+    <div class="sos-line"><span class="sos-name">⚠️ Urgences graves</span><span class="sos-val" style="font-size:12px">Hélico → Trat Hospital</span></div>
+  </div>
+  <div class="inset-title">Ambassade</div>
+  <div class="list-group sos-group sos-green">
+    <div class="sos-header">🇫🇷 Ambassade de France — Bangkok</div>
+    <div class="sos-line"><span class="sos-name">Urgences consulaires 24h</span><span class="sos-val"><a href="tel:+6622663980">+66 2 266-3980</a></span></div>
+    <div class="sos-line"><span class="sos-name">Français en détresse</span><span class="sos-val"><a href="tel:+33170303888">+33 1 70-30-38-88</a></span></div>
+  </div>
+  <div class="inset-title">Carte SOS à montrer</div>
+  <div class="sos-card-display">
+    <div class="sos-card-display-title">Montrer cette carte en cas d'urgence</div>
+    <div class="sos-thai-text">ฉันต้องการความช่วยเหลือ</div>
+    <div class="sos-phon">Chan dtong gaan khwaam chuay luea — J'ai besoin d'aide</div>
+    <div class="sos-thai-text">พาฉันไปโรงพยาบาล</div>
+    <div class="sos-phon">Paa chan bpai rohng phayaban — Emmenez-moi à l'hôpital</div>
+  </div>
+
+  <div class="inset-title">💊 Pharmacies 24h — Bangkok</div>
+  <div class="list-group">
+    <div class="pharma-head">🟢 Chaînes présentes partout</div>
+    <div class="pharma-line"><span class="pharma-name">Boots Pharmacy — Sukhumvit Soi 4 (Nana)</span><span class="pharma-val"><a href="tel:+6621263404">+66 2 126-3404</a></span></div>
+    <div class="pharma-line"><span class="pharma-name">Boots Pharmacy — Asok (Terminal 21)</span><span class="pharma-val">24h/24</span></div>
+    <div class="pharma-line"><span class="pharma-name">Boots Pharmacy — Siam Paragon</span><span class="pharma-val">10h–22h</span></div>
+    <div class="pharma-line"><span class="pharma-name">Watsons — partout BTS/MRT</span><span class="pharma-val">10h–22h</span></div>
+  </div>
+  <div class="list-group">
+    <div class="pharma-head">🏥 Pharmacies hospitalières 24h</div>
+    <div class="pharma-line"><span class="pharma-name">Bangkok Hospital — pharmacie interne</span><span class="pharma-val">24h · <a href="tel:1719">1719</a></span></div>
+    <div class="pharma-line"><span class="pharma-name">Bumrungrad — pharmacie interne</span><span class="pharma-val">24h · <a href="tel:+6626671000">+66 2 667-1000</a></span></div>
+  </div>
+  <div class="list-group">
+    <div class="pharma-head">🏝️ Koh Chang</div>
+    <div class="pharma-line"><span class="pharma-name">Pharmacie White Sand Beach</span><span class="pharma-val">8h–22h</span></div>
+    <div class="pharma-line"><span class="pharma-name">Pharmacie Klong Prao (près villa)</span><span class="pharma-val">8h–21h</span></div>
+    <div class="pharma-line"><span class="pharma-name">⚠️ Médicaments ordonnance</span><span class="pharma-val">Amener depuis France</span></div>
+  </div>
+</div>
+
+<!-- ─── CHECKLIST ─── -->
+<div id="tab-checklist" class="tab-panel" style="display:none">
+  <div id="checklist-content" class="cl-grid"></div>
+  <button class="cl-reset" onclick="resetChecklist()">↺ Tout réinitialiser</button>
+</div>
+
+<!-- ─── GUIDE ─── -->
+<div id="tab-guide" class="tab-panel" style="display:none">
+  <div id="guide-filters">
+    <div class="filter-row" id="guide-city">
+      <button class="fpill active" data-city="bangkok">🏙️ Bangkok</button>
+      <button class="fpill" data-city="chiangmai">🌿 Chiang Mai</button>
+      <button class="fpill" data-city="kohchang">🏝️ Koh Chang</button>
+    </div>
+    <div class="filter-row" id="guide-cat">
+      <button class="fpill active" data-cat="manger">🍜 Manger</button>
+      <button class="fpill" data-cat="dormir">🛏 Dormir</button>
+      <button class="fpill" data-cat="voir">👁 À voir</button>
+    </div>
+    <div class="filter-row" id="guide-budget">
+      <button class="fpill active" data-bud="all">Tous budgets</button>
+      <button class="fpill" data-bud="1">$ Local</button>
+      <button class="fpill" data-bud="2">$$ Confort</button>
+      <button class="fpill" data-bud="3">$$$ Plaisir</button>
+    </div>
+  </div>
+  <div id="guide-main-content">
+    <div id="guide-dormir-note" class="dormir-note" style="display:none">🛏 Logement uniquement pour Chiang Mai — Bangkok et Koh Chang déjà réservés.</div>
+    <div class="guide-grid" id="guide-cards"></div>
+  </div>
+  <div id="guide-detail" style="display:none"></div>
+</div>
+
+<!-- ─── IA ─── -->
+<div id="tab-claude" class="tab-panel" style="display:none">
+  <div class="ia-hero">
+    <div class="ia-hero-title">🤖 Demander à une IA</div>
+    <div class="ia-hero-sub">Le contexte complet du voyage est copié automatiquement. Colle-le dans l'IA de ton choix.</div>
+  </div>
+  <div class="list-group" style="padding:16px">
+    <div style="font-size:12px;font-weight:600;color:var(--label2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Ta question</div>
+    <textarea id="claude-input" class="ia-textarea" placeholder="Ex: Que faire si il pleut toute la journée à Koh Chang ?"></textarea>
+    <div class="ia-btns">
+      <button class="ia-btn" onclick="openIA('https://claude.ai','Claude')" style="background:linear-gradient(135deg,#7c3aed,#4f1fbf)">🟣 Claude</button>
+      <button class="ia-btn" onclick="openIA('https://chatgpt.com','ChatGPT')" style="background:linear-gradient(135deg,#10a37f,#047857)">🟢 ChatGPT</button>
+      <button class="ia-btn" onclick="openIA('https://chat.mistral.ai','Mistral')" style="background:linear-gradient(135deg,#f97316,#c2410c)">🟠 Mistral</button>
+    </div>
+    <div id="claude-feedback" class="ia-feedback">✅ Contexte copié ! Colle dans l'IA (appui long → Coller)</div>
+  </div>
+  <div class="inset-title">Comment ça marche</div>
+  <div class="list-group" style="padding:14px 16px">
+    <div class="how-row"><div class="how-num">1</div><div class="how-text">Tape ta question ci-dessus</div></div>
+    <div class="how-row"><div class="how-num">2</div><div class="how-text">Choisis une IA — le contexte voyage + ta question sont copiés automatiquement</div></div>
+    <div class="how-row" style="border:none"><div class="how-num">3</div><div class="how-text">Le site s'ouvre — fais appui long → <strong>Coller</strong> et envoie</div></div>
+  </div>
+</div>
+
+<!-- ─── TRANSPORT ─── -->
+<div id="tab-transport" class="tab-panel" style="display:none">
+  <div class="transport-hero">
+    <div class="transport-hero-title">🚆 Transports</div>
+    <div class="transport-hero-sub">Réservations, horaires ferries, liaisons rapides</div>
+  </div>
+
+  <div class="inset-title">Réservations en ligne</div>
+  <div class="list-group">
+    <a href="https://12go.asia" target="_blank" class="transport-link-row">
+      <span class="transport-link-icon">🚂</span>
+      <div class="transport-link-info"><div class="transport-link-title">12go.asia</div><div class="transport-link-sub">Trains · Bus · Ferries · Vols en Thaïlande</div></div>
+      <span class="transport-link-arr">↗</span>
+    </a>
+    <a href="https://www.boonsiriferries.com" target="_blank" class="transport-link-row">
+      <span class="transport-link-icon">⛴️</span>
+      <div class="transport-link-info"><div class="transport-link-title">Boonsiri Ferries</div><div class="transport-link-sub">Van + ferry Koh Chang — 1 100 ฿/pers tout inclus</div></div>
+      <span class="transport-link-arr">↗</span>
+    </a>
+    <a href="https://grab.com" target="_blank" class="transport-link-row">
+      <span class="transport-link-icon">🚗</span>
+      <div class="transport-link-info"><div class="transport-link-title">Grab</div><div class="transport-link-sub">VTC Thaïlande — paiement carte dans l'app</div></div>
+      <span class="transport-link-arr">↗</span>
+    </a>
+  </div>
+
+  <div class="inset-title">Étapes clés — réserver</div>
+  <div class="list-group">
+    <div class="resa-row">
+      <span style="font-size:20px;flex-shrink:0">🚂</span>
+      <div class="resa-info">
+        <div class="resa-title">Train de nuit Bangkok → Chiang Mai</div>
+        <div class="resa-sub">27 juil. · Train n°7 · Départ 18h00 · Arrivée 7h10</div>
+        <div class="resa-tip">💡 Couchettes 2e classe ~300฿/pers — inférieures pour les enfants</div>
       </div>
-    `).join('');
-    html += `</div>`;
-  }
-
-  if(phevs.length){
-    html += `<div class="section-sep">PHEV</div><div class="cards">`;
-    html += phevs.map(c=>`
-      <div class="card">
-        <div class="card-top">
-          <span class="model-tag ${compTag(c.type)}">${c.brand} ${c.model}</span>
-          <span class="type-badge">PHEV</span>
-        </div>
-        ${c.price_monthly
-          ? `<div class="card-price">${c.price_monthly} €<span>/mois</span></div>`
-          : `<div class="no-price">Prix indicatif</div>`}
-        <div class="card-rows">
-          ${c.duration_months?`<div class="card-row"><span class="card-row-label">Durée</span><span class="card-row-val">${c.duration_months} mois · ${fmt(c.km_per_year)} km/an</span></div>`:''}
-          ${c.first_payment?`<div class="card-row"><span class="card-row-label">1er loyer</span><span class="card-row-val">${fmt(c.first_payment)} €</span></div>`:''}
-          <div class="card-row"><span class="card-row-label">Source</span><span class="card-row-val"><a class="card-link" href="${c.source_url}" target="_blank">${c.source_name} ↗</a></span></div>
-        </div>
-        ${c.note?`<div class="card-note">${c.note}</div>`:''}
+      <a href="https://12go.asia/fr/travel/bangkok/chiang-mai" target="_blank" class="resa-btn">Réserver</a>
+    </div>
+    <div class="resa-row">
+      <span style="font-size:20px;flex-shrink:0">✈️</span>
+      <div class="resa-info">
+        <div class="resa-title">Vol Chiang Mai → Bangkok</div>
+        <div class="resa-sub">31 juil. · AirAsia / Thai Smile · ~1h · 700–1 200 ฿</div>
       </div>
-    `).join('');
-    html += `</div>`;
+      <a href="https://12go.asia/fr/travel/chiang-mai/bangkok" target="_blank" class="resa-btn">Réserver</a>
+    </div>
+    <div class="resa-row">
+      <span style="font-size:20px;flex-shrink:0">⛴️</span>
+      <div class="resa-info">
+        <div class="resa-title">Van Boonsiri → Koh Chang</div>
+        <div class="resa-sub">2 août · Depuis Khaosan Road · 17h ou 19h</div>
+        <div class="resa-tip">💡 Réserver aussi le retour dès l'arrivée sur l'île !</div>
+      </div>
+      <a href="https://www.boonsiriferries.com" target="_blank" class="resa-btn">Réserver</a>
+    </div>
+    <div class="resa-row">
+      <span style="font-size:20px;flex-shrink:0">⛴️</span>
+      <div class="resa-info">
+        <div class="resa-title">Van Boonsiri Retour Koh Chang → Bangkok</div>
+        <div class="resa-sub">16 août · Retour vers Bangkok · ~6h</div>
+        <div class="resa-tip">💡 Réserver dès les premiers jours sur l'île</div>
+      </div>
+      <a href="https://www.boonsiriferries.com" target="_blank" class="resa-btn">Réserver</a>
+    </div>
+  </div>
+
+  <div class="inset-title">🏝️ Ferries Koh Chang — horaires</div>
+  <div style="font-size:12px;color:var(--label2);padding:0 4px;margin-bottom:8px">Centre Pier (Laem Ngop continent) ↔ Ko Chang Centerpoint Pier</div>
+  <div class="list-group">
+    <div class="ferry-row" style="background:rgba(0,122,255,.05)">
+      <span style="font-size:11px;font-weight:700;color:var(--blue)">ALLER →</span>
+      <span style="font-size:12px;color:var(--label2);flex:1">Laem Ngop → Koh Chang</span>
+    </div>
+    <div class="ferry-row"><span class="ferry-time">6h00</span><span class="ferry-route">Laem Ngop → Centre Pier KC</span><span class="ferry-duration">~45 min</span><span class="ferry-price">80 ฿</span></div>
+    <div class="ferry-row"><span class="ferry-time">7h00</span><span class="ferry-route">Laem Ngop → Centre Pier KC</span><span class="ferry-duration">~45 min</span><span class="ferry-price">80 ฿</span></div>
+    <div class="ferry-row"><span class="ferry-time">9h00</span><span class="ferry-route">Laem Ngop → Centre Pier KC</span><span class="ferry-duration">~45 min</span><span class="ferry-price">80 ฿</span></div>
+    <div class="ferry-row"><span class="ferry-time">11h00</span><span class="ferry-route">Laem Ngop → Centre Pier KC</span><span class="ferry-duration">~45 min</span><span class="ferry-price">80 ฿</span></div>
+    <div class="ferry-row"><span class="ferry-time">13h00</span><span class="ferry-route">Laem Ngop → Centre Pier KC</span><span class="ferry-duration">~45 min</span><span class="ferry-price">80 ฿</span></div>
+    <div class="ferry-row"><span class="ferry-time">15h00</span><span class="ferry-route">Laem Ngop → Centre Pier KC</span><span class="ferry-duration">~45 min</span><span class="ferry-price">80 ฿</span></div>
+    <div class="ferry-row"><span class="ferry-time">17h00</span><span class="ferry-route">Laem Ngop → Centre Pier KC</span><span class="ferry-duration">~45 min</span><span class="ferry-price">80 ฿</span></div>
+    <div class="ferry-row"><span class="ferry-time">19h00</span><span class="ferry-route">Laem Ngop → Centre Pier KC <strong>(dernier)</strong></span><span class="ferry-duration">~45 min</span><span class="ferry-price">80 ฿</span></div>
+  </div>
+  <div class="list-group" style="margin-top:8px">
+    <div class="ferry-row" style="background:rgba(52,199,89,.05)">
+      <span style="font-size:11px;font-weight:700;color:var(--green)">RETOUR ←</span>
+      <span style="font-size:12px;color:var(--label2);flex:1">Koh Chang → Laem Ngop</span>
+    </div>
+    <div class="ferry-row"><span class="ferry-time">6h30</span><span class="ferry-route">Centre Pier KC → Laem Ngop</span><span class="ferry-duration">~45 min</span><span class="ferry-price">80 ฿</span></div>
+    <div class="ferry-row"><span class="ferry-time">8h00</span><span class="ferry-route">Centre Pier KC → Laem Ngop</span><span class="ferry-duration">~45 min</span><span class="ferry-price">80 ฿</span></div>
+    <div class="ferry-row"><span class="ferry-time">10h00</span><span class="ferry-route">Centre Pier KC → Laem Ngop</span><span class="ferry-duration">~45 min</span><span class="ferry-price">80 ฿</span></div>
+    <div class="ferry-row"><span class="ferry-time">12h00</span><span class="ferry-route">Centre Pier KC → Laem Ngop</span><span class="ferry-duration">~45 min</span><span class="ferry-price">80 ฿</span></div>
+    <div class="ferry-row"><span class="ferry-time">14h00</span><span class="ferry-route">Centre Pier KC → Laem Ngop</span><span class="ferry-duration">~45 min</span><span class="ferry-price">80 ฿</span></div>
+    <div class="ferry-row"><span class="ferry-time">16h00</span><span class="ferry-route">Centre Pier KC → Laem Ngop</span><span class="ferry-duration">~45 min</span><span class="ferry-price">80 ฿</span></div>
+    <div class="ferry-row"><span class="ferry-time">18h00</span><span class="ferry-route">Centre Pier KC → Laem Ngop <strong>(dernier)</strong></span><span class="ferry-duration">~45 min</span><span class="ferry-price">80 ฿</span></div>
+  </div>
+  <div style="font-size:11px;color:var(--label3);padding:4px 4px 12px">⚠️ Horaires indicatifs — confirmer sur place. Possible disruption par mauvais temps (mousson).</div>
+
+  <div class="inset-title">🛵 Sur Koh Chang</div>
+  <div class="list-group">
+    <div class="list-row"><span class="list-row-icon">🛵</span><span class="list-row-label">Scooter à louer</span><span class="list-row-val">250 ฿/jour</span></div>
+    <div class="list-row"><span class="list-row-icon">🚐</span><span class="list-row-label">Songthaew (pick-up partagé)</span><span class="list-row-val">30–80 ฿</span></div>
+    <div class="list-row"><span class="list-row-icon">🏍️</span><span class="list-row-label">Moto-taxi</span><span class="list-row-val">Négocier</span></div>
+    <div class="list-row"><span class="list-row-icon">⚡</span><span class="list-row-label">Speed boat → Koh Wai (snorkeling)</span><span class="list-row-val">~1 200 ฿/pers</span></div>
+  </div>
+</div>
+
+<!-- ─── RAPPELS ─── -->
+<div id="tab-rappels" class="tab-panel" style="display:none">
+  <div style="font-size:22px;font-weight:700;color:var(--label);letter-spacing:-.3px;margin-bottom:4px">⏰ Rappels</div>
+  <div style="font-size:12px;color:var(--label2);margin-bottom:14px">À faire avant et pendant le voyage</div>
+
+  <div class="inset-title">Avant le départ</div>
+  <div class="rappel-card">
+    <div class="rappel-head"><span class="rappel-icon">🎟️</span> Réserver le train de nuit n°7<span class="rappel-urgency urg-high">Urgent</span></div>
+    <div class="rappel-body">Réserver sur <strong>12go.asia</strong> ou directement à la gare. Couchettes 2e classe inférieures pour les enfants. Complet rapidement en juillet.</div>
+  </div>
+  <div class="rappel-card">
+    <div class="rappel-head"><span class="rappel-icon">🐘</span> Réserver Elephant Nature Park<span class="rappel-urgency urg-high">Urgent</span></div>
+    <div class="rappel-body">Sur <strong>elephantnaturepark.org</strong> — complet 2–3 semaines avant en haute saison. 2 500 ฿/adulte · 2 000 ฿/enfant.</div>
+  </div>
+  <div class="rappel-card">
+    <div class="rappel-head"><span class="rappel-icon">⛴️</span> Réserver van Boonsiri aller<span class="rappel-urgency urg-high">Urgent</span></div>
+    <div class="rappel-body">Sur <strong>boonsiriferries.com</strong> — 1 100 ฿/pers tout inclus. Départ depuis Khaosan Road, 17h ou 19h.</div>
+  </div>
+  <div class="rappel-card">
+    <div class="rappel-head"><span class="rappel-icon">✈️</span> Réserver vol CM → Bangkok<span class="rappel-urgency urg-med">Important</span></div>
+    <div class="rappel-body">AirAsia ou Thai Smile sur <strong>12go.asia</strong>. ~1h de vol · 700–1 200 ฿/pers. Préférer un vol avant 15h pour arriver serein.</div>
+  </div>
+  <div class="rappel-card">
+    <div class="rappel-head"><span class="rappel-icon">💊</span> Consulte un médecin du voyage<span class="rappel-urgency urg-med">Important</span></div>
+    <div class="rappel-body">Vaccins conseillés : hépatite A, typhoïde, DTP. Antipaludéen selon prescription. Ordonnance antidiarrhéiques pour les enfants.</div>
+  </div>
+  <div class="rappel-card">
+    <div class="rappel-head"><span class="rappel-icon">📱</span> Installer Grab + Revolut<span class="rappel-urgency urg-med">Important</span></div>
+    <div class="rappel-body">Grab : configurer avec carte bancaire avant le départ. Revolut : ouvrir un compte gratuit, taux interbancaire sans frais.</div>
+  </div>
+
+  <div class="inset-title">Sur place — pendant le voyage</div>
+  <div class="rappel-card">
+    <div class="rappel-head"><span class="rappel-icon">📶</span> SIM à l'aéroport à l'arrivée<span class="rappel-urgency urg-high">Dès l'arrivée</span></div>
+    <div class="rappel-body">AIS ou DTAC à Suvarnabhumi — 299 ฿ pour 30 jours de données illimitées. Prendre avant de sortir de l'aéroport.</div>
+  </div>
+  <div class="rappel-card">
+    <div class="rappel-head"><span class="rappel-icon">💵</span> Retrait DAB à l'arrivée<span class="rappel-urgency urg-med">Jour 1</span></div>
+    <div class="rappel-body">Retirer 5 000–10 000 ฿ d'un coup — frais fixes 220 ฿/retrait. Éviter les Forex de l'aéroport. DAB SCB ou Kasikorn Bank.</div>
+  </div>
+  <div class="rappel-card">
+    <div class="rappel-head"><span class="rappel-icon">⛴️</span> Réserver van Boonsiri RETOUR<span class="rappel-urgency urg-high">Dès Koh Chang J1</span></div>
+    <div class="rappel-body">Réserver le retour du 16 août dès l'arrivée sur l'île. Les places partent en 48h. Départ Centre Pier KC → Bangkok.</div>
+  </div>
+  <div class="rappel-card">
+    <div class="rappel-head"><span class="rappel-icon">🛵</span> Louer le scooter à Koh Chang<span class="rappel-urgency urg-med">Jour arrivée KC</span></div>
+    <div class="rappel-body">250 ฿/jour. Vérifier l'état avant de partir. Prudence sur les routes mouillées (mousson). Casque obligatoire.</div>
+  </div>
+  <div class="rappel-card">
+    <div class="rappel-head"><span class="rappel-icon">🌧️</span> Anticiper la mousson à Koh Chang<span class="rappel-urgency urg-med">Continu</span></div>
+    <div class="rappel-body">Août = pic de mousson. Prévoir poncho, sac waterproof. Si pluie toute la journée → journée piscine/villa, cours de cuisine thaïe, village de Bang Bao.</div>
+  </div>
+</div>
+
+<!-- ─── CARNET ─── -->
+<div id="tab-carnet" class="tab-panel" style="display:none">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+    <div>
+      <div style="font-size:22px;font-weight:700;color:var(--label);letter-spacing:-.3px">📓 Carnet</div>
+      <div style="font-size:12px;color:var(--label2);margin-top:2px">Notes de voyage — jours &amp; souvenirs</div>
+    </div>
+    <span class="carnet-counter" id="carnet-counter">0/26 jours</span>
+  </div>
+
+  <div class="filter-row" style="margin-bottom:10px">
+    <button class="fpill active" id="cf-notes" onclick="filterCarnet('notes')">✏️ Avec notes</button>
+    <button class="fpill" id="cf-all" onclick="filterCarnet('all')">Tous les jours</button>
+  </div>
+
+  <button class="carnet-export" onclick="exportCarnet()">📤 Copier tout le carnet</button>
+
+  <div id="carnet-list"></div>
+
+  <div id="carnet-empty" class="carnet-empty" style="display:none">
+    Aucune note pour l'instant.<br>
+    Ouvre un jour dans l'Itinéraire et écris tes souvenirs ✏️
+  </div>
+
+  <div class="inset-title" style="margin-top:4px">Notes libres</div>
+  <button class="carnet-libre-btn" onclick="addLibreNote()">
+    ✚ Ajouter une note libre
+  </button>
+  <div id="carnet-libre-list"></div>
+</div>
+
+<div class="app-footer">
+  Météo : Open-Meteo · Taux : Frankfurter.app · Carte : OpenStreetMap &amp; Leaflet<br>
+  🇹🇭 Thaïlande 2026 · Famille · 23 juil – 18 août
+</div>
+</div><!-- /.page -->
+
+<!-- ─── BOTTOM NAV (mobile only) ─── -->
+<nav class="bottom-nav" id="bottom-nav">
+  <button class="bnav-item active" data-tab="itinerary" onclick="switchTab('itinerary',this)">
+    <span class="bnav-icon">🗓</span><span>Itin.</span>
+  </button>
+  <button class="bnav-item" data-tab="carte" onclick="switchTab('carte',this)">
+    <span class="bnav-icon">🗺</span><span>Carte</span>
+  </button>
+  <button class="bnav-item" data-tab="meteo" onclick="switchTab('meteo',this)">
+    <span class="bnav-icon">🌦</span><span>Météo</span>
+  </button>
+  <button class="bnav-item" data-tab="argent" onclick="switchTab('argent',this)">
+    <span class="bnav-icon">💱</span><span>Argent</span>
+  </button>
+  <button class="bnav-item bnav-more" onclick="toggleMore()" id="more-btn">
+    <span class="bnav-icon">⋯</span><span>Plus</span>
+  </button>
+</nav>
+<div class="more-menu" id="more-menu">
+  <button class="more-item" onclick="switchTabFromMore('transport')"><span class="more-icon">🚆</span> Transport</button>
+  <button class="more-item" onclick="switchTabFromMore('rappels')"><span class="more-icon">⏰</span> Rappels</button>
+  <button class="more-item" onclick="switchTabFromMore('thai')"><span class="more-icon">🗣</span> Thaï</button>
+  <button class="more-item" onclick="switchTabFromMore('sos')"><span class="more-icon">🚨</span> SOS</button>
+  <button class="more-item" onclick="switchTabFromMore('checklist')"><span class="more-icon">✅</span> Checklist</button>
+  <button class="more-item" onclick="switchTabFromMore('guide')"><span class="more-icon">📍</span> Guide</button>
+  <button class="more-item" onclick="switchTabFromMore('carnet')"><span class="more-icon">📓</span> Carnet</button>
+  <button class="more-item" onclick="switchTabFromMore('claude')"><span class="more-icon">🤖</span> IA</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script>
+/* ═══════════════════════════════════════════
+   MODE HORS LIGNE — détection réseau
+   Note: SW blob URL non supporté par les navigateurs
+   (restriction same-origin). Pas nécessaire ici car
+   tout le contenu de l'app est inline dans ce fichier HTML.
+   Le taux de change est mis en cache dans localStorage.
+═══════════════════════════════════════════ */
+(function() {
+  function updateOnlineStatus() {
+    document.getElementById('offline-banner').style.display = navigator.onLine ? 'none' : 'block';
   }
+  window.addEventListener('online', updateOnlineStatus);
+  window.addEventListener('offline', updateOnlineStatus);
+  updateOnlineStatus();
+})();
 
-  if(!html) html = '<div class="empty">Aucune donnée concurrente.</div>';
-  document.getElementById('comp-cards').innerHTML = html;
+/* ═══════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════ */
+var DAYS = [
+  { day:1, date:'24 juil.', stage:'bkk1', stageLabel:'Bangkok 1', emoji:'✈️', title:'Arrivée Bangkok',
+    acts:['07h00 — Atterrissage Suvarnabhumi · Airport Rail Link → BTS centre (45฿, 30 min)','Achat SIM AIS ou DTAC à l\'aéroport (299฿ — données illimitées 30j)','Check-in hébergement · dépôt bagages possible avant 14h','Déjeuner de rue dans le quartier','🌙 Soirée Yaowarat (Chinatown) — fruits de mer grillés au marché nocturne'],
+    tip:'DAB à l\'aéroport : retirer 5 000–10 000฿ d\'un coup — frais fixes 220฿/retrait. Éviter les Forex de l\'aéroport (taux très mauvais).' },
+  { day:2, date:'25 juil.', stage:'bkk1', stageLabel:'Bangkok 1', emoji:'🛕', title:'Grand Palais · Wat Pho · Wat Arun',
+    acts:['8h00 — Grand Palais + Wat Phra Kaew (500฿/adulte — tenues couvrantes obligatoires)','10h30 — Wat Pho : Bouddha couché 46m (100฿)','12h30 — Déjeuner pad thaï rue Tanao ou chez Thip Samai','14h00 — Traversée Chao Phraya en bac (4฿) → Wat Arun (50฿)','🌙 Dîner flottant bord du fleuve ou Khao San Road'],
+    tip:'Arriver dès 8h pile avant les groupes — fermeture à 15h30. Épaules et genoux couverts ou location sur place (200฿ remboursable).' },
+  { day:3, date:'26 juil.', stage:'bkk1', stageLabel:'Bangkok 1', emoji:'🛶', title:'Klongs · Marché flottant · Jim Thompson',
+    acts:['6h00 — Minivan vers Damnoen Saduak (depuis Khaosan, 80฿)','8h00 — Marché flottant en barque (négocier le bateau sur place)','11h00 — Retour Bangkok · déjeuner Pad Thaï local','14h00 — Jim Thompson House : maison en teck, 100฿ adulte, gratuit enfants','🌙 Marché nocturne Rod Fai (vintage, street food)'],
+    tip:'Damnoen Saduak : y être avant 8h — les commerçants lèvent le camp à 10h et les groupes arrivent. Le matin tôt, c\'est authentique.' },
+  { day:4, date:'27 juil.', stage:'bkk1', stageLabel:'Bangkok 1', emoji:'🛍️', title:'Chatuchak · Départ train de nuit',
+    acts:['9h00 — Marché Chatuchak (BTS Mo Chit) — 8000 stands : artisanat, vintage, cuisine','12h00 — Déjeuner street food dans le marché','Après-midi — Repos, préparation sacs, check-out hébergement','18h00 — Gare Hua Lamphong · Train n°7 Bangkok → Chiang Mai','🌙 Nuit dans le train (arrivée 7h10)'],
+    tip:'Réserver les couchettes sur 12go.asia. Couchettes 2ème classe ~300฿/pers. Demander couchettes inférieures pour les enfants.' },
+  { day:5, date:'28 juil.', stage:'cm', stageLabel:'Chiang Mai', emoji:'🌿', title:'Arrivée Chiang Mai · Vieille ville',
+    acts:['7h10 — Arrivée gare · petit-déjeuner Khao Tom sur les quais','Check-in hébergement dans la vieille ville ou Nimman','10h00 — Wat Chedi Luang (15e siècle, gratuit)','12h00 — Déjeuner Khao Soi — la spécialité du Nord (chez Khao Soi Islam, 50฿)','🌙 Night Bazaar + food court Anusarn Market'],
+    tip:'Khao Soi = curry de lait de coco avec nouilles croustillantes. À ne rater sous aucun prétexte. Les enfants adorent.' },
+  { day:6, date:'29 juil.', stage:'cm', stageLabel:'Chiang Mai', emoji:'🐘', title:'Elephant Nature Park',
+    acts:['8h00 — Navette depuis le centre (incluse dans le programme)','Journée complète : nourrir et baigner les éléphants éthiquement','Déjeuner végétarien inclus sur place','Observation en liberté, aucun spectacle ni monte','🌙 Dîner léger — récupération'],
+    tip:'Réserver sur elephantnaturepark.org — complet 2-3 semaines avant. 2 500฿/adulte, 2 000฿/enfant. Seul sanctuaire éthique de Chiang Mai.' },
+  { day:7, date:'30 juil.', stage:'cm', stageLabel:'Chiang Mai', emoji:'🌲', title:'Trek Karen — Jour 1',
+    acts:['8h00 — Départ avec guide privé (circuit 2J/1N)','2h de jeep dans les montagnes','Trek jungle 4-5h, niveau modéré, accessible à 10 ans','Passage par villages Hmong ou Akha','🌙 Nuit chez la famille Karen — dîner partagé'],
+    tip:'Chaussures imperméables OBLIGATOIRES. Sac waterproof, vêtements de rechange, poncho. Les enfants de 10 ans tiennent très bien ce trek.' },
+  { day:8, date:'31 juil.', stage:'cm', stageLabel:'Chiang Mai', emoji:'🏕️', title:'Trek Karen J2 · Retour Bangkok',
+    acts:['Réveil au village · petit-déjeuner partagé avec la famille Karen','Matinée libre ou courte randonnée','13h00 — Retour Chiang Mai en jeep','Vol Chiang Mai → Bangkok (AirAsia / Thai Smile, 1h, ~700-1200฿)','🌙 Arrivée Bangkok fin d\'après-midi'],
+    tip:'Préférer le vol au train pour ce retour : arrivée plus tôt, temps de récupération avant Koh Chang.' },
+  { day:9, date:'1 août', stage:'bkk2', stageLabel:'Bangkok 2', emoji:'🚂', title:'Bangkok · Marché ferroviaire Maeklong',
+    acts:['Matinée repos et récupération','12h00 — Minivan vers le marché ferroviaire de Maeklong (Victory Monument, 35฿)','14h30 — Le train passe au milieu des stands — les étals s\'écartent!','15h30 — Retour Bangkok','🌙 Dîner Silom ou Sathorn'],
+    tip:'Maeklong : arriver à 14h pour le passage à 14h30. Phénomène unique au monde. Les tentes s\'effacent à 30cm du train.' },
+  { day:10, date:'2 août', stage:'bkk2', stageLabel:'Bangkok 2', emoji:'🏝️', title:'Bangkok → Van Boonsiri Koh Chang',
+    acts:['9h00 — Or Tor Kor Market : meilleur marché frais de Bangkok','Dernier déjeuner Bangkok','Courses provisions pour l\'île (Big C, Tops Market)','17h00 (ou 19h) — Van Boonsiri depuis Khaosan Road vers Koh Chang','🌙 Route et ferry de nuit vers l\'île'],
+    tip:'Réserver le van Boonsiri sur boonsiriferries.com — 1100฿/pers tout inclus (van + ferry). 6h de route.' },
+  { day:11, date:'3 août', stage:'kc', stageLabel:'Koh Chang', emoji:'🌊', title:'Arrivée Koh Chang · Beach Club Villa',
+    acts:['Arrivée Centre Pier · taxi ou songthaew vers la villa','Check-in Beach Club Villa by Utalay','Première plage : Klong Prao, à 10 min à pied','🌙 Dîner sur la plage — restaurant Marco ou Oodies Place'],
+    tip:'Location scooter dès le lendemain : 250฿/jour. Indispensable pour explorer l\'île. Prudence sur les routes mouillées.' },
+  { day:24, date:'16 août', stage:'bkk3', stageLabel:'Bangkok fin', emoji:'⛴️', title:'Koh Chang → Bangkok',
+    acts:['Matinée — Dernier bain, plage, achats souvenirs','11h00 — Check-out villa · Van Boonsiri retour','Ferry Centre Pier → continent · Van Bangkok (6h)','Arrivée Bangkok en soirée ~19h-20h','🌙 Check-in hôtel zone Sukhumvit'],
+    tip:'Réserver le van Boonsiri retour dès l\'arrivée sur l\'île — les places partent vite.' },
+  { day:25, date:'17 août', stage:'bkk3', stageLabel:'Bangkok fin', emoji:'🛍️', title:'Bangkok · Dernière journée',
+    acts:['9h00 — Or Tor Kor Market · fruits exotiques, épices, souvenirs alimentaires','11h00 — Massages thaïs en famille (500-800฿/h)','Après-midi — Shopping Siam Paragon ou MBK','Préparation valises · vérification poids bagages (30 kg max éco)','🌙 Dîner d\'adieu bord du fleuve ou rooftop'],
+    tip:'Dernier re-change de bahts à l\'aéroport. Vérifier liquides dans les bagages cabine.' },
+  { day:26, date:'18 août', stage:'bkk3', stageLabel:'Bangkok fin', emoji:'✈️', title:'Retour Paris',
+    acts:['Réveil selon horaire de vol','Grab vers Suvarnabhumi (45-60 min — prévoir large)','Enregistrement · dernier Pad Thaï à l\'aéroport','✈️ Vol retour — atterrissage Paris CDG le 19 août matin','🏠 À la maison avec des souvenirs plein la tête !'],
+    tip:'Prévoir 3h avant le vol. Aéroport Suvarnabhumi est grand — laisser du temps.' },
+];
+
+var KC_ACTS = [
+  { emoji:'🏖️', title:'White Sand Beach', type:'plage', desc:'La plage nord, la plus animée. Commerces, restos, bars en soirée.' },
+  { emoji:'🌊', title:'Klong Prao Beach', type:'plage', desc:'10 min de la villa à pied. Belle, moins fréquentée. Pour les matins tranquilles.' },
+  { emoji:'🌅', title:'Lonely Beach (coucher de soleil)', type:'plage', desc:'30 min en songthaew. Lumière magique en fin de journée.' },
+  { emoji:'💧', title:'Chutes de Khlong Phlu', type:'nature', desc:'Parc national. Entrée 200฿. Cascade 25m, baignade dans les vasques. Incontournable.' },
+  { emoji:'🦞', title:'Village de Bang Bao (pilotis)', type:'culture', desc:'Village de pêcheurs sur pilotis. Fruits de mer frais, boutiques. Point départ excursions.' },
+  { emoji:'🤿', title:'Snorkeling — Koh Wai', type:'mer', desc:'Speedboat depuis Bang Bao (~1000-1500฿/pers). Coraux préservés, eaux turquoise.' },
+  { emoji:'🚣', title:'Kayak dans les mangroves', type:'nature', desc:'Salak Kok Bay. Location sur place (200฿/h). Très calme, faune locale. 2h suffisent.' },
+  { emoji:'🌿', title:'Trek parc national Mu Ko Chang', type:'nature', desc:'Sentiers balisés depuis le poste de ranger. Jungle dense, cascades. Guide recommandé.' },
+  { emoji:'🏊', title:'Journée villa & piscine', type:'villa', desc:'Piscine, lecture, sieste — surtout si la mousson décide. La villa absorbe les mauvais jours.' },
+  { emoji:'🍜', title:'Cours de cuisine thaïe', type:'culture', desc:'~1500฿/pers. Pad Thaï, curry vert, mango sticky rice. Parfait avec les enfants.' },
+  { emoji:'⛵', title:'Tour de l\'île en bateau privé', type:'mer', desc:'Location journée (2000-3000฿ groupe). Snorkeling, plages secrètes, pique-nique à bord.' },
+  { emoji:'🌙', title:'Marché nocturne Klong Son', type:'marche', desc:'Street food locale, moins touristique. Saveurs authentiques de l\'île.' },
+];
+
+var MARKERS = {
+  bangkok:[
+    { name:'Grand Palais + Wat Phra Kaew', lat:13.7500, lon:100.4913, type:'temple', emoji:'🛕', desc:'Incontournable. Tenues couvrantes obligatoires. Arriver dès 8h.' },
+    { name:'Wat Pho — Bouddha couché', lat:13.7465, lon:100.4927, type:'temple', emoji:'🛕', desc:'Bouddha couché 46m. École de massage sur place.' },
+    { name:'Wat Arun — Temple de l\'Aube', lat:13.7436, lon:100.4890, type:'temple', emoji:'🛕', desc:'Traversée depuis le quai Wat Pho (4฿). Montée de la tour 50฿.' },
+    { name:'Marché Chatuchak', lat:13.7997, lon:100.5501, type:'marche', emoji:'🛍️', desc:'Plus grand marché du week-end d\'Asie. 8000 stands. Y aller le matin.' },
+    { name:'Chinatown — Yaowarat', lat:13.7400, lon:100.5140, type:'food', emoji:'🍜', desc:'Street food exceptionnelle. Meilleur dès 18h. Fruits de mer grillés.' },
+    { name:'Jim Thompson House', lat:13.7453, lon:100.5294, type:'culture', emoji:'🏛️', desc:'Maison thaïe traditionnelle. 100฿ adulte, gratuit enfants.' },
+    { name:'Gare Hua Lamphong', lat:13.7393, lon:100.5175, type:'transport', emoji:'🚂', desc:'Départ train de nuit n°7 Bangkok → Chiang Mai à 18h00.' },
+    { name:'Marché ferroviaire de Maeklong', lat:13.5319, lon:100.0032, type:'marche', emoji:'🚃', desc:'Les stands s\'écartent au passage du train. Spectacle unique.' },
+    { name:'Khao San Road', lat:13.7584, lon:100.4966, type:'food', emoji:'🌃', desc:'Quartier backpacker animé. Street food, bars, ambiance nocturne.' },
+    { name:'Or Tor Kor Market', lat:13.8038, lon:100.5503, type:'food', emoji:'🥭', desc:'Meilleur marché alimentaire de Bangkok. Fruits, épices, produits locaux.' },
+    { name:'Damnoen Saduak (marché flottant)', lat:13.5219, lon:99.9576, type:'marche', emoji:'🛶', desc:'1h30 de Bangkok. Y aller avant 8h pour éviter la foule.' },
+  ],
+  chiangmai:[
+    { name:'Tha Phae Gate — Vieille ville', lat:18.7888, lon:98.9929, type:'culture', emoji:'🏛️', desc:'Porte principale de la vieille ville. Point de départ idéal.' },
+    { name:'Wat Chedi Luang', lat:18.7877, lon:98.9862, type:'temple', emoji:'🛕', desc:'Temple du 15e siècle. Discussions avec les moines certains matins.' },
+    { name:'Wat Phra Singh', lat:18.7875, lon:98.9803, type:'temple', emoji:'🛕', desc:'Temple le plus vénéré de Chiang Mai. Fresques remarquables.' },
+    { name:'Elephant Nature Park', lat:19.0384, lon:98.9168, type:'nature', emoji:'🐘', desc:'Seul sanctuaire éthique. Réservation obligatoire. Navette incluse.' },
+    { name:'Night Bazaar', lat:18.7834, lon:98.9979, type:'marche', emoji:'🛍️', desc:'Marché nocturne artisanal. Souvenirs, artisanat, street food. Dès 18h.' },
+    { name:'Nimman Road', lat:18.7953, lon:98.9659, type:'food', emoji:'☕', desc:'Quartier branché cafés-brunch. Meilleures adresses food de Chiang Mai.' },
+    { name:'Doi Suthep', lat:18.8048, lon:98.9219, type:'temple', emoji:'⛰️', desc:'Temple sur les hauteurs. Vue panoramique sur Chiang Mai. Songthaew 50฿.' },
+    { name:'Khao Soi Islam', lat:18.7791, lon:98.9982, type:'food', emoji:'🍜', desc:'Meilleur Khao Soi de Chiang Mai. 50฿ le bol.' },
+  ],
+  kohchang:[
+    { name:'Beach Club Villa by Utalay', lat:12.0362, lon:102.2942, type:'hebergement', emoji:'🏠', desc:'Votre villa pour 13 nuits — zone Klong Prao Beach.' },
+    { name:'White Sand Beach', lat:12.0940, lon:102.3030, type:'plage', emoji:'🏖️', desc:'Plage principale, la plus animée. Commerces, bars, restos en soirée.' },
+    { name:'Klong Prao Beach', lat:12.0350, lon:102.2940, type:'plage', emoji:'🌊', desc:'Belle plage moins fréquentée. À 10 min de la villa à pied.' },
+    { name:'Lonely Beach', lat:11.9880, lon:102.3020, type:'plage', emoji:'🌅', desc:'Coucher de soleil sublime. Ambiance détendue. 30 min en songthaew.' },
+    { name:'Chutes de Khlong Phlu', lat:12.0450, lon:102.3180, type:'nature', emoji:'💧', desc:'Parc national. Entrée 200฿. Cascade 25m, baignade possible.' },
+    { name:'Village de Bang Bao', lat:11.9690, lon:102.3230, type:'culture', emoji:'🦞', desc:'Village de pêcheurs sur pilotis. Fruits de mer frais, artisanat.' },
+    { name:'Centre Pier (ferry Boonsiri)', lat:12.1488, lon:102.3243, type:'transport', emoji:'⛴️', desc:'Port principal. Arrivée & départ van Boonsiri.' },
+    { name:'Salak Kok — Kayak mangroves', lat:12.0700, lon:102.3400, type:'nature', emoji:'🚣', desc:'Kayak dans les mangroves. Location sur place. 2-3h, idéal famille.' },
+  ]
+};
+
+var PHRASES = {
+  politesse:[
+    { th:'สวัสดีครับ / ค่ะ', phon:'Sawasdee khrap / kha', fr:'Bonjour · Bonsoir · Au revoir' },
+    { th:'ขอบคุณครับ / ค่ะ', phon:'Khob khun khrap / kha', fr:'Merci' },
+    { th:'ไม่เป็นไร', phon:'Mai pen rai', fr:'Ce n\'est pas grave / De rien' },
+    { th:'ขอโทษครับ / ค่ะ', phon:'Kho thot khrap / kha', fr:'Excusez-moi / Pardon' },
+    { th:'ใช่', phon:'Chai', fr:'Oui' },
+    { th:'ไม่ใช่', phon:'Mai chai', fr:'Non' },
+    { th:'ไม่เข้าใจ', phon:'Mai khao chai', fr:'Je ne comprends pas' },
+    { th:'พูดช้าๆ ได้ไหม', phon:'Phut cha cha dai mai', fr:'Pouvez-vous parler lentement?' },
+  ],
+  restaurant:[
+    { th:'อร่อยมาก!', phon:'Aroy mak!', fr:'C\'est délicieux!' },
+    { th:'ไม่เผ็ด', phon:'Mai phet', fr:'Pas épicé s\'il vous plaît' },
+    { th:'เผ็ดนิดหน่อย', phon:'Phet nit noy', fr:'Un peu épicé' },
+    { th:'ขอเมนูด้วย', phon:'Kho menu duay', fr:'Le menu s\'il vous plaît' },
+    { th:'เช็คบิล', phon:'Check bin', fr:'L\'addition s\'il vous plaît' },
+    { th:'น้ำเปล่า', phon:'Nam plao', fr:'Eau plate' },
+    { th:'ไม่ใส่ผักชี', phon:'Mai sai phak chi', fr:'Sans coriandre' },
+    { th:'แพ้ถั่วลิสง', phon:'Phae thua lisong', fr:'Allergie aux cacahuètes' },
+  ],
+  transport:[
+    { th:'ไปที่นี่ได้ไหม', phon:'Pai thi ni dai mai', fr:'Pouvez-vous m\'emmener ici?' },
+    { th:'จอดตรงนี้เลย', phon:'Chot trong ni loey', fr:'Arrêtez-vous ici' },
+    { th:'เท่าไหร่', phon:'Tao rai', fr:'Combien ça coûte?' },
+    { th:'แพงเกินไป', phon:'Phaeng kern pai', fr:'C\'est trop cher' },
+    { th:'ขวา', phon:'Khwa', fr:'À droite' },
+    { th:'ซ้าย', phon:'Sai', fr:'À gauche' },
+    { th:'ตรงไป', phon:'Trong pai', fr:'Tout droit' },
+    { th:'สนามบิน', phon:'Sanam bin', fr:'Aéroport' },
+  ],
+  shopping:[
+    { th:'ราคาเท่าไหร่', phon:'Rakha tao rai', fr:'Quel est le prix?' },
+    { th:'ลดได้ไหม', phon:'Lot dai mai', fr:'Vous pouvez baisser le prix?' },
+    { th:'แพงไป', phon:'Phaeng pai', fr:'C\'est trop cher' },
+    { th:'ไม่เอา', phon:'Mai ao', fr:'Je n\'en veux pas' },
+    { th:'เอาอันนี้', phon:'Ao an ni', fr:'Je prends celui-ci' },
+    { th:'มีสีอื่นไหม', phon:'Mi si eun mai', fr:'Vous avez d\'autres couleurs?' },
+  ],
+  urgences:[
+    { th:'ช่วยด้วย!', phon:'Chuay duay!', fr:'Au secours! À l\'aide!' },
+    { th:'โทรตำรวจ', phon:'Tho tamruat', fr:'Appelez la police' },
+    { th:'โทรรถพยาบาล', phon:'Tho rot phayaban', fr:'Appelez une ambulance' },
+    { th:'โรงพยาบาล', phon:'Rong phayaban', fr:'Hôpital' },
+    { th:'ฉันป่วย', phon:'Chan puay', fr:'Je suis malade' },
+    { th:'ฉันเจ็บ', phon:'Chan chep', fr:'J\'ai mal / Je suis blessé(e)' },
+    { th:'ขโมย!', phon:'Khamoy!', fr:'Au voleur!' },
+    { th:'หมอ', phon:'Maw', fr:'Médecin' },
+  ],
+  sante:[
+    { th:'ปวดหัว', phon:'Puad hua', fr:'Mal de tête' },
+    { th:'ปวดท้อง', phon:'Puad thong', fr:'Mal au ventre' },
+    { th:'คลื่นไส้', phon:'Khleun sai', fr:'Nausée' },
+    { th:'ท้องเสีย', phon:'Thong sia', fr:'Diarrhée' },
+    { th:'เป็นไข้', phon:'Pen khai', fr:'Fièvre' },
+    { th:'แพ้แมลง', phon:'Phae malaeng', fr:'Allergie — piqûre d\'insecte' },
+    { th:'ยาแก้ปวด', phon:'Ya kae puad', fr:'Antidouleur / Paracétamol' },
+  ]
+};
+
+var CHECKLIST_DATA = {
+  documents:{ label:'Documents & Admin', emoji:'📄', items:['Passeports valides ×4 (6 mois de validité après le retour)','Visas — Français exemptés 30 jours (vérifier règles à jour)','Assurance voyage — vérifier couverture rapatriement','Billets d\'avion imprimés ou sauvegardés hors-ligne','Réservations hébergements (Bangkok, Chiang Mai, Koh Chang)','Carnet de vaccination (hépatite A, typhoïde recommandés)','Attestation assurance carte bancaire','Numéros d\'urgence notés sur papier','Photocopies passeports + partage sur Google Drive','Permis de conduire international (si location scooter)']},
+  sante:{ label:'Santé & Hygiène', emoji:'💊', items:['Répulsif anti-moustiques DEET 50% minimum — OBLIGATOIRE','Crème solaire SPF 50+ en grande quantité','Antipaludéen si prescrit — consulter médecin du voyage','Antidiarrhéiques (Imodium)','Paracétamol + Ibuprofène','Antihistaminiques (allergie insectes)','Désinfectant plaies + pansements','Sérum physiologique','Thermomètre numérique','Ordonnances médicaments en cours']},
+  bagages:{ label:'Bagages & Équipement', emoji:'🎒', items:['Vêtements légers (lin/coton — éviter le synthétique)','Vêtements couvrants pour temples (épaules + genoux)','Imperméable léger / poncho pliant (saison des pluies)','Chaussures de marche imperméables','Sandales ou tongs pour la plage','Maillots de bain ×2 minimum','Adaptateur prise électrique — type A/B (même qu\'en France ✓)','Sac de plage imperméable / pochette étanche téléphone','Bouteille réutilisable','Cadenas pour sac à dos']},
+  tech:{ label:'Tech & Numérique', emoji:'📱', items:['Téléphones chargés + câbles de charge','Powerbank 10 000+ mAh','Adaptateurs USB multi-ports','Cartes mémoire / stockage photos','Écouteurs + casques (avion + enfants)','Tablette pour les enfants (avion)','Google Maps hors-ligne : Bangkok, Chiang Mai, Koh Chang','Grab installé et configuré avec carte bancaire','Google Translate hors-ligne thaï téléchargé','App bancaire Revolut installée']}
+};
+
+/* ─── GUIDE DATA ─── */
+var GUIDE_DATA = {
+  bangkok:{
+    manger:[
+      { name:"Wang Lang Market", budget:1, tags:["local","sf"], desc:"Marché caché face à l'hôpital Siriraj, 100% local zéro touriste. Accessible uniquement en bateau express (arrêt n°10). Ruelles enchevêtrées, cuisines de quartier.", price:"30-60 ฿ le plat", open:"Lun-Ven 10h-14h", lat:13.7587, lon:100.4854, web:"", reviews:["https://www.22places.com/bangkok-off-the-beaten-track/","https://offpaththailand.com/bangkok-hidden-gems-guide/"], tip:"Y aller en semaine à midi. Prendre le bateau express (pas le bleu touristique) arrêt Wang Lang (n°10)." },
+      { name:"Banthat Thong Road", budget:1, tags:["local","sf"], desc:"Rue street food des locaux classée 14e rue la plus cool du monde par Time Out 2024. Stands de nouilles, grillades, curries — clientèle purement thaïe le soir.", price:"40-80 ฿", open:"Soir tous les jours 18h-23h", lat:13.7381, lon:100.5261, web:"", reviews:["https://pixidia.com/bangkok-hors-sentiers-battus-2026-banthat-thong-street-food/"], tip:"Y aller le soir vers 18h-20h quand les travailleurs de bureau arrivent. Jeh Oh pour les nouilles." },
+      { name:"Sam Yan Food Court", budget:1, tags:["local","insolite"], desc:"Food court sous la dalle du MRT Sam Yan — le secret des étudiants de Chulalongkorn. Prix thaïs vrais, 40 stands de toutes les régions. Inconnu des guides touristiques.", price:"35-70 ฿", open:"Lun-Sam 10h-20h", lat:13.7333, lon:100.5283, web:"", reviews:["https://offpaththailand.com/bangkok-hidden-gems-food-2026/"], tip:"Descendre MRT Sam Yan, sortie Chulalongkorn. Le midi c'est plein — y aller à 11h30 ou 13h30." },
+      { name:"Huai Khwang Night Market", budget:1, tags:["local","sf"], desc:"Marché nocturne 100% local sur Pracha Songkhro Road — aucun touriste. Papaya salad, grillades, somtam. L'un des derniers grands marchés nocturnes authentiques.", price:"40-70 ฿", open:"Tous les soirs 17h-minuit", lat:13.7729, lon:100.5755, web:"", reviews:["https://www.22places.com/bangkok-off-the-beaten-track/"], tip:"MRT Huai Khwang. Y aller en semaine — le week-end quelques expats mais reste très local." },
+      { name:"Thip Samai — Pad Thai légendaire", budget:2, tags:["resto","local"], desc:"Le Pad Thai le plus célèbre de Bangkok depuis 70 ans. Fait maison devant vous, oeuf entourant les nouilles. File d'attente normale — ça vaut l'attente.", price:"80-150 ฿", open:"Lun-Sam 17h-1h", lat:13.7530, lon:100.5003, web:"https://www.thipsamai.com", reviews:["https://guide.michelin.com/fr/fr/article/travel/2-jours-a-bangkok-le-meilleur-de-la-street-food"], tip:"Y aller à 17h à l'ouverture pour éviter la queue. Prendre le Pad Thai royal aux crevettes royales." },
+      { name:"Por. Pochaya (Bib Gourmand Michelin)", budget:2, tags:["resto","gastro"], desc:"Bib Gourmand Michelin 2024. Trois générations de la même famille depuis 50 ans. Bœuf sauté aux feuilles de cumin, omelette au crabe. Clients locaux exclusivement.", price:"120-250 ฿", open:"Mar-Dim 6h-14h", lat:13.7523, lon:100.5041, web:"", reviews:["https://guide.michelin.com/fr/fr/article/travel/2-jours-a-bangkok-le-meilleur-de-la-street-food"], tip:"Le petit-déjeuner ici est une expérience — y aller dès 7h avec les Bangkokois. Ferme l'après-midi." },
+      { name:"Nusara (rooftop Wat Pho)", budget:3, tags:["gastro","insolite"], desc:"1 étoile Michelin, rooftop avec vue directe sur Wat Pho. Seulement 10 couverts. La cheffe Ton cuisine les recettes de sa grand-mère en version raffinée.", price:"2000-4000 ฿/pers", open:"Mer-Dim 18h-22h", lat:13.7461, lon:100.4927, web:"", reviews:["https://guide.michelin.com/th/en/bangkok-region/bangkok/restaurant/nusara"], tip:"Réserver sur leur site 3 semaines à l'avance minimum. Demander une table côté Wat Pho." }
+    ],
+    dormir:[],
+    voir:[
+      { name:"Bang Krachao — l'île verte", budget:1, tags:["insolite","local"], desc:"Presqu'île jungle au milieu du Chao Phraya, à 15 min de bateau du centre. 100% à vélo — location sur place 60฿/h. Chemins dans la verdure, jardins flottants, marché local le week-end.", price:"Bac: 4 ฿ · Vélo: 60 ฿/h", open:"Toute la journée", lat:13.6869, lon:100.5789, web:"", reviews:["https://offpaththailand.com/bangkok-hidden-gems-guide/"], tip:"Y aller le week-end matin — le marché local Sri Nakhon Kheun Khan est incroyable. Éviter midi-14h." },
+      { name:"Talad Noi — quartier Sino-portugais", budget:1, tags:["insolite","local"], desc:"Vieux quartier chinois caché derrière Chinatown. Ruelles étroites, maisons Sino-portugaises du 19e siècle, ateliers de ferronnerie ancestraux. Le Bangkok d'il y a 100 ans.", price:"Gratuit", open:"Toute la journée", lat:13.7344, lon:100.5137, web:"", reviews:["https://offpaththailand.com/bangkok-hidden-gems-guide/"], tip:"Y aller en matinée — les artisans au travail, la lumière est belle. Commencer par Soi Wanit 2." },
+      { name:"Wat Prayoon — bassin aux tortues", budget:1, tags:["insolite","local"], desc:"Temple de Thonburi inconnu des touristes avec un bassin aux tortues en liberté. Colline artificielle parsemée de stupas miniatures. Calme absolu.", price:"Gratuit", open:"8h-17h", lat:13.7389, lon:100.4886, web:"", reviews:["https://offpaththailand.com/bangkok-hidden-gems-guide/"], tip:"Traverser le Chao Phraya en bac depuis le quai Rachini (3฿). À 10 min du Grand Palais, zéro touriste." }
+    ]
+  },
+  chiangmai:{
+    manger:[
+      { name:"Khao Soi Islam", budget:1, tags:["local","sf"], desc:"Le meilleur Khao Soi de Chiang Mai selon tous les locaux. Restaurant musulman tenu par la même famille depuis des décennies. Simple, parfait.", price:"50-70 ฿", open:"Lun-Sam 10h-15h", lat:18.7791, lon:98.9982, web:"", reviews:["https://www.asiatica-travel.fr/blog/restaurants-chiang-mai.html"], tip:"Y aller à midi — ils ferment quand c'est épuisé (souvent 13h-14h). Prendre le Khao Soi poulet." },
+      { name:"Talat Warorot — marché des locaux", budget:1, tags:["local","sf"], desc:"Grand marché couvert du nord fréquenté uniquement par les habitants. Le matin tôt : saucisses Chiang Mai (sai oua), curries du Nord, herbes locales.", price:"30-80 ฿", open:"Tous les jours 4h-18h", lat:18.7963, lon:98.9995, web:"", reviews:["https://www.asiakingtravel.fr/blog/meilleurs-restaurants-chiang-mai.html"], tip:"Y aller avant 8h — les meilleurs stands partent vite. Prendre la saucisse sai oua grillée sur place." },
+      { name:"Huen Phen", budget:2, tags:["local","resto"], desc:"Cuisine Lanna authentique du nord dans une maison ancienne pleine d'antiquités. Le midi c'est simple et local. Gaeng hang le (curry porc birman).", price:"100-200 ฿", open:"Tous les jours 8h-22h", lat:18.7876, lon:98.9867, web:"", reviews:["https://www.asiatica-travel.fr/blog/restaurants-chiang-mai.html"], tip:"Table du midi uniquement en intérieur à gauche de l'entrée. La salle du fond est la vraie. Éviter le soir." },
+      { name:"Dash! Restaurant", budget:2, tags:["famille","resto"], desc:"Maison en teck centenaire avec jardin ombragé au cœur de la vieille ville. Cuisine thaï classique bien exécutée. Parfait en famille.", price:"150-350 ฿", open:"Lun-Sam 10h-14h et 17h30-21h30", lat:18.7877, lon:98.9852, web:"", reviews:["https://autourasia.fr/ou-manger-a-chiang-mai-top-06-meilleurs-restaurants-a-chiang-mai-b1342.html"], tip:"Réserver une table dans le jardin. Prendre le curry vert et le mango sticky rice maison." },
+      { name:"SP Chicken", budget:1, tags:["local","sf"], desc:"Poulet rôti gai yang — l'institution de Chiang Mai depuis 1962. File de locaux tous les midis, poulet entier découpé à la commande avec riz gluant.", price:"50-90 ฿", open:"Tous les jours 7h-20h", lat:18.7989, lon:98.9924, web:"", reviews:["https://www.asiakingtravel.fr/blog/meilleurs-restaurants-chiang-mai.html"], tip:"Pointer la vitrine pour commander, pas de menu en anglais. Demi-poulet + riz gluant + sauce verte." }
+    ],
+    dormir:[
+      { name:"Tree House Hideaway", budget:1, tags:["insolite","famille"], desc:"Cabanes en bois dans un village de montagne à 1h30 au nord (district Chiang Dao). Repas inclus, guide anglophone, trek jusqu'à une cascade. Les enfants en parlent pendant des années.", price:"~800 ฿/pers tout inclus", open:"Toute l'année — réservation obligatoire", lat:19.4167, lon:98.9333, web:"https://treehouseinchiangmai.com", reviews:["https://www.tourhero.com/en/magazine/travel/5-best-treehouse-villas-in-chiang-mai-for-your-next-nature-retreat/"], tip:"Navette depuis Chiang Mai incluse. Apporter lampe frontale, répulsif, vêtements chauds (nuits fraîches)." },
+      { name:"Rabeang Pasak Treehouse Resort", budget:2, tags:["insolite","famille"], desc:"6 treehouses construits à la main dans une forêt de teck, 70km de Chiang Mai. Feux de camp le soir, grotte de chauves-souris, piste vélo, rivière. Note 4.9/5.", price:"1200-2500 ฿/nuit", open:"Toute l'année", lat:18.9167, lon:99.1833, web:"https://www.google.com/search?q=Rabeang+Pasak+Treehouse+Resort+Chiang+Mai", reviews:["https://www.google.com/search?q=Rabeang+Pasak+Treehouse+Chiang+Mai"], tip:"Réserver en avance — les treehouses familiaux partent en premier. Louer une voiture pour y accéder (70km)." },
+      { name:"My Chiangmai Boutique Lodge", budget:2, tags:["famille","local"], desc:"Vieille ville, suite familiale avec chambre parents et chambre enfants séparées. Personnel très attentif noté 4.9/5. Idéal comme base pour explorer les temples à pied.", price:"1500-2500 ฿/nuit", open:"Toute l'année", lat:18.7883, lon:98.9905, web:"", reviews:["https://www.tripadvisor.fr/Hotels-g293917-Chiang_Mai-Hotels.html"], tip:"Demander la suite familiale spécifiquement. Petit-déjeuner parfois inclus — vérifier à la réservation." },
+      { name:"Rachamankha", budget:3, tags:["insolite","local"], desc:"Hôtel boutique hors-du-commun dans la vieille ville, architecture Lanna authentique, bibliothèque d'antiques, jardin tropical et piscine.", price:"5000-9000 ฿/nuit", open:"Toute l'année", lat:18.7872, lon:98.9820, web:"https://www.rachamankha.com", reviews:["https://www.tripadvisor.fr/Hotels-g293917-Chiang_Mai-Hotels.html"], tip:"Demander une chambre côté jardin. Le petit-déjeuner dans le jardin est une expérience en soi." }
+    ],
+    voir:[
+      { name:"Sauna à herbes — Wat Suan Dok", budget:1, tags:["insolite","local"], desc:"Sauna à herbes médicinales traditionnelles dans l'enceinte du temple Wat Suan Dok. Vapeur d'eucalyptus, citronnelle et kaffir. Inconnu des touristes.", price:"50 ฿", open:"Mar-Dim 9h-20h", lat:18.7858, lon:98.9681, web:"", reviews:[], tip:"Y aller entre 9h et 11h le matin. Apporter une serviette. Temple à 10 min à vélo du centre." },
+      { name:"Village artisanal de Baan Tawai", budget:1, tags:["local","insolite"], desc:"Village où tous les sculpteurs, laqueurs et artisans de Chiang Mai ont leurs ateliers. Acheter directement au producteur. Prix moitié moins chers que les boutiques en ville.", price:"Gratuit + achats", open:"Tous les jours 8h-17h", lat:18.6847, lon:98.9617, web:"", reviews:[], tip:"Louer un scooter pour y aller. Le matin quand les artisans travaillent — on les voit à l'œuvre." },
+      { name:"Doi Suthep — coucher de soleil secret", budget:1, tags:["local"], desc:"Temple sacré en montagne dominant Chiang Mai. Rester jusqu'au coucher de soleil — la vue sur la plaine est extraordinaire et quasi personne ne reste le soir.", price:"Songthaew 50฿ + entrée 30฿", open:"Tous les jours 6h-20h", lat:18.8048, lon:98.9219, web:"", reviews:[], tip:"Éviter 10h-15h (foule). Partir à 15h30, voir le coucher de soleil vers 18h30 en juillet." }
+    ]
+  },
+  kohchang:{
+    manger:[
+      { name:"Gargotes route principale", budget:1, tags:["local","sf"], desc:"Petits restaurants thaïs le long de la route — chercher les tables en plastique avec les locaux. Curry rouge, riz au poulet basil, soupe tom yum. Prix thaïs vrais.", price:"50-80 ฿", open:"7h-21h", lat:12.0350, lon:102.2940, web:"", reviews:["https://iamkohchang.com/restaurants/guide.html"], tip:"Repérer les stands avec des thermoses de bouillon chaud. Éviter menus photos plastifiés en anglais." },
+      { name:"Bang Bao à l'aube — pêche du jour", budget:1, tags:["insolite","local"], desc:"Avant 7h, les pêcheurs rentrent avec la pêche de la nuit et vendent directement sur les barques. Un spectacle vivant que presque aucun touriste ne voit.", price:"Gratuit (spectacle)", open:"5h30-8h quotidien", lat:11.9690, lon:102.3230, web:"", reviews:["https://iamkohchang.com/restaurants/guide.html"], tip:"Être là avant 6h30. Prendre un café chez les locaux qui ouvrent dès l'aube. Lumière magnifique." },
+      { name:"Oodies Place", budget:2, tags:["famille","resto"], desc:"Restaurant bord de plage à Klong Prao, cuisine thaïe fraîche et soignée. Poisson entier grillé, curry au lait de coco, fruits de mer. Vue sur le coucher de soleil.", price:"150-350 ฿", open:"Tous les jours 11h-22h", lat:12.0349, lon:102.2938, web:"", reviews:["https://iamkohchang.com/restaurants/guide.html"], tip:"Arriver avant 18h pour une table avec vue mer. Commander le poisson du jour grillé entier — toujours frais." },
+      { name:"Nelly O'Chang's", budget:2, tags:["famille","local"], desc:"Bar irlandais de l'île. Cuisine thaïe et western, Guinness à la pression. Ambiance relax et familiale, l'une des rares adresses qui mixe locaux et voyageurs.", price:"150-300 ฿", open:"Tous les jours 11h-minuit", lat:12.0280, lon:102.2960, web:"", reviews:["https://iamkohchang.com/restaurants/guide.html"], tip:"Y aller en semaine pour une ambiance tranquille. Les soirées quiz du vendredi sont légendaires sur l'île." },
+      { name:"Keeree Ele Restaurant", budget:3, tags:["gastro","insolite"], desc:"LE gastronomique de Koh Chang en hauteur avec vue panoramique sur la forêt et la mer. Cuisine thaï revisitée avec les produits de l'île.", price:"500-1500 ฿/pers", open:"Tous les jours 18h-22h", lat:12.0512, lon:102.3145, web:"", reviews:["https://fr.tripadvisor.ch/Restaurants-g580110-Ko_Chang_Trat_Province.html"], tip:"Réserver obligatoirement. Demander une table avec vue. Pour un dîner de famille un soir spécial." }
+    ],
+    dormir:[],
+    voir:[
+      { name:"Road trip scooter autour de l'île", budget:1, tags:["insolite","famille"], desc:"Faire le tour complet en 3-4h — la route sud est spectaculaire avec falaises, jungle et vues mer. Découvrir des plages sauvages sans accès bateau.", price:"Scooter 250 ฿/j", open:"Toute la journée", lat:11.9690, lon:102.3230, web:"", reviews:["https://iamkohchang.com/restaurants/guide.html"], tip:"Partir tôt le matin (7h) avant la chaleur. Route vers Bang Bao sinueuse — prudence sur le mouillé." },
+      { name:"Salak Kok — village sur l'eau", budget:1, tags:["insolite","local"], desc:"Village de pêcheurs sur pilotis dans les mangroves à l'est de l'île. Kayak de location sur place, silence absolu, varans, singes, oiseaux. Très peu de voyageurs y vont.", price:"Kayak 200 ฿/h", open:"Toute la journée", lat:12.0700, lon:102.3400, web:"", reviews:["https://iamkohchang.com/restaurants/guide.html"], tip:"Y aller tôt le matin pour voir les pêcheurs partir. La balade kayak 2h dans les mangroves est parmi les plus belles." },
+      { name:"Snorkeling Koh Wai — coraux préservés", budget:2, tags:["famille","insolite"], desc:"Île voisine accessible en speedboat depuis Bang Bao (45 min). Coraux parmi les mieux préservés du golfe de Thaïlande, raies, poissons tropicaux.", price:"Speedboat ~1000-1500 ฿/pers AR", open:"Tous les jours selon météo", lat:11.9250, lon:102.3750, web:"", reviews:["https://iamkohchang.com/restaurants/guide.html"], tip:"Partir tôt (7h) avant les autres bateaux. Apporter son masque/tuba — les locations sur place sont usées." }
+    ]
+  }
+};
+
+/* ═══════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════ */
+var mapInited = false, map = null, markerLayer = null, userMarker = null;
+var weatherFetched = false, rateFetched = false, currentRate = null;
+var mapCity = 'bangkok', mapType = 'all';
+var currentTab = 'itinerary';
+
+/* ─── CLOCK ─── */
+function updateClock() {
+  document.getElementById('bkk-clock').textContent =
+    new Date().toLocaleTimeString('fr-FR', { timeZone:'Asia/Bangkok', hour:'2-digit', minute:'2-digit' });
+}
+updateClock();
+setInterval(updateClock, 5000);
+
+/* ─── TABS ─── */
+function switchTab(name, btnEl) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.style.display = 'none'; });
+  document.querySelectorAll('.top-nav button').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('.bnav-item').forEach(function(b) { b.classList.remove('active'); });
+
+  document.getElementById('tab-' + name).style.display = '';
+  if (btnEl) btnEl.classList.add('active');
+
+  // Sync bottom nav
+  var bnav = document.querySelector('.bnav-item[data-tab="' + name + '"]');
+  if (bnav) bnav.classList.add('active');
+
+  currentTab = name;
+  closeMore();
+
+  if (name === 'carte') {
+    if (!mapInited) { mapInited = true; setTimeout(initMap, 80); }
+    else if (map) { setTimeout(function() { map.invalidateSize(); }, 80); }
+  }
+  if (name === 'meteo' && !weatherFetched) { weatherFetched = true; fetchAllWeather(); }
+  if (name === 'argent' && !rateFetched) { rateFetched = true; fetchRate(); }
+  if (name === 'guide' && !window._guideInited) { window._guideInited = true; renderGuide(); }
+  if (name === 'carnet') { renderCarnet(); }
+  window.scrollTo(0, 0);
 }
 
-function switchTab(tab, btn){
-  currentTab = tab;
-  document.getElementById('tab-main').style.display = tab==='main' ? '' : 'none';
-  document.getElementById('tab-comp').style.display = tab==='comp' ? '' : 'none';
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  btn.classList.add('active');
-  if(tab==='comp') renderComp();
+/* ─── MORE MENU ─── */
+function toggleMore() {
+  document.getElementById('more-menu').classList.toggle('open');
+}
+function closeMore() {
+  document.getElementById('more-menu').classList.remove('open');
+}
+function switchTabFromMore(name) {
+  // Find top-nav btn
+  var topBtns = document.querySelectorAll('.top-nav button');
+  var found = null;
+  topBtns.forEach(function(b) {
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + name + "'")) found = b;
+  });
+  switchTab(name, found);
+  // Activate more btn in bottom nav
+  document.querySelector('#more-btn').classList.add('active');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.bnav-more') && !e.target.closest('.more-menu')) closeMore();
+});
+
+/* ─── KC DETAIL ─── */
+var KC_LINKS = {
+  "White Sand Beach":["https://iamkohchang.com"],
+  "Klong Prao Beach":["https://iamkohchang.com"],
+  "Lonely Beach (coucher de soleil)":["https://iamkohchang.com"],
+  "Chutes de Khlong Phlu":["https://iamkohchang.com"],
+  "Village de Bang Bao (pilotis)":["https://iamkohchang.com"],
+  "Snorkeling — Koh Wai":["https://iamkohchang.com"],
+  "Kayak dans les mangroves":["https://iamkohchang.com"],
+  "Trek parc national Mu Ko Chang":["https://iamkohchang.com"],
+  "Cours de cuisine thaïe":["https://iamkohchang.com"],
+  "Tour de l'île en bateau privé":["https://iamkohchang.com"],
+  "Marché nocturne Klong Son":["https://iamkohchang.com"]
+};
+
+var KC_CONTAINER_ID = null; // tracks current container for kc detail
+
+function showKcDetail(idx, containerId) {
+  var a = KC_ACTS[idx]; if (!a) return;
+  KC_CONTAINER_ID = containerId || 'itinerary-cards';
+  var typeMap = { plage:"kc-plage", nature:"kc-nature", mer:"kc-mer", culture:"kc-culture", villa:"kc-villa", marche:"kc-marche" };
+  var typeLabel = { plage:"Plage", nature:"Nature", mer:"Mer", culture:"Culture", villa:"Villa", marche:"Marché" };
+  var links = KC_LINKS[a.title] || [];
+  var linksHtml = links.length ? "<div class='detail-section'>En savoir plus</div>" +
+    links.map(function(url) {
+      return "<a href='" + url + "' target='_blank' class='detail-link'>↗ " + url.replace("https://","").split("/")[0] + "</a>";
+    }).join("") : "";
+  var container = document.getElementById(KC_CONTAINER_ID);
+  var detail = container.querySelector('.kc-detail-panel');
+  var grid = container.querySelector('.kc-grid');
+  var hero = container.querySelector('.kc-hero');
+  if (!detail) return;
+  detail.innerHTML =
+    "<button class='back-btn' onclick='closeKcDetail()'> Retour</button>" +
+    "<div class='list-group' style='padding:14px 16px;margin-bottom:10px'>" +
+      "<div style='display:flex;align-items:center;gap:10px;margin-bottom:8px'>" +
+        "<span style='font-size:32px'>" + a.emoji + "</span>" +
+        "<div><div style='font-size:17px;font-weight:700;color:var(--label);line-height:1.2'>" + a.title + "</div>" +
+        "<span class='kc-badge " + typeMap[a.type] + "'>" + typeLabel[a.type] + "</span></div>" +
+      "</div>" +
+      "<div class='detail-section'>Description</div>" +
+      "<div class='detail-desc'>" + a.desc + "</div>" +
+      linksHtml +
+    "</div>";
+  detail.style.display = "";
+  if (grid) grid.style.display = "none";
+  if (hero) hero.style.display = "none";
+  setTimeout(function() { detail.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60);
+}
+function closeKcDetail() {
+  var container = document.getElementById(KC_CONTAINER_ID || 'itinerary-cards');
+  var detail = container ? container.querySelector('.kc-detail-panel') : null;
+  var grid = container ? container.querySelector('.kc-grid') : null;
+  var hero = container ? container.querySelector('.kc-hero') : null;
+  if (detail) detail.style.display = "none";
+  if (grid) grid.style.display = "";
+  if (hero) hero.style.display = "";
 }
 
-document.getElementById('main-filters').addEventListener('click', e=>{
-  const btn=e.target.closest('.pill'); if(!btn) return;
-  mainFilter=btn.dataset.f; renderMain();
+/* ─── NOTES KEY ─── */
+var NOTES_KEY = 'thai2026_notes';
+function loadNotes() { try { return JSON.parse(localStorage.getItem(NOTES_KEY)) || {}; } catch(e) { return {}; } }
+function saveNote(dayKey, val) { var n = loadNotes(); n[dayKey] = val; try { localStorage.setItem(NOTES_KEY, JSON.stringify(n)); } catch(e) {} }
+
+/* ─── KC CALENDAR ─── */
+var KC_CAL_KEY = 'thai2026_kcal';
+function loadKcCal() { try { return JSON.parse(localStorage.getItem(KC_CAL_KEY)) || {}; } catch(e) { return {}; } }
+function saveKcCal(data) { try { localStorage.setItem(KC_CAL_KEY, JSON.stringify(data)); } catch(e) {} }
+var kcPickerDay = null;
+
+function renderKcCalendar(containerId) {
+  var cal = loadKcCal();
+  var typeEmoji = { plage:'🏖', nature:'🌿', mer:'🌊', culture:'🏛', villa:'🏊', marche:'🌙' };
+  var kcDays = [];
+  for (var d = 3; d <= 15; d++) kcDays.push(d);
+  var heads = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+  var gridHtml = heads.map(function(h) { return '<div class="kc-cal-day-head">' + h + '</div>'; }).join('');
+  gridHtml += '<div style="min-height:54px"></div>'; // pad: Aug 3 = Monday
+  kcDays.forEach(function(d) {
+    var key = 'kc_' + d;
+    var acts = cal[key] || [];
+    var hasAct = acts.length > 0;
+    var content = '';
+    if (hasAct) {
+      var first = KC_ACTS[acts[0]];
+      var emoji = first ? (typeEmoji[first.type] || first.emoji || '✓') : '✓';
+      var shortName = first ? first.title.split('—')[0].split('(')[0].trim().substring(0,9) : '';
+      content += '<div style="font-size:15px;line-height:1.1">' + emoji + '</div>';
+      content += '<div style="font-size:7.5px;color:var(--blue);font-weight:600;line-height:1.2;text-align:center;padding:0 1px;overflow:hidden;max-width:38px;word-break:break-word">' + shortName + '</div>';
+      if (acts.length > 1) content += '<div style="font-size:9px;font-weight:700;color:var(--blue);background:rgba(0,122,255,.12);border-radius:99px;padding:0 4px;line-height:1.6">+' + (acts.length-1) + '</div>';
+    } else {
+      content = '<div style="font-size:16px;color:var(--label4);margin-top:2px">+</div>';
+    }
+    gridHtml += '<div class="kc-cal-day' + (hasAct ? ' has-act' : '') + '" onclick="openKcPicker(' + d + ',\'' + containerId + '\')">' +
+      '<div class="kc-cal-day-num">' + d + '</div>' + content + '</div>';
+  });
+  var container = document.getElementById(containerId);
+  var calWrapper = container ? container.querySelector('.kc-cal-wrapper') : null;
+  if (calWrapper) calWrapper.querySelector('.kc-cal-grid').innerHTML = gridHtml;
+}
+
+function openKcPicker(day, containerId) {
+  kcPickerDay = day; KC_CONTAINER_ID = containerId;
+  var cal = loadKcCal(); var key = 'kc_' + day;
+  var selected = cal[key] || [];
+  var typeLabel = { plage:"Plage", nature:"Nature", mer:"Mer", culture:"Culture", villa:"Villa", marche:"Marché" };
+  var container = document.getElementById(containerId);
+  var picker = container.querySelector('.kc-act-picker');
+  if (!picker) return;
+  picker.querySelector('.kc-act-picker-title span').textContent = day + ' août — Choisir activités';
+  var opts = picker.querySelector('.kc-act-opts');
+  var summaryHtml = '';
+  if (selected.length > 0) {
+    summaryHtml = '<div style="background:rgba(0,122,255,.07);border-left:3px solid var(--blue);border-radius:10px;padding:10px 12px;margin-bottom:12px">' +
+      '<div style="font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">&#x2705; Déjà planifié (' + selected.length + ')</div>';
+    selected.forEach(function(i) {
+      var act = KC_ACTS[i]; if (!act) return;
+      summaryHtml += '<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:0.5px solid rgba(0,122,255,.1);cursor:pointer" onclick="showKcDetailFromPicker(' + i + ',\'' + containerId + '\')">' +
+        '<span style="font-size:18px">' + act.emoji + '</span>' +
+        '<span style="flex:1;font-size:13px;font-weight:500;color:var(--label)">' + act.title + '</span>' +
+        '<span style="font-size:12px;color:var(--blue);font-weight:600">&#8594; Détail</span>' +
+      '</div>';
+    });
+    summaryHtml += '</div><div style="font-size:11px;font-weight:600;color:var(--label2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Modifier / Ajouter</div>';
+  }
+  opts.innerHTML = summaryHtml + KC_ACTS.map(function(a, i) {
+    var on = selected.indexOf(i) >= 0;
+    return '<div class="kc-act-option" onclick="toggleKcAct(' + i + ')">' +
+      '<span class="kc-act-option-emoji">' + a.emoji + '</span>' +
+      '<div class="kc-act-option-info"><div class="kc-act-option-title">' + a.title + '</div><div class="kc-act-option-type">' + typeLabel[a.type] + '</div></div>' +
+      '<div class="kc-act-check' + (on?' on':'') + '" id="kc-check-' + i + '">' + (on?'✓':'') + '</div>' +
+    '</div>';
+  }).join('');
+  picker.classList.add('open');
+  picker.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+function showKcDetailFromPicker(idx, containerId) {
+  var container = document.getElementById(containerId);
+  var picker = container ? container.querySelector('.kc-act-picker') : null;
+  if (picker) picker.classList.remove('open');
+  showKcDetail(idx, containerId);
+}
+
+function closeKcPicker(containerId) {
+  var container = document.getElementById(containerId || KC_CONTAINER_ID);
+  if (container) { var p = container.querySelector('.kc-act-picker'); if (p) p.classList.remove('open'); }
+  renderKcCalendar(containerId || KC_CONTAINER_ID);
+}
+
+function toggleKcAct(idx) {
+  var cal = loadKcCal(); var key = 'kc_' + kcPickerDay;
+  var selected = cal[key] || [];
+  var pos = selected.indexOf(idx);
+  if (pos >= 0) selected.splice(pos, 1); else selected.push(idx);
+  cal[key] = selected; saveKcCal(cal);
+  var check = document.getElementById('kc-check-' + idx);
+  if (check) { check.classList.toggle('on', pos < 0); check.textContent = pos < 0 ? '✓' : ''; }
+}
+
+/* ─── ITINERARY ─── */
+function renderItinerary(f) {
+  document.querySelectorAll('#stage-filter .fpill').forEach(function(p) {
+    p.classList.toggle('active', p.dataset.f === f);
+  });
+  var container = document.getElementById('itinerary-cards');
+  var notes = loadNotes();
+  var html = '';
+  var days = DAYS.filter(function(d) { return f === 'all' || d.stage === f; });
+  days.forEach(function(d) {
+    var sp = d.stage.startsWith('bkk') ? 'sp-bkk' : (d.stage === 'cm' ? 'sp-cm' : 'sp-kc');
+    var raw = notes['day_' + d.day];
+    var noteText = getNoteText(raw);
+    var noteLieu = getNoteLieu(raw, d.stageLabel);
+    html += '<div class="day-card">' +
+      '<div class="day-header" onclick="toggleDay(this)">' +
+        '<div class="day-num">Jour ' + d.day + '</div>' +
+        '<div class="day-emoji">' + d.emoji + '</div>' +
+        '<div class="day-info">' +
+          '<div class="day-title">' + d.title + '</div>' +
+          '<div class="day-date">' + d.date + ' · ' + d.stageLabel + (noteText ? ' ✏️' : '') + '</div>' +
+        '</div>' +
+        '<span class="stage-pill ' + sp + '">' + d.stageLabel + '</span>' +
+        '<span class="day-chevron">▾</span>' +
+      '</div>' +
+      '<div class="day-body">' +
+        '<ul class="act-list">' + d.acts.map(function(a) { return '<li>' + a + '</li>'; }).join('') + '</ul>' +
+        '<div class="tip-box">' + d.tip + '</div>' +
+        '<div class="day-note-area">' +
+          '<div style="font-size:11px;font-weight:600;color:var(--label3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">📍 Lieu</div>' +
+          '<input type="text" class="day-note-lieu" data-day="' + d.day + '" value="' + noteLieu.replace(/"/g,'&quot;') + '" placeholder="Où as-tu fait ça ?" oninput="autosaveLieuItin(this)" style="width:100%;font-size:13px;font-family:\'Inter\',sans-serif;padding:6px 10px;border:1.5px solid var(--bg4);border-radius:8px;background:var(--bg2);color:var(--label);outline:none;margin-bottom:8px;" onfocus="this.style.borderColor=\'var(--blue)\'" onblur="this.style.borderColor=\'var(--bg4)\'">' +
+          '<div class="day-note-label">✏️ Mes notes</div>' +
+          '<textarea class="day-note-input" data-day="' + d.day + '" placeholder="Tes souvenirs pour ce jour…" oninput="autosaveNote(this)">' + noteText + '</textarea>' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px">' +
+            '<div class="day-note-saved" id="note-saved-' + d.day + '">Enregistré ✓</div>' +
+            (noteText ? '<button onclick="deleteNote(' + d.day + ')" style="font-size:11px;color:var(--red);background:none;border:none;cursor:pointer;font-family:\'Inter\',sans-serif;">🗑 Supprimer</button>' : '') +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  });
+  if (f === 'all' || f === 'kc') {
+    var typeMap = { plage:'kc-plage', nature:'kc-nature', mer:'kc-mer', culture:'kc-culture', villa:'kc-villa', marche:'kc-marche' };
+    var typeLabel = { plage:'Plage', nature:'Nature', mer:'Mer', culture:'Culture', villa:'Villa', marche:'Marché' };
+    var heads = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+    html += '<div class="kc-hero"><div class="kc-hero-title">🏝️ Koh Chang — Jours 11 à 23 (3–15 août)</div>' +
+      '<div class="kc-hero-sub">13 nuits · Beach Club Villa by Utalay · Klong Prao Beach<br>Planifie tes journées dans le calendrier ↓ ou explore les activités</div></div>' +
+      '<div class="kc-detail-panel" style="display:none"></div>' +
+      // Calendrier
+      '<div class="kc-cal-wrapper">' +
+        '<div style="font-size:13px;font-weight:600;color:var(--label);margin-bottom:8px">📅 Calendrier activités — août 2026</div>' +
+        '<div style="font-size:11px;color:var(--label2);margin-bottom:8px">Touche un jour pour planifier tes activités</div>' +
+        '<div class="kc-cal-grid">' + heads.map(function(h) { return '<div class="kc-cal-day-head">' + h + '</div>'; }).join('') + '</div>' +
+      '</div>' +
+      '<div class="kc-act-picker">' +
+        '<div class="kc-act-picker-title"><span>Choisir activités</span><button class="kc-act-close" onclick="closeKcPicker(\'itinerary-cards\')">✕</button></div>' +
+        '<div class="kc-act-opts"></div>' +
+      '</div>' +
+      // Cards activités
+      '<div class="inset-title" style="margin-top:4px">Toutes les activités</div>' +
+      '<div class="kc-grid">' +
+      KC_ACTS.map(function(a, ki) {
+        return '<div class="kc-card" onclick="showKcDetail(' + ki + ',\'itinerary-cards\')">' +
+          '<span class="kc-badge ' + typeMap[a.type] + '">' + typeLabel[a.type] + '</span>' +
+          '<div class="kc-emoji">' + a.emoji + '</div>' +
+          '<div class="kc-title">' + a.title + '</div>' +
+          '<div class="kc-desc">' + a.desc.substring(0,65) + '…</div>' +
+          '<div class="kc-more">Détail →</div></div>';
+      }).join('') + '</div>';
+  }
+  container.innerHTML = html || '<div class="loading-msg">Aucune étape pour ce filtre.</div>';
+  // Render KC calendar after DOM update
+  if (f === 'all' || f === 'kc') renderKcCalendar('itinerary-cards');
+}
+document.getElementById('stage-filter').addEventListener('click', function(e) {
+  var btn = e.target.closest('.fpill'); if (btn) renderItinerary(btn.dataset.f);
 });
-document.getElementById('comp-filters').addEventListener('click', e=>{
-  const btn=e.target.closest('.pill'); if(!btn) return;
-  compFilter=btn.dataset.f; renderComp();
+function toggleDay(header) {
+  var body = header.nextElementSibling;
+  var open = body.style.display === 'block';
+  body.style.display = open ? 'none' : 'block';
+  header.classList.toggle('open', !open);
+}
+
+/* ─── NOTE AUTOSAVE ─── */
+var noteTimers = {};
+function autosaveNote(el) {
+  var day = el.dataset.day; var val = el.value;
+  clearTimeout(noteTimers[day]);
+  noteTimers[day] = setTimeout(function() {
+    // Preserve existing lieu, update text
+    var existing = loadNotes()['day_' + day];
+    var lieu = getNoteLieu(existing, (DAYS.find(function(d){return String(d.day)===String(day);})||{stageLabel:''}).stageLabel);
+    // Check if there's a lieu input visible in either itinerary or carnet
+    var lieuEl = document.querySelector('.day-note-lieu[data-day="' + day + '"]') || document.querySelector('.carnet-lieu-input[data-day="' + day + '"]');
+    if (lieuEl) lieu = lieuEl.value;
+    saveNoteObj('day_' + day, val, lieu);
+    var saved = document.getElementById('note-saved-' + day);
+    if (saved) { saved.classList.add('show'); setTimeout(function() { saved.classList.remove('show'); }, 2000); }
+    refreshCarnetCounter();
+  }, 700);
+}
+
+/* ─── CARNET ─── */
+var LIBRE_KEY = 'thai2026_libre';
+function loadLibre() { try { return JSON.parse(localStorage.getItem(LIBRE_KEY)) || []; } catch(e) { return []; } }
+function saveLibre(arr) { try { localStorage.setItem(LIBRE_KEY, JSON.stringify(arr)); } catch(e) {} }
+
+function refreshCarnetCounter() {
+  var notes = loadNotes();
+  var count = Object.keys(notes).filter(function(k) {
+    if (!k.startsWith('day_')) return false;
+    var v = notes[k]; var t = (v && typeof v === 'object') ? (v.text||'') : (v||'');
+    return t.trim().length > 0;
+  }).length;
+  var el = document.getElementById('carnet-counter');
+  if (el) el.textContent = count + '/26 jours';
+}
+
+/* Notes shape: {text, lieu} or legacy string */
+function getNoteText(val) { return (val && typeof val === 'object') ? (val.text||'') : (val||''); }
+function getNoteLieu(val, def) { return (val && typeof val === 'object') ? (val.lieu||def) : def; }
+function saveNoteObj(dayKey, text, lieu) {
+  var n = loadNotes(); n[dayKey] = { text: text, lieu: lieu };
+  try { localStorage.setItem(NOTES_KEY, JSON.stringify(n)); } catch(e) {}
+}
+
+var carnetFilter = 'notes';
+function filterCarnet(f) {
+  carnetFilter = f;
+  document.getElementById('cf-notes').classList.toggle('active', f === 'notes');
+  document.getElementById('cf-all').classList.toggle('active', f === 'all');
+  renderCarnet();
+}
+
+function renderCarnet() {
+  var notes = loadNotes();
+  var list = document.getElementById('carnet-list');
+  var emptyEl = document.getElementById('carnet-empty');
+  if (!list) return;
+  var html = '';
+  var hasAny = false;
+  DAYS.forEach(function(d) {
+    var raw = notes['day_' + d.day];
+    var text = getNoteText(raw);
+    var lieu = getNoteLieu(raw, d.stageLabel);
+    if (carnetFilter === 'notes' && !text.trim()) return;
+    hasAny = true;
+    var preview = text.trim() ? text.trim().substring(0, 80) + (text.length > 80 ? '…' : '') : '(aucune note — touche pour écrire)';
+    html += '<div class="carnet-entry" id="ce-' + d.day + '">' +
+      '<div class="carnet-entry-head" onclick="toggleCarnetEntry(' + d.day + ')">' +
+        '<div class="carnet-entry-day">Jour ' + d.day + '</div>' +
+        '<div class="carnet-entry-emoji">' + d.emoji + '</div>' +
+        '<div class="carnet-entry-info">' +
+          '<div class="carnet-entry-title">' + d.title + ' <span style="font-size:11px;font-weight:400;color:var(--label2)">· ' + lieu + '</span></div>' +
+          '<div class="carnet-entry-preview">' + preview + '</div>' +
+        '</div>' +
+        '<span class="carnet-entry-chevron">▾</span>' +
+      '</div>' +
+      '<div class="carnet-entry-body">' +
+        '<div style="margin-top:12px;margin-bottom:10px">' +
+          '<div style="font-size:11px;font-weight:600;color:var(--label3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">📍 Lieu (modifiable)</div>' +
+          '<input type="text" class="carnet-lieu-input" value="' + lieu.replace(/"/g,'&quot;') + '" data-day="' + d.day + '" placeholder="Où étais-tu ?" oninput="autosaveLieu(this)">' +
+        '</div>' +
+        '<div style="font-size:11px;font-weight:600;color:var(--label3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">✏️ Notes</div>' +
+        '<textarea class="carnet-textarea" style="margin-top:0" data-day="' + d.day + '" oninput="autosaveNote(this)" placeholder="Souvenirs, impressions, anecdotes…">' + text + '</textarea>' +
+        '<div style="display:flex;justify-content:flex-end;margin-top:8px">' +
+          '<button onclick="deleteNote(' + d.day + ')" style="font-size:12px;color:var(--red);background:none;border:none;cursor:pointer;font-family:\'Inter\',sans-serif;padding:4px 8px">🗑 Supprimer cette note</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  });
+  list.innerHTML = html;
+  if (emptyEl) emptyEl.style.display = (!hasAny && carnetFilter === 'notes') ? 'block' : 'none';
+  refreshCarnetCounter();
+  renderLibreNotes();
+}
+
+function toggleCarnetEntry(day) {
+  var entry = document.getElementById('ce-' + day);
+  if (!entry) return;
+  var body = entry.querySelector('.carnet-entry-body');
+  var open = body.style.display === 'block';
+  body.style.display = open ? 'none' : 'block';
+  entry.classList.toggle('open', !open);
+  if (!open) { var ta = body.querySelector('textarea'); if (ta) ta.focus(); }
+}
+
+function autosaveLieu(el) {
+  var day = el.dataset.day;
+  var notes = loadNotes(); var raw = notes['day_' + day];
+  var text = getNoteText(raw);
+  saveNoteObj('day_' + day, text, el.value);
+  var entry = document.getElementById('ce-' + day);
+  if (entry) {
+    var titleEl = entry.querySelector('.carnet-entry-title');
+    var d = DAYS.find(function(x) { return String(x.day) === String(day); });
+    if (titleEl && d) titleEl.innerHTML = d.title + ' <span style="font-size:11px;font-weight:400;color:var(--label2)">· ' + el.value + '</span>';
+  }
+}
+
+/* Lieu from itinerary panel — sync to carnet if open */
+function autosaveLieuItin(el) {
+  var day = el.dataset.day;
+  var notes = loadNotes(); var raw = notes['day_' + day];
+  var text = getNoteText(raw);
+  saveNoteObj('day_' + day, text, el.value);
+  // Sync carnet lieu input if open
+  var carnetLieu = document.querySelector('.carnet-lieu-input[data-day="' + day + '"]');
+  if (carnetLieu) carnetLieu.value = el.value;
+  var entry = document.getElementById('ce-' + day);
+  if (entry) {
+    var titleEl = entry.querySelector('.carnet-entry-title');
+    var d = DAYS.find(function(x) { return String(x.day) === String(day); });
+    if (titleEl && d) titleEl.innerHTML = d.title + ' <span style="font-size:11px;font-weight:400;color:var(--label2)">· ' + el.value + '</span>';
+  }
+}
+
+function deleteNote(day) {
+  if (!confirm('Supprimer la note du jour ' + day + ' ?')) return;
+  var n = loadNotes(); delete n['day_' + day];
+  try { localStorage.setItem(NOTES_KEY, JSON.stringify(n)); } catch(e) {}
+  var itinInput = document.querySelector('.day-note-input[data-day="' + day + '"]');
+  if (itinInput) itinInput.value = '';
+  var itinLieu = document.querySelector('.day-note-lieu[data-day="' + day + '"]');
+  if (itinLieu) { var d = DAYS.find(function(x){return String(x.day)===String(day);}); if(d) itinLieu.value=d.stageLabel; }
+  var saved = document.getElementById('note-saved-' + day);
+  if (saved) { saved.textContent='Supprimé ✓'; saved.classList.add('show'); setTimeout(function(){saved.classList.remove('show');saved.textContent='Enregistré ✓';},2000); }
+  renderCarnet();
+}
+
+function exportCarnet() {
+  var notes = loadNotes(); var libre = loadLibre();
+  var lines = ['=== CARNET DE VOYAGE — THAÏLANDE 2026 ===', ''];
+  DAYS.forEach(function(d) {
+    var raw = notes['day_' + d.day];
+    var text = getNoteText(raw); var lieu = getNoteLieu(raw, d.stageLabel);
+    if (text && text.trim()) {
+      lines.push('Jour ' + d.day + ' — ' + d.title + ' · ' + lieu + ' (' + d.date + ')');
+      lines.push(text.trim()); lines.push('');
+    }
+  });
+  if (libre.length) {
+    lines.push('--- Notes libres ---');
+    libre.forEach(function(n) { lines.push((n.title||'Note') + (n.lieu?' · '+n.lieu:'') + '\n' + (n.text||'')); lines.push(''); });
+  }
+  var text = lines.join('\n');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(function() { alert('✅ Carnet copié !'); });
+  } else {
+    var ta = document.createElement('textarea'); ta.value = text;
+    ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); alert('✅ Carnet copié !'); } catch(e) {}
+    document.body.removeChild(ta);
+  }
+}
+
+function addLibreNote() {
+  var libre = loadLibre();
+  libre.push({ id: Date.now(), title: 'Note libre', lieu: '', text: '' });
+  saveLibre(libre); renderLibreNotes();
+}
+
+function renderLibreNotes() {
+  var libre = loadLibre();
+  var el = document.getElementById('carnet-libre-list');
+  if (!el) return;
+  el.innerHTML = libre.map(function(n) {
+    return '<div class="carnet-libre-entry">' +
+      '<div class="carnet-libre-head">' +
+        '<span class="carnet-libre-icon">📝</span>' +
+        '<input class="carnet-libre-title-input" type="text" value="' + (n.title||'').replace(/"/g,'&quot;') + '" ' +
+          'oninput="saveLibreField(' + n.id + ',\'title\',this.value)" placeholder="Titre…">' +
+        '<button class="carnet-libre-del" onclick="deleteLibreNote(' + n.id + ')">🗑</button>' +
+      '</div>' +
+      '<div class="carnet-libre-body">' +
+        '<input type="text" class="carnet-lieu-input" style="margin-bottom:8px" ' +
+          'value="' + (n.lieu||'').replace(/"/g,'&quot;') + '" ' +
+          'oninput="saveLibreField(' + n.id + ',\'lieu\',this.value)" placeholder="📍 Lieu…">' +
+        '<textarea class="carnet-textarea" style="margin-top:0" oninput="saveLibreField(' + n.id + ',\'text\',this.value)" placeholder="Tes notes…">' + (n.text||'') + '</textarea>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function saveLibreField(id, field, val) {
+  var libre = loadLibre();
+  var item = libre.find(function(n) { return n.id === id; });
+  if (item) { item[field] = val; saveLibre(libre); }
+}
+
+function deleteLibreNote(id) {
+  if (!confirm('Supprimer cette note ?')) return;
+  var libre = loadLibre().filter(function(n) { return n.id !== id; });
+  saveLibre(libre); renderLibreNotes();
+}
+
+/* ─── MAP ─── */
+var cityCoords = {
+  bangkok: [13.7563, 100.5018],
+  chiangmai: [18.7883, 98.9853],
+  kohchang: [12.0508, 102.3191]
+};
+function initMap() {
+  map = L.map('leaflet-map').setView(cityCoords.bangkok, 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom:19, attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+  markerLayer = L.layerGroup().addTo(map);
+  renderMapMarkers();
+  document.getElementById('city-filter').addEventListener('click', function(e) {
+    var btn = e.target.closest('[data-city]'); if (!btn) return;
+    document.querySelectorAll('#city-filter [data-city]').forEach(function(p) { p.classList.remove('active'); });
+    btn.classList.add('active');
+    mapCity = btn.dataset.city;
+    map.setView(cityCoords[mapCity], mapCity === 'kohchang' ? 12 : 13);
+    renderMapMarkers();
+  });
+  document.getElementById('type-filter').addEventListener('click', function(e) {
+    var btn = e.target.closest('[data-type]'); if (!btn) return;
+    document.querySelectorAll('#type-filter [data-type]').forEach(function(p) { p.classList.remove('active'); });
+    btn.classList.add('active');
+    mapType = btn.dataset.type;
+    renderMapMarkers();
+  });
+}
+function renderMapMarkers() {
+  markerLayer.clearLayers();
+  var list = (MARKERS[mapCity] || []).filter(function(m) { return mapType === 'all' || m.type === mapType; });
+  list.forEach(function(m) {
+    var icon = L.divIcon({
+      className:'', iconSize:[28,28], iconAnchor:[14,14],
+      html:'<div style="font-size:22px;line-height:1;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))">' + m.emoji + '</div>'
+    });
+    var cmDeep = 'citymapper://directions?endcoord=' + m.lat + ',' + m.lon + '&endname=' + encodeURIComponent(m.name);
+    var grabUrl = 'grab://open?screenType=BOOKING&destCoord=' + m.lat + ',' + m.lon + '&destName=' + encodeURIComponent(m.name);
+    var gmUrl = 'https://www.google.com/maps/dir/?api=1&destination=' + m.lat + ',' + m.lon;
+    var popup =
+      '<div style="font-family:system-ui;min-width:210px;padding:4px 0">' +
+        '<div style="font-size:14px;font-weight:600;margin-bottom:4px">' + m.emoji + ' ' + m.name + '</div>' +
+        '<div style="font-size:12px;color:#666;margin-bottom:10px;line-height:1.45">' + m.desc + '</div>' +
+        '<div style="display:flex;gap:5px;flex-wrap:wrap">' +
+          '<button onclick="openCityMapper(' + m.lat + ',' + m.lon + ',\'' + encodeURIComponent(m.name) + '\')" style="font-size:11px;padding:6px 9px;border-radius:8px;border:none;color:#fff;font-weight:600;background:#007AFF;cursor:pointer">🗺 CityMapper</button>' +
+          '<a href="' + grabUrl + '" style="font-size:11px;padding:6px 9px;border-radius:8px;text-decoration:none;color:#fff;font-weight:600;background:#00B14F;display:inline-block">🚗 Grab</a>' +
+          '<a href="' + gmUrl + '" target="_blank" style="font-size:11px;padding:6px 9px;border-radius:8px;text-decoration:none;color:#fff;font-weight:600;background:#EA4335;display:inline-block">📍 GMaps</a>' +
+        '</div>' +
+      '</div>';
+    L.marker([m.lat, m.lon], { icon:icon }).addTo(markerLayer).bindPopup(popup, { maxWidth:260 });
+  });
+}
+function isAndroid() { return /android/i.test(navigator.userAgent); }
+function openCityMapper(lat, lon, encodedName) {
+  var webUrl = 'https://citymapper.com/directions?endcoord=' + lat + ',' + lon + '&endname=' + encodedName;
+  if (isAndroid()) {
+    var intentUrl = 'intent://directions?endcoord=' + lat + ',' + lon + '&endname=' + encodedName +
+      '#Intent;scheme=citymapper;package=com.citymapper.app.release;S.browser_fallback_url=' + encodeURIComponent(webUrl) + ';end';
+    window.location.href = intentUrl;
+  } else {
+    window.location.href = 'citymapper://directions?endcoord=' + lat + ',' + lon + '&endname=' + encodedName;
+    setTimeout(function() { if (!document.hidden) { window.location.href = webUrl; } }, 1500);
+  }
+}
+function cmFallback(webUrl) {
+  setTimeout(function() { if (!document.hidden) { window.location.href = webUrl; } }, 1500);
+}
+function locateMe() {
+  var btn = document.getElementById('geolocate-btn');
+  if (!navigator.geolocation) { alert('Géolocalisation non supportée.'); return; }
+  btn.textContent = '⏳ Localisation…'; btn.disabled = true;
+  navigator.geolocation.getCurrentPosition(
+    function(pos) {
+      var lat = pos.coords.latitude, lon = pos.coords.longitude, acc = pos.coords.accuracy;
+      if (userMarker) { map.removeLayer(userMarker); userMarker = null; }
+      L.circle([lat,lon], {radius:acc,color:'#007AFF',fillColor:'#007AFF',fillOpacity:.1,weight:1.5}).addTo(map);
+      var icon = L.divIcon({
+        className:'', iconSize:[14,14], iconAnchor:[7,7],
+        html:'<div style="width:14px;height:14px;border-radius:50%;background:#007AFF;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.4)"></div>'
+      });
+      userMarker = L.marker([lat,lon], {icon:icon}).addTo(map)
+        .bindPopup('<div style="font-family:system-ui;padding:3px 0"><div style="font-size:13px;font-weight:600;margin-bottom:3px">📍 Vous êtes ici</div><div style="font-size:11px;color:#888">Précision : ±' + Math.round(acc) + ' m</div></div>', {maxWidth:200})
+        .openPopup();
+      map.setView([lat,lon], 15);
+      btn.textContent = '✅ Localisé'; btn.disabled = false;
+    },
+    function(err) {
+      var msgs = {1:'Permission refusée.',2:'Position introuvable.',3:'Délai dépassé.'};
+      alert(msgs[err.code] || 'Erreur géolocalisation.');
+      btn.textContent = '📍 Ma position'; btn.disabled = false;
+    },
+    { enableHighAccuracy:true, timeout:10000, maximumAge:0 }
+  );
+}
+
+/* ─── WEATHER ─── */
+var WC = [
+  { name:'Bangkok', lat:13.7563, lon:100.5018, emoji:'🏙️' },
+  { name:'Chiang Mai', lat:18.7883, lon:98.9853, emoji:'🌿' },
+  { name:'Koh Chang', lat:12.0508, lon:102.3191, emoji:'🏝️' },
+];
+var WX_DAYS = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+function wEmoji(c) {
+  if (c===0) return '☀️'; if (c<=3) return '🌤️'; if (c<=48) return '🌫️';
+  if (c<=67) return '🌧️'; if (c<=82) return '🌦️'; return '⛈️';
+}
+function wLabel(c) {
+  if (c===0) return 'Ciel dégagé'; if (c<=3) return 'Peu nuageux'; if (c<=48) return 'Brumeux';
+  if (c<=67) return 'Pluie'; if (c<=82) return 'Averses'; return 'Orage';
+}
+function fetchAllWeather() {
+  var el = document.getElementById('weather-content');
+  var promises = WC.map(function(c) {
+    return fetch('https://api.open-meteo.com/v1/forecast?latitude=' + c.lat + '&longitude=' + c.lon +
+      '&current=temperature_2m,weather_code,relative_humidity_2m,uv_index' +
+      '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max' +
+      '&timezone=Asia%2FBangkok&forecast_days=5').then(function(r) { return r.json(); });
+  });
+  Promise.all(promises).then(function(results) {
+    var html = '<div class="inset-title">Météo temps réel — 3 villes</div><div class="weather-grid">';
+    WC.forEach(function(c, i) {
+      var d = results[i]; var cur = d.current; var daily = d.daily;
+      var fc = daily.time.map(function(t, j) {
+        var dt = new Date(t);
+        return '<div class="fc-day"><div class="fc-label">' + WX_DAYS[dt.getDay()] + '</div>' +
+          '<div class="fc-icon">' + wEmoji(daily.weather_code[j]) + '</div>' +
+          '<div class="fc-hi">' + Math.round(daily.temperature_2m_max[j]) + '°</div>' +
+          '<div class="fc-lo">' + Math.round(daily.temperature_2m_min[j]) + '°</div>' +
+          '<div class="fc-rain">💧' + daily.precipitation_probability_max[j] + '%</div></div>';
+      }).join('');
+      html += '<div class="weather-card">' +
+        '<div class="w-header"><div><div class="w-city">' + c.emoji + ' ' + c.name + '</div>' +
+        '<div class="w-condition">' + wLabel(cur.weather_code) + '</div></div>' +
+        '<div class="w-live">● En direct</div></div>' +
+        '<div class="w-main"><span class="w-emoji">' + wEmoji(cur.weather_code) + '</span>' +
+        '<div><div><span class="w-temp-val">' + Math.round(cur.temperature_2m) + '</span><span class="w-temp-unit">°C</span></div>' +
+        '<div class="w-feels">Humidité ' + cur.relative_humidity_2m + '%</div></div></div>' +
+        '<div class="w-details"><span class="w-detail-pill">🔆 UV ' + (cur.uv_index || '—') + '</span>' +
+        '<span class="w-detail-pill">💧 ' + daily.precipitation_probability_max[0] + '% auj.</span></div>' +
+        '<div class="forecast">' + fc + '</div></div>';
+    });
+    el.innerHTML = html + '</div>';
+  }).catch(function() {
+    el.innerHTML = '<div class="loading-msg">⚠️ Météo non disponible en prévisualisation. OK sur Netlify.</div>';
+  });
+}
+
+/* ─── ARGENT ─── */
+var RATE_CACHE_KEY = 'thai2026_rate';
+function saveRateToCache(rate, source) {
+  try { localStorage.setItem(RATE_CACHE_KEY, JSON.stringify({ rate:rate, source:source, ts:Date.now() })); } catch(e) {}
+}
+function loadRateFromCache() {
+  try { return JSON.parse(localStorage.getItem(RATE_CACHE_KEY)); } catch(e) { return null; }
+}
+function showRate(rate, source) {
+  currentRate = rate;
+  document.getElementById('rate-block').innerHTML =
+    '<div class="rate-hero">' +
+    '<div class="rate-label-top">EUR → THB · Taux du jour</div>' +
+    '<div class="rate-value">1 € = ' + rate.toFixed(2) + ' ฿</div>' +
+    '<div class="rate-source">' + source + '</div>' +
+    '</div>';
+  convert();
+}
+function fetchRate() {
+  var cached = loadRateFromCache();
+  if (cached && (Date.now() - cached.ts) < 3600000) {
+    showRate(cached.rate, cached.source + ' (cache)');
+  }
+  fetch('https://api.frankfurter.app/latest?from=EUR&to=THB')
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.rates && d.rates.THB) { saveRateToCache(d.rates.THB,'Frankfurter · BCE'); showRate(d.rates.THB,'Frankfurter · BCE'); }
+      else throw new Error();
+    })
+    .catch(function() {
+      fetch('https://open.er-api.com/v6/latest/EUR')
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          if (d.rates && d.rates.THB) { saveRateToCache(d.rates.THB,'ExchangeRate-API'); showRate(d.rates.THB,'ExchangeRate-API'); }
+          else throw new Error();
+        })
+        .catch(function() {
+          fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/eur.json')
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+              if (d.eur && d.eur.thb) { saveRateToCache(d.eur.thb,'currency-api · CDN'); showRate(d.eur.thb,'currency-api · CDN'); }
+              else throw new Error();
+            })
+            .catch(function() {
+              var c = loadRateFromCache();
+              if (c) { showRate(c.rate, '⚠️ Hors ligne — taux en cache'); }
+              else { currentRate = 38.0; document.getElementById('rate-block').innerHTML = '<div class="rate-hero"><div class="rate-label-top">Taux indicatif · EUR → THB</div><div class="rate-value">1 € ≈ 38,00 ฿</div><div class="rate-source">⚠️ Hors ligne — taux de secours</div></div>'; convert(); }
+            });
+        });
+    });
+}
+var convDirection = 'thb';
+function setDirection(dir) {
+  convDirection = dir;
+  document.getElementById('btn-thb-eur').classList.toggle('active', dir === 'thb');
+  document.getElementById('btn-eur-thb').classList.toggle('active', dir === 'eur');
+  document.getElementById('conv-from-label').textContent = dir === 'thb' ? 'Montant en bahts (฿)' : 'Montant en euros (€)';
+  document.getElementById('conv-to-unit').textContent = dir === 'thb' ? '€' : '฿';
+  document.getElementById('conv-input').placeholder = dir === 'thb' ? '1000' : '100';
+  document.getElementById('conv-input').value = '';
+  document.getElementById('conv-output').innerHTML = '—&nbsp;<span id="conv-to-unit" style="font-size:18px;font-weight:400">' + (dir === 'thb' ? '€' : '฿') + '</span>';
+}
+function convert() {
+  var amount = parseFloat(document.getElementById('conv-input').value);
+  var out = document.getElementById('conv-output');
+  if (!currentRate) { document.getElementById('conv-loading').style.display='block'; return; }
+  document.getElementById('conv-loading').style.display='none';
+  var unit = convDirection === 'thb' ? '€' : '฿';
+  if (isNaN(amount) || amount <= 0) { out.innerHTML = '—&nbsp;<span style="font-size:18px;font-weight:400">' + unit + '</span>'; return; }
+  var result = convDirection === 'thb' ? (amount / currentRate).toFixed(2) : Math.round(amount * currentRate).toLocaleString('fr-FR');
+  out.innerHTML = result + '&nbsp;<span style="font-size:18px;font-weight:400">' + unit + '</span>';
+}
+
+/* ─── PHRASES ─── */
+function renderPhrases(cat) {
+  document.querySelectorAll('#phrase-filter .fpill').forEach(function(p) {
+    p.classList.toggle('active', p.dataset.cat === cat);
+  });
+  var list = PHRASES[cat] || [];
+  document.getElementById('phrases-list').innerHTML = list.map(function(p, i) {
+    return '<div class="phrase-card">' +
+      '<div class="phrase-main"><div class="p-thai">' + p.th + '</div>' +
+      '<div class="p-phon">' + p.phon + '</div>' +
+      '<div class="p-fr">' + p.fr + '</div></div>' +
+      '<button class="speak-btn" onclick="speak(\'' + p.th.replace(/'/g,'') + '\',\'' + p.phon.replace(/'/g,'') + '\')">🔊</button>' +
+    '</div>';
+  }).join('');
+}
+function speak(th, phon) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  var voices = speechSynthesis.getVoices();
+  var thVoice = voices.find(function(v) { return v.lang.startsWith('th'); });
+  var u = new SpeechSynthesisUtterance(thVoice ? th : phon);
+  u.lang = thVoice ? 'th-TH' : 'fr-FR'; if (thVoice) u.voice = thVoice; u.rate = 0.8;
+  speechSynthesis.speak(u);
+}
+document.getElementById('phrase-filter').addEventListener('click', function(e) {
+  var btn = e.target.closest('.fpill'); if (btn) renderPhrases(btn.dataset.cat);
 });
 
-renderMain();
+/* ─── CHECKLIST ─── */
+var CL_KEY = 'thai2026_cl';
+function loadCl() { try { return JSON.parse(localStorage.getItem(CL_KEY)) || {}; } catch(e) { return {}; } }
+function saveCl(state) { try { localStorage.setItem(CL_KEY, JSON.stringify(state)); } catch(e) {} }
+function renderChecklist() {
+  var state = loadCl(); var html = '';
+  Object.keys(CHECKLIST_DATA).forEach(function(key) {
+    var sec = CHECKLIST_DATA[key];
+    var total = sec.items.length;
+    var done = sec.items.filter(function(_,i) { return state[key+'_'+i]; }).length;
+    html += '<div class="cl-section"><div class="cl-section-head">' +
+      '<div class="cl-section-title-row"><div class="cl-section-title">' + sec.emoji + ' ' + sec.label + '</div>' +
+      '<div class="cl-progress" id="prog-'+key+'">' + done + '/' + total + '</div></div>' +
+      '<div class="cl-bar"><div class="cl-bar-fill" id="bar-'+key+'" style="width:' + Math.round(done/total*100) + '%"></div></div>' +
+      '</div>';
+    sec.items.forEach(function(item, i) {
+      var id = key+'_'+i; var checked = !!state[id];
+      html += '<label class="cl-item' + (checked?' checked':'') + '">' +
+        '<input type="checkbox"' + (checked?' checked':'') + ' onchange="toggleCl(\''+id+'\',\''+key+'\',this)">' +
+        '<span>' + item + '</span></label>';
+    });
+    html += '</div>';
+  });
+  document.getElementById('checklist-content').innerHTML = html;
+}
+function toggleCl(id, key, checkbox) {
+  var state = loadCl(); state[id] = checkbox.checked; saveCl(state);
+  checkbox.closest('.cl-item').classList.toggle('checked', checkbox.checked);
+  var sec = CHECKLIST_DATA[key]; var total = sec.items.length;
+  var done = sec.items.filter(function(_,i) { return state[key+'_'+i]; }).length;
+  var prog = document.getElementById('prog-'+key); var bar = document.getElementById('bar-'+key);
+  if (prog) prog.textContent = done+'/'+total;
+  if (bar) bar.style.width = Math.round(done/total*100)+'%';
+}
+function resetChecklist() {
+  if (!confirm('Tout réinitialiser ?')) return;
+  try { localStorage.removeItem(CL_KEY); } catch(e) {}
+  renderChecklist();
+}
+
+/* ─── IA ─── */
+function openIA(url, name) {
+  var question = document.getElementById('claude-input').value.trim();
+  if (!question) { document.getElementById('claude-input').focus(); return; }
+  var context = [
+    "=== CONTEXTE VOYAGE THAÏLANDE 2026 ===",
+    "Famille : 2 adultes + 2 enfants jumeaux de 10 ans (nés le 11/05/2016).",
+    "Style : économique, indépendant, curieux, téméraire. Pas de voyages organisés. Street food et restos locaux.",
+    "Dates : 23 juillet – 18 août 2026 (26 jours). Saison des pluies (mousson).",
+    "",
+    "ITINÉRAIRE :",
+    "• 24–27 juil. → Bangkok (temples, klongs, marché ferroviaire, Chatuchak)",
+    "• 27 juil. soir → Train de nuit Bangkok → Chiang Mai",
+    "• 28–31 juil. → Chiang Mai (Elephant Nature Park, trek Karen 2J/1N en village)",
+    "• 1–2 août → Bangkok (marché ferroviaire Maeklong, préparation Koh Chang)",
+    "• 3–16 août → Koh Chang · Beach Club Villa by Utalay (Klong Prao Beach) — 13 nuits",
+    "• 16–18 août → Bangkok (dernière journée, retour Paris le 18 août)",
+    "",
+    "LOGEMENT CONFIRMÉ : Beach Club Villa by Utalay, Koh Chang (Klong Prao Beach area).",
+    "TRANSPORT : Van Boonsiri (1100฿/pers) pour Koh Chang. Scooter sur l'île (250฿/j).",
+    "BUDGET : économique mais flexible. Revolut pour les paiements. Cash en bahts.",
+    "=================================",
+    "",
+    "MA QUESTION : " + question
+  ].join("\n");
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(context).then(showClaudeFeedback).catch(function() { fallbackCopy(context); });
+  } else { fallbackCopy(context); }
+  window.open(url, '_blank');
+}
+function fallbackCopy(text) {
+  var ta = document.createElement('textarea'); ta.value = text;
+  ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.focus(); ta.select();
+  try { document.execCommand('copy'); } catch(e) {}
+  document.body.removeChild(ta); showClaudeFeedback();
+}
+function showClaudeFeedback() {
+  var fb = document.getElementById('claude-feedback');
+  fb.style.display = 'block'; setTimeout(function() { fb.style.display = 'none'; }, 4000);
+}
+
+/* ─── GUIDE ─── */
+var guideCity = "bangkok", guideCat = "manger", guideBudget = "all";
+function renderGuide() {
+  var data = GUIDE_DATA[guideCity]; if (!data) return;
+  document.getElementById("guide-detail").style.display = "none";
+  document.getElementById("guide-main-content").style.display = "";
+  document.getElementById("guide-dormir-note").style.display =
+    (guideCat === "dormir" && guideCity !== "chiangmai") ? "block" : "none";
+  var items = (data[guideCat] || []).filter(function(item) {
+    return guideBudget === "all" || item.budget === parseInt(guideBudget);
+  });
+  var bLabel = ["","$","$$","$$$"], bClass = ["","gb1","gb2","gb3"];
+  var tagLabels = { local:"🏠 Local", insolite:"✨ Insolite", sf:"🍢 Street food", gastro:"⭐ Gastronomique", famille:"👨‍👩‍👧 Famille", resto:"🍽 Resto" };
+  var tagClass = { local:"gtag-local", insolite:"gtag-insolite", sf:"gtag-sf", gastro:"gtag-gastro", famille:"gtag-famille", resto:"gtag-resto" };
+  if (!items.length) {
+    document.getElementById("guide-cards").innerHTML = "<div class='guide-empty'>Aucune adresse pour ce filtre.<br>Essaie un autre budget ou une autre catégorie.</div>"; return;
+  }
+  window._guideItems = items;
+  document.getElementById("guide-cards").innerHTML = items.map(function(item, idx) {
+    var tagsHtml = (item.tags||[]).map(function(t) { return "<span class='gtag " + (tagClass[t]||"") + "'>" + (tagLabels[t]||t) + "</span>"; }).join("");
+    return "<div class='guide-card' onclick='showGuideDetail(" + idx + ")'>" +
+      "<div class='guide-card-header'><div class='guide-name'>" + item.name + "</div>" +
+      "<span class='gbadge " + bClass[item.budget] + "'>" + bLabel[item.budget] + "</span></div>" +
+      "<div class='guide-tags'>" + tagsHtml + "</div>" +
+      "<div class='guide-desc-short'>" + item.desc.substring(0,100) + "…</div>" +
+      "<div class='guide-price-tag'>💰 " + item.price + "</div>" +
+      "<div class='guide-cta'>Voir le détail →</div></div>";
+  }).join("");
+}
+function showGuideDetail(idx) {
+  var item = window._guideItems[idx]; if (!item) return;
+  var bLabel = ["","$","$$","$$$"], bClass = ["","gb1","gb2","gb3"];
+  var tagLabels = { local:"🏠 Local", insolite:"✨ Insolite", sf:"🍢 Street food", gastro:"⭐ Gastronomique", famille:"👨‍👩‍👧 Famille", resto:"🍽 Resto" };
+  var tagClass = { local:"gtag-local", insolite:"gtag-insolite", sf:"gtag-sf", gastro:"gtag-gastro", famille:"gtag-famille", resto:"gtag-resto" };
+  var tagsHtml = (item.tags||[]).map(function(t) { return "<span class='gtag " + (tagClass[t]||"") + "'>" + (tagLabels[t]||t) + "</span>"; }).join("");
+  var reviewsHtml = "";
+  if (item.reviews && item.reviews.length) {
+    reviewsHtml = "<div class='detail-section'>Avis &amp; ressources</div>" +
+      item.reviews.map(function(url) {
+        return "<a href='" + url + "' target='_blank' class='detail-link'>↗ " + url.replace("https://","").split("/")[0] + "</a>";
+      }).join("");
+  }
+  var gmUrl = "https://www.google.com/maps/search/?api=1&query=" + item.lat + "," + item.lon;
+  var cmDeep = "citymapper://directions?endcoord=" + item.lat + "," + item.lon + "&endname=" + encodeURIComponent(item.name);
+  document.getElementById("guide-detail").innerHTML =
+    "<button class='back-btn' onclick='closeGuideDetail()'>Retour</button>" +
+    "<div class='list-group' style='padding:14px 16px;margin-bottom:10px'>" +
+      "<div class='guide-card-header' style='margin-bottom:8px'><div class='guide-name' style='font-size:17px'>" + item.name + "</div><span class='gbadge " + bClass[item.budget] + "'>" + bLabel[item.budget] + "</span></div>" +
+      "<div class='guide-tags' style='margin-bottom:10px'>" + tagsHtml + "</div>" +
+      "<div class='detail-section'>Description</div><div class='detail-desc'>" + item.desc + "</div>" +
+      "<div class='detail-section'>Prix · Horaires</div><div class='detail-meta'>" + item.price + " &nbsp;·&nbsp; " + item.open + "</div>" +
+      "<div class='detail-section'>Bon plan</div><div class='detail-tip'>" + item.tip + "</div>" +
+      reviewsHtml +
+      "<div class='detail-section'>Y aller</div>" +
+      "<div class='nav-btns'>" +
+        (item.web ? "<a href='" + item.web + "' target='_blank' class='nav-btn' style='background:#6D28D9'>🌐 Site</a>" : "") +
+        "<a href='" + cmDeep + "' onclick=\"cmFallback('https://citymapper.com/directions?endcoord=" + item.lat + "," + item.lon + "&endname=" + encodeURIComponent(item.name) + "')\" class='nav-btn' style='background:#007AFF'>🗺 CityMapper</a>" +
+        "<a href='grab://open?screenType=BOOKING&destCoord=" + item.lat + "," + item.lon + "&destName=" + encodeURIComponent(item.name) + "' class='nav-btn' style='background:#00B14F'>🚗 Grab</a>" +
+        "<a href='" + gmUrl + "' target='_blank' class='nav-btn' style='background:#EA4335'>📍 Maps</a>" +
+        "<button onclick='showOnAppMap(" + item.lat + "," + item.lon + ",\"" + item.name.replace(/"/g,'') + "\")' class='nav-btn' style='background:var(--blue)'>📌 Carte app</button>" +
+      "</div>" +
+    "</div>";
+  document.getElementById("guide-main-content").style.display = "none";
+  document.getElementById("guide-detail").style.display = "";
+  window.scrollTo(0,0);
+}
+function closeGuideDetail() {
+  document.getElementById("guide-detail").style.display = "none";
+  document.getElementById("guide-main-content").style.display = "";
+}
+function showOnAppMap(lat, lon, name) {
+  var topBtns = document.querySelectorAll('.top-nav button');
+  var found = null;
+  topBtns.forEach(function(b) { if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'carte'")) found = b; });
+  switchTab("carte", found);
+  setTimeout(function() {
+    if (map) {
+      map.setView([lat,lon], 15);
+      var icon = L.divIcon({ className:"", html:"<div style='font-size:26px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))'>📌</div>", iconSize:[28,28], iconAnchor:[14,14] });
+      var m = L.marker([lat,lon], {icon:icon}).addTo(map)
+        .bindPopup("<div style='font-family:system-ui;font-size:13px;font-weight:600'>" + name + "</div>", {maxWidth:200}).openPopup();
+      setTimeout(function() { map.removeLayer(m); }, 8000);
+    }
+  }, 300);
+}
+document.getElementById("guide-city").addEventListener("click", function(e) {
+  var btn = e.target.closest("[data-city]"); if (!btn) return;
+  document.querySelectorAll("#guide-city .fpill").forEach(function(p) { p.classList.remove("active"); });
+  btn.classList.add("active"); guideCity = btn.dataset.city;
+  if (guideCity !== "chiangmai" && guideCat === "dormir") {
+    guideCat = "manger";
+    document.querySelectorAll("#guide-cat .fpill").forEach(function(p) { p.classList.toggle("active", p.dataset.cat === "manger"); });
+  }
+  renderGuide();
+});
+document.getElementById("guide-cat").addEventListener("click", function(e) {
+  var btn = e.target.closest("[data-cat]"); if (!btn) return;
+  document.querySelectorAll("#guide-cat .fpill").forEach(function(p) { p.classList.remove("active"); });
+  btn.classList.add("active"); guideCat = btn.dataset.cat; renderGuide();
+});
+document.getElementById("guide-budget").addEventListener("click", function(e) {
+  var btn = e.target.closest("[data-bud]"); if (!btn) return;
+  document.querySelectorAll("#guide-budget .fpill").forEach(function(p) { p.classList.remove("active"); });
+  btn.classList.add("active"); guideBudget = btn.dataset.bud; renderGuide();
+});
+
+/* ─── INIT ─── */
+renderItinerary('all');
+renderPhrases('politesse');
+renderChecklist();
+refreshCarnetCounter();
+fetchRate(); rateFetched = true;
+if (window.speechSynthesis) {
+  speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged = function() { speechSynthesis.getVoices(); };
+}
 </script>
 </body>
 </html>
