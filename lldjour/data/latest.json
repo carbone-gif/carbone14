@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-17T17:35:14",
-  "date": "2026-06-17",
+  "generated_at": "2026-06-18T17:54:25",
+  "date": "2026-06-18",
   "count": 8,
   "offers": [
     {
@@ -15,8 +15,8 @@
       "source_name": "even-motors.com (PW)",
       "source_url": "https://even-motors.com/nouveau-xpeng-g6-une-offre-en-lld-des-359e-mois/",
       "note": "",
-      "scraped_at": "2026-06-17T17:34:26",
-      "scraped_date": "2026-06-17"
+      "scraped_at": "2026-06-18T17:53:36",
+      "scraped_date": "2026-06-18"
     },
     {
       "model": "G6",
@@ -30,8 +30,8 @@
       "source_name": "even-motors.com (PW)",
       "source_url": "https://event.xpeng.com/fr/3y01dt.html",
       "note": "",
-      "scraped_at": "2026-06-17T17:34:51",
-      "scraped_date": "2026-06-17"
+      "scraped_at": "2026-06-18T17:54:04",
+      "scraped_date": "2026-06-18"
     },
     {
       "model": "G6",
@@ -45,8 +45,8 @@
       "source_name": "www.vivacar.fr (PW)",
       "source_url": "https://www.vivacar.fr/voiture-occasion/xpeng/g6",
       "note": "",
-      "scraped_at": "2026-06-17T17:34:58",
-      "scraped_date": "2026-06-17"
+      "scraped_at": "2026-06-18T17:54:10",
+      "scraped_date": "2026-06-18"
     },
     {
       "model": "G6",
@@ -60,8 +60,8 @@
       "source_name": "even-motors.com (PW)",
       "source_url": "https://even-motors.com/nouveau-xpeng-g6-en-lld-a-partir-de-425e-mois/",
       "note": "",
-      "scraped_at": "2026-06-17T17:34:33",
-      "scraped_date": "2026-06-17"
+      "scraped_at": "2026-06-18T17:53:43",
+      "scraped_date": "2026-06-18"
     },
     {
       "model": "G9",
@@ -75,8 +75,8 @@
       "source_name": "even-motors.com (PW)",
       "source_url": "https://event.xpeng.com/fr/t79710.html",
       "note": "",
-      "scraped_at": "2026-06-17T17:34:46",
-      "scraped_date": "2026-06-17"
+      "scraped_at": "2026-06-18T17:53:58",
+      "scraped_date": "2026-06-18"
     },
     {
       "model": "G9",
@@ -90,8 +90,8 @@
       "source_name": "even-motors.com (PW)",
       "source_url": "https://even-motors.com/nouveau-xpeng-g9-profitez-dune-offre-en-lld-des-565e-mois/",
       "note": "",
-      "scraped_at": "2026-06-17T17:34:39",
-      "scraped_date": "2026-06-17"
+      "scraped_at": "2026-06-18T17:53:50",
+      "scraped_date": "2026-06-18"
     },
     {
       "model": "G9",
@@ -105,8 +105,8 @@
       "source_name": "www.vivacar.fr (PW)",
       "source_url": "https://www.vivacar.fr/voiture-occasion/xpeng/g9",
       "note": "",
-      "scraped_at": "2026-06-17T17:35:03",
-      "scraped_date": "2026-06-17"
+      "scraped_at": "2026-06-18T17:54:17",
+      "scraped_date": "2026-06-18"
     },
     {
       "model": "7X",
@@ -120,8 +120,8 @@
       "source_name": "www.zeekr.eu (PW)",
       "source_url": "https://www.zeekr.eu/fr-fr/offers",
       "note": "Zeekr lancé en France le 2 avril 2026. Prix catalogue 52 990 €. Offre LLD FR non encore publiée.",
-      "scraped_at": "2026-06-17T17:35:14",
-      "scraped_date": "2026-06-17"
+      "scraped_at": "2026-06-18T17:54:25",
+      "scraped_date": "2026-06-18"
     }
   ]
 }
